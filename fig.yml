@@ -1,0 +1,11 @@
+rdb:
+  image: dockerfile/rethinkdb
+node:
+  build: .
+  command: npm start
+  ports:
+    - "80:3000"
+  links:
+    - rdb
+
+
