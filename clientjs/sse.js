@@ -1,14 +1,39 @@
+import React from 'react'
 
-var eventList = document.getElementById('event-list');
-var evtSource = new EventSource("/events");
+var _messages = []
 
-evtSource.onmessage = function(e) {
-  var newElement = document.createElement("li");
-  newElement.innerHTML = e.data;
-  eventList.appendChild(newElement);
-}
-evtSource.addEventListener("date", function(e) {
-  var newElement = document.createElement("li");
-  newElement.innerHTML = "Date Event: " + e.data;
-  eventList.appendChild(newElement);
-}, false);
+var SSE = React.createClass({
+
+  getInitialState() {
+    return {
+      messages: _messages
+    }
+  },
+
+  componentWillMount() {
+    this.evtSource = new EventSource("/events")
+    this.evtSource.addEventListener("date", (event) => {
+      _messages.push(event.data)
+      this.setState({ messages: _messages })
+    })
+  },
+
+  componentWillUnmount() {
+    _messages = []
+    this.evtSource.close()
+  },
+
+  render() {
+    console.log('triggered re-render')
+    var li = this.state.messages.map((mess) => {
+      return <li>{mess}</li>
+    })
+    return (
+      <ul>
+        {li}
+      </ul>
+    )
+  }
+})
+
+export default SSE
