@@ -1,6 +1,6 @@
 var express = require('express')
-var routes = require('./server/routes');
-var rdb = require('./server/rdb');
+var routes = require('./app/routes');
+var rdb = require('./app/rdb');
 var app = express();
 
 rdb.setup(function() {
