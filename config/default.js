@@ -10,5 +10,8 @@ module.exports = {
       'cache',
       'users'
     ]
+  },
+  secrets: {
+    authToken: process.env.AUTH_TOKEN_SECRET || 'd93nf90ao8wnb9sgzwr9h3l1]4;'
   }
 };
