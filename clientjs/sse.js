@@ -11,8 +11,8 @@ var SSE = React.createClass({
   },
 
   componentWillMount() {
-    this.evtSource = new EventSource("/events")
-    this.evtSource.addEventListener("date", (event) => {
+    this.evtSource = new EventSource("/users/stream")
+    this.evtSource.addEventListener("user", (event) => {
       _messages.push(event.data)
       this.setState({ messages: _messages })
     })

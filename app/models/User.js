@@ -6,6 +6,7 @@ var r = require('rethinkdb')
 var rdb = require('../services/rdb-service')
 
 var ATTRS = [
+  'id',
   'email',
   'firstName',
   'lastName',
@@ -66,6 +67,26 @@ User.objects = {
           done(err, results)
         })
       }) 
+    })
+  },
+
+  streamAll: function(listener, done) {
+    rdb.getConnection(function(err, conn) {
+      r.db(config.rdb.name).table("users").changes().run(conn, function(err, cursor) {
+        if (err) return done()
+
+        console.log('Query succeeded')
+
+        cursor.on("error", function(error) {
+          console.log('Stream error called. Remove listeners')
+          cursor.removeAllListeners()
+          done(error)
+        })
+
+        cursor.on("data", function(message) {
+          listener(message.new_val)
+        })
+      })
     })
   }
 }

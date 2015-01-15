@@ -7,6 +7,7 @@ var messagesCtrl = require('./controllers/messages-ctrl')
 var sseMiddleware = require('./middlewares/sse-response')
 
 router.get('/events', sseMiddleware, messagesCtrl.eventStream)
+router.get('/users/stream', sseMiddleware, usersCtrl.streamIndex)
 router.get('/users', usersCtrl.index)
 router.post('/users', usersCtrl.create)
 

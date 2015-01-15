@@ -18,5 +18,14 @@ module.exports = {
     user.save(function() {
       res.json(user.toJson())
     })
+  },
+
+  streamIndex: function(req, res) {
+    User.objects.streamAll(function(data) {
+      res.emit(JSON.stringify(data), 'user')
+    }, function(err) {
+      console.log('Ending response', err.message)
+      res.end()
+    })
   }
 }
