@@ -1,15 +1,30 @@
 'use strict'
 
+var Message = require('../models/Message')
+
 module.exports = {
-  eventStream: function(req, res) {
-    res.emit('Dates coming', 'date')
+  index: function(req, res) {
+    Message.objects.all(function (err, messages) {
+      if (err) {
+        return res.status(500).json({ errors: [{ msg: err.message }] })
+      }
+      res.json({ 'messages': messages })
+    })
+  },
 
-    setInterval(function() {
-      res.emit((new Date()).toString(), 'date')
-    }, 1000)
+  create: function(req, res) {
+    var message = new Message(req.body)
+    message.save(function() {
+      res.json(message.toJson())
+    })
+  },
 
-    setInterval(function() {
-      res.emit('Another Day', 'date')
-    }, 1530)
+  streamIndex: function(req, res) {
+    Message.objects.streamAll(function(data) {
+      res.emit(JSON.stringify(data), 'message')
+    }, function(err) {
+      console.log('Ending response', err.message)
+      res.end()
+    })
   }
 }

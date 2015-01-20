@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node /code/app.js",
-    "stop": "forever stop \"storm-js\"",
     "build": "webpack --colors",
     "watch": "webpack -d --colors --watch",
     "migrate": "klei-migrate run"

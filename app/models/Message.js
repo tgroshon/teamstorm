@@ -7,37 +7,34 @@ var rdb = require('../services/rdb-service')
 
 var ATTRS = [
   'id',
-  'email',
-  'firstName',
-  'lastName',
-  'password'
+  'creator',
+  'payload'
 ]
 
 var PRIVATE_ATTRS = [
-  'password'
+  'creator'
 ]
 
-function User(payload) {
+function Message(payload) {
   var cleanAttrs = _.pick(payload, ATTRS)
   Object.keys(cleanAttrs).forEach(function(key) {
     this[key] = cleanAttrs[key]
   }.bind(this))
 }
 
-User.prototype.save = function(done) {
-  User.objects.insert(this, function(err, newUserColl) {
-    var newUser = newUserColl.pop()
-    _.extend(this, newUser)
+Message.prototype.save = function(done) {
+  Message.objects.insert(this, function(err, newMessageColl) {
+    var newMess = newMessageColl.pop()
+    _.extend(this, newMess)
     done(err)
   }.bind(this))
 }
 
-User.prototype.toJson = function() {
+Message.prototype.toJson = function() {
   return _.omit(this, PRIVATE_ATTRS)
 }
 
-User.objects = {
-
+Message.objects = {
   insert: function(data, done) {
     rdb.getConnection(function(err, conn) {
       if (err) return done(err)
@@ -45,7 +42,7 @@ User.objects = {
       _.extend(data, { createDate: r.now() })
 
       r.db(config.rdb.name)
-        .table('users')
+        .table('messages')
         .insert(data, {conflict: 'update', returnChanges: true})
         .run(conn, function(dbErr, results) {
           conn.close()
@@ -61,7 +58,7 @@ User.objects = {
 
   all: function(done) {
     rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name).table('users').run(conn, function(err, cursor) {
+      r.db(config.rdb.name).table('messages').run(conn, function(err, cursor) {
         conn.close()
         if (err) return done(err)
         cursor.toArray(function(err, results) {
@@ -74,7 +71,7 @@ User.objects = {
 
   streamAll: function(listener, done) {
     rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name).table("users").changes().run(conn, function(err, feed) {
+      r.db(config.rdb.name).table("messages").changes().run(conn, function(err, feed) {
         if (err) return done()
 
         console.log('Query succeeded')
@@ -94,4 +91,5 @@ User.objects = {
   }
 }
 
-module.exports = User
+module.exports = Message
+

@@ -2,6 +2,22 @@ import React from 'react'
 
 var _messages = []
 
+var MessageBox = React.createClass({
+  render() {
+    var message = this.props.message
+    var createDate = new Date(message.createDate)
+    return (
+      <div className="col-xs">
+        <div className="message-box">
+          {message.payload}
+          <br />
+          <span className="message-date">{createDate.toDateString()}</span>
+        </div>
+      </div>
+    )
+  }
+})
+
 var SSE = React.createClass({
 
   getInitialState() {
@@ -11,9 +27,9 @@ var SSE = React.createClass({
   },
 
   componentWillMount() {
-    this.evtSource = new EventSource("/users/stream")
-    this.evtSource.addEventListener("user", (event) => {
-      _messages.push(event.data)
+    this.evtSource = new EventSource("/messages/stream")
+    this.evtSource.addEventListener("message", (event) => {
+      _messages.push(JSON.parse(event.data))
       this.setState({ messages: _messages })
     })
   },
@@ -24,14 +40,13 @@ var SSE = React.createClass({
   },
 
   render() {
-    console.log('triggered re-render')
-    var li = this.state.messages.map((mess) => {
-      return <li>{mess}</li>
+    var messageBoxes = this.state.messages.map((mess) => {
+      return <MessageBox message={mess} />
     })
     return (
-      <ul>
-        {li}
-      </ul>
+      <div className="row">
+        {messageBoxes}
+      </div>
     )
   }
 })
