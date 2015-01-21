@@ -4,7 +4,7 @@
   "description": "brainstorming",
   "main": "index.js",
   "scripts": {
-    "start": "node /code/app.js",
+    "start": "node /code/server/app.js",
     "build": "gulp build",
     "watch": "gulp",
     "migrate": "klei-migrate run"

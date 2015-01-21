@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
 	cache: true,
-	context: __dirname + '/clientjs',
+	context: __dirname + '/client',
 	entry: {
 		client: [
 			'6to5/polyfill',

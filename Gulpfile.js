@@ -8,15 +8,15 @@ var webpackConfig = require('./webpack.config.js')
 
 gulp.task('default', ['webpack:build-dev', 'assets', 'sass'], function() {
 	gulp.watch([
-    'clientjs/**/*.js'
+    'client/**/*.js'
   ],['webpack:build-dev'])
 
 	gulp.watch([
-    'clientjs/assets/**/*'
+    'client/assets/**/*'
   ],['assets'])
 
   gulp.watch([
-    'clientjs/stylesheets/**/*'
+    'client/stylesheets/**/*'
   ], ['sass'])
 })
 
@@ -49,14 +49,14 @@ gulp.task('webpack:build', function(callback) {
 })
 
 gulp.task('assets', function () {
-  return gulp.src(['clientjs/assets/**/*'])
+  return gulp.src(['client/assets/**/*'])
     .pipe(imagemin())
     .pipe(gulp.dest('public'))
 })
 
 // See: https://github.com/sindresorhus/gulp-ruby-sass/issues/74
 gulp.task('sass', function() {
-  return gulp.src('clientjs/stylesheets/main.scss')
+  return gulp.src('client/stylesheets/main.scss')
     .pipe(sass({
       outputStyle: 'compressed'
     }))
