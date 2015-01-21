@@ -16,10 +16,6 @@ module.exports = {
 				test: /\.jsx?$/i,
 				exclude: /node_modules/,
 				loader: '6to5'
-			},
-			{
-				test: /\.(gif|png|jpeg)$/i,
-				loader: 'url?limit=10000&name=img/[name].[ext]'
 			}
 		],
 	},
@@ -27,6 +23,7 @@ module.exports = {
 		filename: '[name].bundle.js',
 		path: __dirname + '/public/js',
 		publicPath: '/'
-	}
+	},
+  plugins: []
 };
 
