@@ -7,7 +7,7 @@ module.exports = {
 		client: [
 			'6to5/polyfill',
 			'6to5/runtime',
-			'./index.js'
+			'./app/index.js'
 		]
 	},
 	module: {

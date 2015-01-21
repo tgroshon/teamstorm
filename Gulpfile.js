@@ -8,7 +8,7 @@ var webpackConfig = require('./webpack.config.js')
 
 gulp.task('default', ['webpack:build-dev', 'assets', 'sass'], function() {
 	gulp.watch([
-    'client/**/*.js'
+    'client/app/**/*.js'
   ],['webpack:build-dev'])
 
 	gulp.watch([
