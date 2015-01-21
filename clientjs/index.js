@@ -3,18 +3,32 @@ import Router, { Route, DefaultRoute, RouteHandler, Link, NotFoundRoute } from '
 import Login from './login'
 import SSE from './sse'
 
+var TopNav = React.createClass({
+  render() {
+    return (
+      <nav className="top__navigation">
+        <ul className="top__navigation_list">
+          <li className="top__navigation_list_item">
+            <Link className="top__navigation_link" to="app">Dashboard</Link>
+          </li>
+          <li className="top__navigation_list_item">
+            <Link className="top__navigation_link" to="login">Login</Link>
+          </li>
+          <li className="top__navigation_list_item">
+            <Link className="top__navigation_link" to="sse">Events</Link>
+          </li>
+        </ul>
+      </nav>
+    )
+  }
+})
+
 var App = React.createClass({
   render() {
     return (
       <div>
-        <header>
-          <h1>Welcome</h1>
-          <p>Page generated with React</p>
-          <ul>
-            <li><Link to="app">Dashboard</Link></li>
-            <li><Link to="login">Login</Link></li>
-            <li><Link to="sse">Events</Link></li>
-          </ul>
+        <header className="top__header">
+          <TopNav />
         </header>
         <RouteHandler/>
       </div>
@@ -39,6 +53,6 @@ var routes = (
 )
 
 Router.run(routes, function (Handler) {
-  React.render(<Handler/>, document.body)
+  React.render(<Handler/>, document.getElementById('application'))
 })
 

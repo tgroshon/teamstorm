@@ -1,4 +1,5 @@
 import React from 'react'
+import request from 'superagent'
 
 var _messages = []
 
@@ -7,7 +8,7 @@ var MessageBox = React.createClass({
     var message = this.props.message
     var createDate = new Date(message.createDate)
     return (
-      <div className="col-xs">
+      <div>
         <div className="message-box">
           {message.payload}
           <br />
@@ -28,10 +29,13 @@ var SSE = React.createClass({
 
   componentWillMount() {
     this.evtSource = new EventSource("/messages/stream")
-    this.evtSource.addEventListener("message", (event) => {
-      _messages.push(JSON.parse(event.data))
-      this.setState({ messages: _messages })
+    request.get('/messages').end((err, res) => {
+      this.setState({ messages: res.body.messages })
     })
+    // this.evtSource.addEventListener("message", (event) => {
+    //   _messages.push(JSON.parse(event.data))
+    //   this.setState({ messages: _messages })
+    // })
   },
 
   componentWillUnmount() {
@@ -41,7 +45,7 @@ var SSE = React.createClass({
 
   render() {
     var messageBoxes = this.state.messages.map((mess) => {
-      return <MessageBox message={mess} />
+      return <MessageBox key={mess.id} message={mess} />
     })
     return (
       <div className="row">

@@ -4,8 +4,15 @@ var Login = React.createClass({
   render() {
     return (
       <form>
-        <input name="username" type="text" />
-        <input name="password" type="password" />
+        <label>
+          Username:
+          <input name="username" type="text" />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input name="password" type="password" />
+        </label>
       </form>
     )
   }

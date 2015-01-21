@@ -1,10 +1,51 @@
 
+* {
+  font-family: Arial;  
+}
+
+.top__header {
+  margin: 10;
+}
+
+.top__navigation_list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.top__navigation_list_item {
+  display: inline;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.top__navigation_link {
+  text-decoration: none;
+  color: blue;
+}
+.top__navigation_link.active {
+  color: darkblue;
+}
+
+.top__navigation_link:hover {
+  color: lightblue;
+}
+
 .message-box {
+  position: relative;
   border: 1px solid black;
   height: 100px;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(248, 236, 118);
+  box-shadow: 3px 3px 5px #888888;
 }
 
 .message-date {
-
+  position: absolute;
+  font-size: 8pt;
+  bottom: 2px;
 }
 
