@@ -11,7 +11,8 @@ router.get('/users', usersCtrl.index)
 router.post('/users', usersCtrl.create)
 
 router.get('/messages/stream', sseMiddleware, messagesCtrl.streamIndex)
-router.post('/messages', messagesCtrl.create)
-router.get('/messages', messagesCtrl.index)
+
+router.get('/activity/:activityId/messages', messagesCtrl.index)
+router.post('/activity/:activityId/messages', messagesCtrl.create)
 
 module.exports = router
