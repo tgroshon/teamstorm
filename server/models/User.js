@@ -37,61 +37,14 @@ User.prototype.toJson = function() {
 }
 
 User.objects = {
-
   insert: function(data, done) {
-    rdb.getConnection(function(err, conn) {
-      if (err) return done(err)
-
-      _.extend(data, { createDate: r.now() })
-
-      r.db(config.rdb.name)
-        .table('users')
-        .insert(data, {conflict: 'update', returnChanges: true})
-        .run(conn, function(dbErr, results) {
-          conn.close()
-          if (err) return done(err)
-
-          var changedValues = results.changes.map(function(change) {
-            return change['new_val']
-          })
-          done(err, changedValues)
-        })
-    })
+    rdb.insert(config.rdb.tables.users, data, done)
   }, 
 
   all: function(done) {
-    rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name).table('users').run(conn, function(err, cursor) {
-        conn.close()
-        if (err) return done(err)
-        cursor.toArray(function(err, results) {
-          if (err) return done(err)
-          done(err, results)
-        })
-      }) 
-    })
+    rdb.getAll(config.rdb.tables.users, done)
   },
-
-  streamAll: function(listener, done) {
-    rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name).table("users").changes().run(conn, function(err, feed) {
-        if (err) return done()
-
-        console.log('Query succeeded')
-
-        feed.on("error", function(error) {
-          console.log('Stream error called. Remove listeners')
-          feed.removeAllListeners()
-          done(error)
-        })
-
-        feed.on("data", function(message) {
-          console.log('stream message', JSON.stringify(message))
-          listener(message.new_val)
-        })
-      })
-    })
-  }
 }
 
 module.exports = User
+
