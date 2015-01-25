@@ -42,7 +42,7 @@ User.objects = {
   }, 
 
   all: function(done) {
-    rdb.getAll(config.rdb.tables.users, done)
+    rdb.all(config.rdb.tables.users, done)
   },
 }
 

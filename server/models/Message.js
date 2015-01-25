@@ -41,7 +41,11 @@ Message.objects = {
   }, 
 
   all: function(done) {
-    rdb.getAll(config.rdb.tables.messages, done)
+    rdb.all(config.rdb.tables.messages, done)
+  },
+
+  byActivity: function(activityId, done) {
+    rdb.getByIndex(config.rdb.tables.messages, 'activityId', activityId, done)
   },
 
   streamAll: function(listener, done) {

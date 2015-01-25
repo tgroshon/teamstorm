@@ -6,8 +6,9 @@ import Marty from 'marty'
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,
   getState() {
+    var id = 'bd94b175-3448-4de5-aa6f-6fde0ef60667'
     return {
-      messageResults: MessageStore.getAll(1)
+      messageResults: MessageStore.getAll(id)
     }
   }
 })

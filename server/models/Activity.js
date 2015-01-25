@@ -25,6 +25,7 @@ function Activity(payload) {
   }.bind(this))
 }
 
+
 Activity.prototype.save = function(done) {
   Activity.objects.insert(this, function(err, newActivityColl) {
     var newActivity = newActivityColl.pop()
@@ -37,14 +38,20 @@ Activity.prototype.toJson = function() {
   return _.omit(this, PRIVATE_ATTRS)
 }
 
+Activity.tableName = config.rdb.tables.activities
+
 Activity.objects = {
   insert: function(data, done) {
     rdb.insert(config.rdb.tables.activities, data, done)
   }, 
 
   all: function(done) {
-    rdb.getAll(config.rdb.tables.activities, done)
+    rdb.all(config.rdb.tables.activities, done)
   },
+
+  find: function(id, done) {
+    rdb.get(Activity, id, done)
+  }
 }
 
 module.exports = Activity

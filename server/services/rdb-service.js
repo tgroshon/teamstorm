@@ -2,6 +2,7 @@
 
 var r = require('rethinkdb')
 var config = require('config')
+var _ = require('lodash')
 
 function getConnection(done) {
   r.connect({host: config.rdb.host, port: config.rdb.port }, function (err, connection) {
@@ -13,6 +14,7 @@ function getConnection(done) {
 
 module.exports = {
   getConnection: getConnection,
+
   insert: function rdbServiceInsert(tableName, data, done) {
     getConnection(function(err, conn) {
       if (err) return done(err)
@@ -33,7 +35,8 @@ module.exports = {
         })
     })
   },
-  getAll: function rdbServiceGetAll(tableName, done) {
+
+  all: function rdbServiceGetAll(tableName, done) {
     getConnection(function(err, conn) {
       r.db(config.rdb.name).table(tableName).run(conn, function(err, cursor) {
         conn.close()
@@ -43,6 +46,36 @@ module.exports = {
           done(err, results)
         })
       }) 
+    })
+  },
+
+  get: function rdbServiceGet(Klass, key, done) {
+    getConnection(function(err, conn) {
+      r.db(config.rdb.name)
+        .table(Klass.tableName)
+        .get(key)
+        .run(conn, function(err, cursor) {
+          conn.close()
+          if (err) return done(err)
+
+          done(err, new Klass(cursor))
+        })
+    })
+  },
+
+  getByIndex: function rdbServiceGetByIndex(tableName, index, value, done) {
+    getConnection(function(err, conn) {
+      r.db(config.rdb.name)
+      .table(tableName)
+      .getAll(value, {index: index})
+      .run(conn, function(err, cursor) {
+        conn.close()
+        if (err) return done(err)
+        cursor.toArray(function(err, results) {
+          if (err) return done(err)
+          done(err, results)
+        })
+      })
     })
   }
 }
