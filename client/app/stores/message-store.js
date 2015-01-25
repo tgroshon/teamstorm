@@ -1,7 +1,7 @@
 import Marty from 'marty'
 import { Message as MessageConstants } from '../constants'
 import { List } from 'immutable'
-import ActivityHttpAPI from '../sources/activity-http-api'
+import StormHttpAPI from '../sources/storm-http-api'
 
 export default Marty.createStore({
   name: 'Message',
@@ -45,7 +45,7 @@ export default Marty.createStore({
       },
       remotely: () => {
         // return the promise
-        return ActivityHttpAPI.fetchMessages(activityId)
+        return StormHttpAPI.fetchMessages(activityId)
       }
     })
   }

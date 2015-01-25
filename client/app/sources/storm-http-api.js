@@ -19,7 +19,7 @@ export default Marty.createStateSource({
     this.evtSource.addEventListener('message', listener)
   },
 
-  stopStreaming(listener) {
+  closeMessageStream(listener) {
     if (this.evtSource) {
       this.evtSource.removeEventListener('message', listener)
       this.evtSource.close()
