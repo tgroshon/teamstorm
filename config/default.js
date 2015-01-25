@@ -10,7 +10,8 @@ module.exports = {
     tables: {
       users: 'users',
       teams: 'teams',
-      messages: 'messages'
+      messages: 'messages',
+      activities: 'activities',
     }
   },
   secrets: {

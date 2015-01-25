@@ -8,7 +8,7 @@ exports.up = function (next) {
   rdb.getConnection(function(err, connection) {
     if (err) return next(err)
 
-    r.db(config.rdb.name).tableCreate(config.rdb.tables.messages, {primaryKey: 'id'}).run(connection, function(err, result) {
+    r.db(config.rdb.name).tableCreate(config.rdb.tables.activities, {primaryKey: 'id'}).run(connection, function(err, result) {
       next(err)
     })
   })
@@ -18,8 +18,9 @@ exports.down = function (next) {
   rdb.getConnection(function(err, connection) {
     if (err) return next(err)
 
-    r.db(config.rdb.name).tableDrop(config.rdb.tables.messages).run(connection, function(err, result) {
+    r.db(config.rdb.name).tableDrop(config.rdb.tables.activities).run(connection, function(err, result) {
       next(err)
     })
   })
 }
+

@@ -2,7 +2,7 @@
 
 var config = require('config')
 var r = require('rethinkdb')
-var rdb = require('../app/services/rdb-service')
+var rdb = require('../server/services/rdb-service')
 
 exports.up = function (next) {
   rdb.getConnection(function(err, connection) {
