@@ -7,5 +7,7 @@ export default Marty.createActionCreators({
   editMessage: Constants.Message.EDIT_MESSAGE(),
   newActivity: Constants.Activity.NEW_ACTIVITY(),
   receiveActivities: Constants.Activity.RECEIVE_ACTIVITIES(),
+  getMessageStream: Constants.Message.GET_MESSAGE_STREAM(),
+  stopMessageStream: Constants.Message.STOP_MESSAGE_STREAM(),
 })
 

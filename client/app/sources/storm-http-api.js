@@ -12,7 +12,8 @@ export default Marty.createStateSource({
     });
   },
 
-  streamMessages(listener) {
+  streamMessages(activityId, listener) {
+    console.log('Streaming from', activityId)
     var url = pathToUrl('/activity/:activityId/messages/stream',
                         {activityId})
     this.evtSource = new EventSource(url)
@@ -21,6 +22,7 @@ export default Marty.createStateSource({
 
   closeMessageStream(listener) {
     if (this.evtSource) {
+      console.log('Closing Stream')
       this.evtSource.removeEventListener('message', listener)
       this.evtSource.close()
       this.evtSource = null

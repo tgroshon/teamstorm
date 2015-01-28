@@ -48,21 +48,24 @@ Message.objects = {
     rdb.getByIndex(config.rdb.tables.messages, 'activityId', activityId, done)
   },
 
-  streamAll: function(listener, done) {
+  streamAll: function(activityId, listener, done) {
     rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name).table(config.rdb.tables.activities).changes().run(conn, function(err, feed) {
-        if (err) return done()
+      r.db(config.rdb.name)
+        .table(config.rdb.tables.messages)
+        .changes()
+        .filter(r.row('new_val')('activityId').eq(activityId))
+        .run(conn, function(err, feed) {
+          if (err) return done(err)
 
-        feed.on("error", function(error) {
-          console.log('Stream error called. Remove listeners')
-          feed.removeAllListeners()
-          done(error)
-        })
+          feed.on("error", function(error) {
+            feed.removeAllListeners()
+            done(error)
+          })
 
-        feed.on("data", function(message) {
-          listener(message.new_val)
+          feed.on("data", function(message) {
+            listener(message.new_val)
+          })
         })
-      })
     })
   }
 }

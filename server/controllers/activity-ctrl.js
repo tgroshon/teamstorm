@@ -39,10 +39,10 @@ module.exports = {
   },
 
   streamMessages: function(req, res) {
-    Message.objects.streamAll(function(data) {
+    Message.objects.streamAll(req.params.activityId, function(data) {
       res.emit(JSON.stringify(data), 'message')
     }, function(err) {
-      console.log('Ending response', err.message)
+      console.log('Ending response', err.msg)
       res.end()
     })
   }

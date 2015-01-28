@@ -15,7 +15,9 @@ export default Marty.createStore({
   handlers: {
     newMessage: MessageConstants.NEW_MESSAGE,
     receiveMessages: MessageConstants.RECEIVE_MESSAGES,
-    editMessage: MessageConstants.EDIT_MESSAGE
+    editMessage: MessageConstants.EDIT_MESSAGE,
+    getStream: MessageConstants.GET_MESSAGE_STREAM,
+    stopStream: MessageConstants.STOP_MESSAGE_STREAM,
   },
 
   newMessage(message) {
@@ -30,6 +32,26 @@ export default Marty.createStore({
 
   editMessage(message) {
     //TODO: lookup the message
+  },
+
+  getStream(activityId) {
+    console.log('Acquire Stream')
+    StormHttpAPI.streamMessages(activityId, this.messageServerEventListener.bind(this))
+  },
+
+  stopStream() {
+    console.log('Close Stream')
+    StormHttpAPI.closeMessageStream(this.messageServerEventListener)
+  },
+
+  messageServerEventListener(event) {
+    try {
+      var message = JSON.parse(event.data)
+      this.newMessage(message)
+    } catch (exp) {
+      console.log(exp)
+      throw exp
+    }
   },
 
   getAll(activityId) {

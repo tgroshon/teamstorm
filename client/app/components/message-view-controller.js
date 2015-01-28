@@ -2,6 +2,7 @@ import React from 'react'
 import MessageBox from './views/message-box'
 import MessageStore from '../stores/message-store'
 import Marty from 'marty'
+import ActionCreators from '../action-creators'
 
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,
@@ -15,6 +16,18 @@ var MessageStateMixin = Marty.createStateMixin({
 
 export default React.createClass({
   mixins: [MessageStateMixin],
+
+  componentWillMount() {
+    console.log('mounting')
+    var id = 'bd94b175-3448-4de5-aa6f-6fde0ef60667'
+    ActionCreators.getMessageStream(id)
+  },
+
+  componentWillUnmount() {
+    console.log('Unmounting')
+    ActionCreators.stopMessageStream()
+  },
+
   render() {
     return this.state.messageResults.when({
       pending() {
