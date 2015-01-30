@@ -42,11 +42,11 @@ Activity.tableName = config.rdb.tables.activities
 
 Activity.objects = {
   insert: function(data, done) {
-    rdb.insert(config.rdb.tables.activities, data, done)
+    rdb.insert(Activity, data, done)
   }, 
 
   all: function(done) {
-    rdb.all(config.rdb.tables.activities, done)
+    rdb.all(Activity, done)
   },
 
   find: function(id, done) {

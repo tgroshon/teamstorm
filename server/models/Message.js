@@ -35,23 +35,25 @@ Message.prototype.toJson = function() {
   return _.omit(this, PRIVATE_ATTRS)
 }
 
+Message.tableName = config.rdb.tables.messages
+
 Message.objects = {
   insert: function(data, done) {
-    rdb.insert(config.rdb.tables.messages, data, done)
+    rdb.insert(Message, data, done)
   }, 
 
   all: function(done) {
-    rdb.all(config.rdb.tables.messages, done)
+    rdb.all(Message, done)
   },
 
   byActivity: function(activityId, done) {
-    rdb.getByIndex(config.rdb.tables.messages, 'activityId', activityId, done)
+    rdb.getByIndex(Message, 'activityId', activityId, done)
   },
 
   streamAll: function(activityId, listener, done) {
     rdb.getConnection(function(err, conn) {
       r.db(config.rdb.name)
-        .table(config.rdb.tables.messages)
+        .table(Message.tableName)
         .changes()
         .filter(r.row('new_val')('activityId').eq(activityId))
         .run(conn, function(err, feed) {

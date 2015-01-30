@@ -1,6 +1,7 @@
 'use strict'
 
 var User = require('../models/User')
+var authService = require('../services/auth-service')
 
 module.exports = {
 
@@ -15,9 +16,17 @@ module.exports = {
 
   create: function(req, res) {
     var user = new User(req.body)
-    user.save(function() {
-      res.json(user.toJson())
+    user.hashPassword(req.body.password, function(err) {
+      if (err) throw err
+      user.save(function(err) {
+        if (err) throw err
+        user.token = authService.encode(user)
+        res.json(user.toJson())
+      })
     })
+  },
+
+  get: function(req, res) {
   },
 
   streamIndex: function(req, res) {

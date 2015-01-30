@@ -15,15 +15,16 @@ function getConnection(done) {
 module.exports = {
   getConnection: getConnection,
 
-  insert: function rdbServiceInsert(tableName, data, done) {
+  insert: function rdbServiceInsert(Klass, data, done) {
     getConnection(function(err, conn) {
       if (err) return done(err)
 
-      _.extend(data, { createDate: r.now() })
+      var clonedData = _.clone(data)
+      _.extend(clonedData, { createDate: r.now() })
 
       r.db(config.rdb.name)
-        .table(tableName)
-        .insert(data, {conflict: 'update', returnChanges: true})
+        .table(Klass.tableName)
+        .insert(clonedData, {conflict: 'update', returnChanges: true})
         .run(conn, function(dbErr, results) {
           conn.close()
           if (err) return done(err)
@@ -36,9 +37,9 @@ module.exports = {
     })
   },
 
-  all: function rdbServiceGetAll(tableName, done) {
+  all: function rdbServiceGetAll(Klass, done) {
     getConnection(function(err, conn) {
-      r.db(config.rdb.name).table(tableName).run(conn, function(err, cursor) {
+      r.db(config.rdb.name).table(Klass.tableName).run(conn, function(err, cursor) {
         conn.close()
         if (err) return done(err)
         cursor.toArray(function(err, results) {
@@ -54,19 +55,19 @@ module.exports = {
       r.db(config.rdb.name)
         .table(Klass.tableName)
         .get(key)
-        .run(conn, function(err, cursor) {
+        .run(conn, function(err, data) {
           conn.close()
           if (err) return done(err)
 
-          done(err, new Klass(cursor))
+          done(err, new Klass(data))
         })
     })
   },
 
-  getByIndex: function rdbServiceGetByIndex(tableName, index, value, done) {
+  getByIndex: function rdbServiceGetByIndex(Klass, index, value, done) {
     getConnection(function(err, conn) {
       r.db(config.rdb.name)
-      .table(tableName)
+      .table(Klass.tableName)
       .getAll(value, {index: index})
       .run(conn, function(err, cursor) {
         conn.close()
