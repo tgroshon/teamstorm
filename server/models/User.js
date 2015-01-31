@@ -2,7 +2,6 @@
 
 var _ = require('lodash')
 var config = require('config')
-var r = require('rethinkdb')
 var rdb = require('../services/rdb-service')
 var authService = require('../services/auth-service')
 

@@ -7,7 +7,8 @@
     "start": "node /code/server/app.js",
     "build": "gulp build",
     "watch": "gulp",
-    "migrate": "klei-migrate run"
+    "migrate": "klei-migrate run",
+    "test": "mocha --harmony \"test/unit/**/*.spec.*\" --reporter min"
   },
   "author": "tgroshon",
   "license": "MIT",
@@ -41,8 +42,12 @@
     "gulp-util": "^3.0.2",
     "immutable": "^3.6.2",
     "marty": "^0.8.3",
+    "mocha": "^2.1.0",
+    "proxyquire": "^1.3.1",
     "react": "^0.12.2",
     "react-router": "^0.11.6",
+    "should": "^4.6.2",
+    "spyquire": "^1.1.0",
     "url-loader": "^0.5.5",
     "webpack": "^1.4.15",
     "webpack-dev-server": "^1.7.0"
