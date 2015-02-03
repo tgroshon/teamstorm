@@ -1,0 +1,6 @@
+--require should
+--reporter nyan
+--ui bdd
+--require test/util/6to5-register
+--globals regeneratorRuntime
+
