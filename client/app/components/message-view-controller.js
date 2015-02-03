@@ -4,12 +4,12 @@ import MessageStore from '../stores/message-store'
 import Marty from 'marty'
 import ActionCreators from '../action-creators'
 
+var activityId = '91cf93f7-d657-4c82-acd6-8cbaa03e4fa'
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,
   getState() {
-    var id = 'bd94b175-3448-4de5-aa6f-6fde0ef60667'
     return {
-      messageResults: MessageStore.getAll(id)
+      messageResults: MessageStore.getAll(activityId)
     }
   }
 })
@@ -19,8 +19,7 @@ export default React.createClass({
 
   componentWillMount() {
     console.log('mounting')
-    var id = 'bd94b175-3448-4de5-aa6f-6fde0ef60667'
-    ActionCreators.getMessageStream(id)
+    ActionCreators.getMessageStream(activityId)
   },
 
   componentWillUnmount() {

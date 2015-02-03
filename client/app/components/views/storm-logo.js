@@ -3,12 +3,9 @@ import React from 'react'
 export default React.createClass({
   render() {
     return (
-      <div>
-        <h3>I will be a Dashboard someday</h3>
-        
+      <div className="col-xs top__logo-container">
+        <h1 className="top__logo-text">TeamStorm</h1>
       </div>
     )
-
   }
 })
-

@@ -1,0 +1,17 @@
+.message-box {
+  position: relative;
+  border: 1px solid #E4D10C;
+  height: 100px;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: $message-box-color;
+  box-shadow: 3px 3px 5px #888888;
+}
+
+.message-date {
+  position: absolute;
+  font-size: 8pt;
+  bottom: 2px;
+}
