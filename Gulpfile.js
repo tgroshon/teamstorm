@@ -3,6 +3,7 @@ var gutil = require('gulp-util')
 var webpack = require('webpack')
 var sass = require('gulp-sass')
 var imagemin = require('gulp-imagemin')
+var autoprefixer = require('gulp-autoprefixer')
 var WebpackDevServer = require('webpack-dev-server')
 var webpackConfig = require('./webpack.config.js')
 
@@ -61,6 +62,7 @@ gulp.task('sass', function() {
       outputStyle: 'compressed'
     }))
     .on('error', function (err) { gutil.log(err.message, err) })
+    .pipe(autoprefixer())
     .pipe(gulp.dest('public/css'))
 })
 
