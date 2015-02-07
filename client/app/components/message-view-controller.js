@@ -3,11 +3,14 @@ import MessageBox from './views/message-box'
 import MessageStore from '../stores/message-store'
 import Marty from 'marty'
 import ActionCreators from '../action-creators'
+import Router, {Link, RouteHandler} from 'react-router'
 
-var activityId = '91cf93f7-d657-4c82-acd6-8cbaa03e4fa'
+//var activityId = '91cf93f7-d657-4c82-acd6-8cbaa03e4fa'
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,
   getState() {
+    var activityId = this.getParams().activityId
+    console.log('Message Mixin params', activityId)
     return {
       messageResults: MessageStore.getAll(activityId)
     }
@@ -15,11 +18,11 @@ var MessageStateMixin = Marty.createStateMixin({
 })
 
 export default React.createClass({
-  mixins: [MessageStateMixin],
+  mixins: [Router.State, MessageStateMixin],
 
   componentWillMount() {
     console.log('mounting')
-    ActionCreators.getMessageStream(activityId)
+    ActionCreators.getMessageStream(this.getParams().activityId)
   },
 
   componentWillUnmount() {

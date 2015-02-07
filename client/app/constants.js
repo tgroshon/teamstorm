@@ -14,3 +14,12 @@ export default Marty.createConstants({
   ]
 })
 
+export var strings = {
+  types: {
+    activity: {
+      discussion: 'discussion',
+      deliverable: 'deliverable',
+      issue: 'issue'
+    }
+  }
+}

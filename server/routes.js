@@ -14,6 +14,7 @@ router.post('/login', authMiddleware.passwordAuth, authMiddleware.stub)
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
 
 router.get('/activity/:activityId', activityCtrl.show)
+router.get('/activity', activityCtrl.index)
 router.post('/activity', activityCtrl.create)
 router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.streamMessages)
 router.get('/activity/:activityId/messages', activityCtrl.messageIndex)

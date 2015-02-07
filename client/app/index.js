@@ -1,18 +1,16 @@
 import React from 'react'
 import Router, { Route, DefaultRoute, RouteHandler, Link, NotFoundRoute } from 'react-router'
 import MessageViewController from './components/message-view-controller'
+import ActivityViewController from './components/activity-view-controller'
 import LoginViewController from './components/login-view-controller'
 import DashboardViewController from './components/dashboard-view-controller'
 import TopNav from './components/views/top-nav'
-import StormLogo from './components/views/storm-logo'
-import SideNav from './components/views/side-nav'
 
 var App = React.createClass({
   render() {
     return (
       <div>
-        <header className="row top__header">
-          <StormLogo />
+        <header className="top__header">
           <TopNav />
         </header>
         <main className="main__wrapper">
@@ -20,7 +18,20 @@ var App = React.createClass({
             <RouteHandler/>
           </div>
         </main>
+        <footer className="bottom__footer">
+          <div className="bottom__copy-container container">
+            <p className="text-muted">&copy; 2014 Tommy Groshong</p>
+          </div>
+        </footer>
       </div>
+    )
+  }
+})
+
+var DefaultAct = React.createClass({
+  render() {
+    return (
+      <h1>Choose an activity</h1>
     )
   }
 })
@@ -28,7 +39,10 @@ var App = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="login" handler={LoginViewController}/>
-    <Route name="messages" handler={MessageViewController}/>
+    <Route name="activity" path="/activity" handler={ActivityViewController}>
+      <Route name="messages" path=":activityId/messages" handler={MessageViewController}/>
+      <DefaultRoute handler={DefaultAct}/>
+    </Route>
     <DefaultRoute handler={DashboardViewController}/>
   </Route>
 )

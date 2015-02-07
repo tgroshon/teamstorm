@@ -1,14 +1,16 @@
 import React from 'react'
+import { PageHeader } from 'react-bootstrap'
 
 export default React.createClass({
   render() {
     return (
       <div>
-        <h3>I will be a Dashboard someday</h3>
-        
+        <PageHeader>
+          Dashboard
+          <small> Coming Soon!</small>
+        </PageHeader>
       </div>
     )
-
   }
 })
 

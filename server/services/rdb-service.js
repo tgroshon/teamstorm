@@ -44,7 +44,9 @@ module.exports = {
         if (err) return done(err)
         cursor.toArray(function(err, results) {
           if (err) return done(err)
-          done(err, results)
+          done(err, results.map(function(result) {
+            return new Klass(result)
+          }))
         })
       }) 
     })
@@ -74,7 +76,9 @@ module.exports = {
         if (err) return done(err)
         cursor.toArray(function(err, results) {
           if (err) return done(err)
-          done(err, results)
+          done(err, results.map(function(result){
+            return new Klass(result)
+          }))
         })
       })
     })

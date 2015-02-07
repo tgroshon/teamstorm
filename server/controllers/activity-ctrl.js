@@ -5,6 +5,20 @@ var Activity = require('../models/Activity')
 
 module.exports = {
 
+  index: function(req, res) {
+    Activity.objects.all(function (err, activities) {
+      if (err) {
+        return res.status(500).json({ errors: [{ msg: err.message }] })
+      }
+
+      res.json({
+        'activities': activities.map(function(act) {
+          return act.toJson()
+        })
+      })
+    })
+  },
+
   show: function(req, res) {
     Activity.objects.find(req.params.activityId, function (err, activity) {
       if (err) {

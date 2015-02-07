@@ -19,6 +19,4 @@ watcher:
   command: ["npm", "run", "watch"]
   volumes:
     - ".:/code"
-  links:
-    - rdb
 

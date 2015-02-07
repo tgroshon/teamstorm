@@ -12,6 +12,12 @@ export default Marty.createStateSource({
     });
   },
 
+  fetchActivities() {
+    return this.get('/activity').then((res) => {
+      ActionCreators.receiveActivities(res.body.activities);
+    });
+  },
+
   streamMessages(activityId, listener) {
     console.log('Streaming from', activityId)
     var url = pathToUrl('/activity/:activityId/messages/stream',
