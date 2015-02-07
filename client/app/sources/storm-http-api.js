@@ -8,7 +8,7 @@ export default Marty.createStateSource({
   fetchMessages(activityId) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     return this.get(url).then(function (res) {
-      ActionCreators.receiveMessages(res.body.messages);
+      ActionCreators.receiveMessages(activityId, res.body.messages);
     });
   },
 
@@ -19,7 +19,7 @@ export default Marty.createStateSource({
   },
 
   streamMessages(activityId, listener) {
-    console.log('Streaming from', activityId)
+    console.log('Source, Streaming from', activityId)
     var url = pathToUrl('/activity/:activityId/messages/stream',
                         {activityId})
     this.evtSource = new EventSource(url)
@@ -28,7 +28,7 @@ export default Marty.createStateSource({
 
   closeMessageStream(listener) {
     if (this.evtSource) {
-      console.log('Closing Stream')
+      console.log('Source, Closing Stream')
       this.evtSource.removeEventListener('message', listener)
       this.evtSource.close()
       this.evtSource = null

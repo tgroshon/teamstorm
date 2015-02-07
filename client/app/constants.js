@@ -6,7 +6,8 @@ export default Marty.createConstants({
     'NEW_MESSAGE',
     'RECEIVE_MESSAGES',
     'GET_MESSAGE_STREAM',
-    'STOP_MESSAGE_STREAM'
+    'STOP_MESSAGE_STREAM',
+    'KILL_MESSAGE_CACHE',
   ],
   Activity: [
     'RECEIVE_ACTIVITIES',

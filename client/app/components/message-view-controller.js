@@ -21,12 +21,16 @@ export default React.createClass({
   mixins: [Router.State, MessageStateMixin],
 
   componentWillMount() {
-    console.log('mounting')
+    ActionCreators.getMessageStream(this.getParams().activityId)
+  },
+
+  componentWillReceiveProps() {
+    ActionCreators.stopMessageStream()
+    ActionCreators.killMessageCache(this.getParams().activityId)
     ActionCreators.getMessageStream(this.getParams().activityId)
   },
 
   componentWillUnmount() {
-    console.log('Unmounting')
     ActionCreators.stopMessageStream()
   },
 

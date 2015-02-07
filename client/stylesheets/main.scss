@@ -71,7 +71,6 @@ body {
 }
 .ActivityList__ItemBox {
   margin-bottom: 5px;
-  @include animater(shading, 1s, ease)
 }
 
 .ActivityList__ItemLink:hover {

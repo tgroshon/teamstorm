@@ -1,6 +1,6 @@
 import Marty from 'marty'
 import { Message as MessageConstants } from '../constants'
-import { List } from 'immutable'
+import { List, Map as iMap } from 'immutable'
 import StormHttpAPI from '../sources/storm-http-api'
 
 export default Marty.createStore({
@@ -8,46 +8,61 @@ export default Marty.createStore({
 
   getInitialState() {
     return {
-      messages: List()
+      messages: iMap()
     }
   },
 
   handlers: {
     newMessage: MessageConstants.NEW_MESSAGE,
+    killMessageCache: MessageConstants.KILL_MESSAGE_CACHE,
     receiveMessages: MessageConstants.RECEIVE_MESSAGES,
     editMessage: MessageConstants.EDIT_MESSAGE,
     getStream: MessageConstants.GET_MESSAGE_STREAM,
     stopStream: MessageConstants.STOP_MESSAGE_STREAM,
   },
 
-  newMessage(message) {
-    this.setState({ messages: this.state.messages.push(message)})
+  killMessageCache(activityId) {
+    console.log('Store, killing message cache', activityId)
+    this.setState({ messages: this.state.messages.delete(activityId) })
   },
 
-  receiveMessages(messages) {
+  newMessage(activityId, message) {
+    var messagesForActivity = this.state.messages.get(activityId)
     this.setState({
-      messages: this.state.messages.concat(List(messages))
+      messages: this.state.messages.set(activityId, messagesForActivity.push(message))
     })
   },
 
-  editMessage(message) {
+  editMessage(activityId, message) {
     //TODO: lookup the message
   },
 
+  receiveMessages(activityId, messages) {
+    var messagesForActivity = this.state.messages.get(activityId)
+    if (List.isList(messagesForActivity)) {
+      messagesForActivity = messagesForActivity.concat(List(messages))
+    } else {
+      messagesForActivity = List(messages)
+    }
+    this.setState({
+      messages: this.state.messages.set(activityId, messagesForActivity)
+    })
+  },
+
   getStream(activityId) {
-    console.log('Acquire Stream')
+    console.log('Store, Acquire Stream')
     StormHttpAPI.streamMessages(activityId, this.messageServerEventListener.bind(this))
   },
 
   stopStream() {
-    console.log('Close Stream')
+    console.log('Store, Close Stream')
     StormHttpAPI.closeMessageStream(this.messageServerEventListener)
   },
 
   messageServerEventListener(event) {
     try {
       var message = JSON.parse(event.data)
-      this.newMessage(message)
+      this.newMessage(message.activityId, message)
     } catch (exp) {
       console.log(exp)
       throw exp
@@ -55,13 +70,14 @@ export default Marty.createStore({
   },
 
   getAll(activityId) {
-    var id = `activity-${activityId}-messages`
+    var requestId = `activity-${activityId}-messages`
+    console.log('Store getting', requestId)
 
     return this.fetch({
-      id,
+      id: requestId,
       locally: () => {
-        if (this.hasAlreadyFetched(id)) {
-          return this.state.messages
+        if (this.hasAlreadyFetched(requestId)) {
+          return this.state.messages.get(activityId)
         }
         return undefined
       },
