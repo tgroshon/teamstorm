@@ -1,19 +1,41 @@
 import React from 'react'
+import {Button} from 'react-bootstrap'
+import Router, {Navigation} from 'react-router'
+// TODO Refactor api-action-creators to use SourceActionCreators
+import ActionCreators from '../api-action-creators'
 
 export default React.createClass({
+  mixins: [Navigation],
+
+  buttonClick() {
+    var username = this.refs.username.getDOMNode().value
+    var password = this.refs.password.getDOMNode().value
+    var promise = ActionCreators.login(username, password)
+
+    promise.then(() => {
+      this.transitionTo('activity')
+    }).catch((err) => {
+      // TODO validation error message
+      console.log('Login Error', err)
+    })
+  },
+
   render() {
     return (
-      <form>
+      <div>
+        <h1>Sign In</h1>
         <label>
           Username:
-          <input name="username" type="text" />
+          <input ref="username" name="username" type="text" />
         </label>
         <br />
         <label>
           Password:
-          <input name="password" type="password" />
+          <input ref="password" name="password" type="password" />
         </label>
-      </form>
+        <br />
+        <button onClick={this.buttonClick} className="btn btn-primary">Login</button>
+      </div>
     )
   }
 })

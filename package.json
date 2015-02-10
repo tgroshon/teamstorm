@@ -26,7 +26,7 @@
     "passport": "^0.2.1",
     "path-to-url": "^0.1.0",
     "rethinkdb": "^1.15.0-0",
-    "rsvp": "^3.0.16",
+    "rsvp": "3.0.14",
     "server-event": "^1.0.1",
     "superagent": "^0.21.0"
   },

@@ -1,21 +1,42 @@
 import Marty from 'marty'
 import ActionCreators from '../action-creators'
 import pathToUrl from 'path-to-url'
+import RSVP from 'rsvp'
 
 export default Marty.createStateSource({
   type: 'http',
 
+  login(email, password) {
+    // TODO get this promise to the caller
+    return new RSVP.Promise((resolve, reject) => {
+      this.post({
+        url: '/login',
+        body: {
+          email,
+          password
+        }
+      }).then((res) => {
+        ActionCreators.receiveToken(res.body.token)
+        resolve()
+      }).catch(reject)
+    })
+  },
+
+  logout() {
+    ActionCreators.destroyTokenAndUser(res.body.token)
+  },
+
   fetchMessages(activityId) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
-    return this.get(url).then(function (res) {
-      ActionCreators.receiveMessages(activityId, res.body.messages);
-    });
+    return this.get(url).then((res) => {
+      ActionCreators.receiveMessages(activityId, res.body.messages)
+    })
   },
 
   fetchActivities() {
     return this.get('/activity').then((res) => {
-      ActionCreators.receiveActivities(res.body.activities);
-    });
+      ActionCreators.receiveActivities(res.body.activities)
+    })
   },
 
   streamMessages(activityId, listener) {
@@ -38,8 +59,9 @@ export default Marty.createStateSource({
   postMessage(message) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     this.post({ url, body: message })
-        .then(function (res) {
-          ActionCreators.receiveMessage(res.body);
-        });
+        .then((res) => {
+          ActionCreators.receiveMessage(res.body)
+        })
   }
-});
+})
+

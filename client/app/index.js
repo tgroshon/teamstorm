@@ -5,8 +5,13 @@ import ActivityViewController from './components/activity-view-controller'
 import LoginViewController from './components/login-view-controller'
 import DashboardViewController from './components/dashboard-view-controller'
 import TopNav from './components/views/top-nav'
+import ActionCreators from './action-creators'
 
 var App = React.createClass({
+  componentWillMount() {
+    ActionCreators.restoreSession()
+  },
+
   render() {
     return (
       <div>
@@ -39,6 +44,8 @@ var DefaultAct = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="login" handler={LoginViewController}/>
+    <Route name="signup" handler={LoginViewController}/>
+    <Route name="team" handler={LoginViewController}/>
     <Route name="activity" path="/activity" handler={ActivityViewController}>
       <Route name="messages" path=":activityId/messages" handler={MessageViewController}/>
       <DefaultRoute handler={DefaultAct}/>

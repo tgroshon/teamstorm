@@ -12,6 +12,14 @@ export default Marty.createConstants({
   Activity: [
     'RECEIVE_ACTIVITIES',
     'NEW_ACTIVITY',
+  ],
+  User: [
+    'RESTORE_SESSION',
+    'LOGIN',
+    'LOGOUT',
+    'RECEIVE_USER',
+    'RECEIVE_TOKEN',
+    'CREATE_USER',
   ]
 })
 

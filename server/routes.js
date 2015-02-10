@@ -9,8 +9,8 @@ var authMiddleware = require('./middlewares/authentication')
 
 router.get('/users', usersCtrl.index)
 router.post('/users', usersCtrl.create)
+router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
 
-router.post('/login', authMiddleware.passwordAuth, authMiddleware.stub)
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
 
 router.get('/activity/:activityId', activityCtrl.show)
