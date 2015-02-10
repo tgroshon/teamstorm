@@ -1,8 +1,7 @@
 import React from 'react'
 import {Button} from 'react-bootstrap'
 import Router, {Navigation} from 'react-router'
-// TODO Refactor api-action-creators to use SourceActionCreators
-import ActionCreators from '../api-action-creators'
+import ActionCreators from '../action-creators'
 
 export default React.createClass({
   mixins: [Navigation],

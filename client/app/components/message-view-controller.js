@@ -5,12 +5,10 @@ import Marty from 'marty'
 import ActionCreators from '../action-creators'
 import Router, {Link, RouteHandler} from 'react-router'
 
-//var activityId = '91cf93f7-d657-4c82-acd6-8cbaa03e4fa'
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,
   getState() {
     var activityId = this.getParams().activityId
-    console.log('Message Mixin params', activityId)
     return {
       messageResults: MessageStore.getAll(activityId)
     }
@@ -45,7 +43,7 @@ export default React.createClass({
       done(messages) {
         var messageBoxes = messages.map((mess) => {
           return <MessageBox key={mess.id} message={mess} />
-        }).toArray()
+        })
 
         return (
           <div className="row">

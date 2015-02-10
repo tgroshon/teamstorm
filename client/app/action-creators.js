@@ -1,22 +1,27 @@
 import Marty from 'marty'
 import Constants from './constants'
+import StormHttpAPI from './sources/storm-http-api'
+import LocalStorage from './sources/local-storage'
+import MessageStore from './stores/message-store'
+import UserStore from './stores/user-store'
 
 export default Marty.createActionCreators({
-  newActivity: Constants.Activity.NEW_ACTIVITY(),
-  receiveActivities: Constants.Activity.RECEIVE_ACTIVITIES(),
-
-  newMessage: Constants.Message.NEW_MESSAGE(),
-  receiveMessages: Constants.Message.RECEIVE_MESSAGES(),
-  editMessage: Constants.Message.EDIT_MESSAGE(),
-  getMessageStream: Constants.Message.GET_MESSAGE_STREAM(),
-  stopMessageStream: Constants.Message.STOP_MESSAGE_STREAM(),
-  killMessageCache: Constants.Message.KILL_MESSAGE_CACHE(),
+  createUser: Constants.User.CREATE_USER(),
+  logout: Constants.User.LOGOUT(),
+  login: Constants.User.LOGIN(function(email, password) {
+    return StormHttpAPI.login(email, password)
+  }),
 
   restoreSession: Constants.User.RESTORE_SESSION(),
-  createUser: Constants.User.CREATE_USER(),
-  login: Constants.User.LOGIN(),
-  logout: Constants.User.LOGOUT(),
-  receiveToken: Constants.User.RECEIVE_TOKEN(),
-  receiveUser: Constants.User.RECEIVE_USER(),
+  newMessage: Constants.Message.NEW_MESSAGE(function(activityId, message) {
+    StormHttpAPI.postMessage(activityId, message)
+  }),
+  getMessageStream: Constants.Message.GET_MESSAGE_STREAM(function(activityId) {
+    StormHttpAPI.streamMessages(activityId, MessageStore.messageServerEventListener.bind(MessageStore))
+  }),
+  stopMessageStream: Constants.Message.STOP_MESSAGE_STREAM(function() {
+    StormHttpAPI.closeMessageStream(MessageStore.messageServerEventListener)
+  }),
+  killMessageCache: Constants.Message.KILL_MESSAGE_CACHE(),
 })
 

@@ -13,24 +13,14 @@ export default Marty.createStore({
   },
 
   handlers: {
-    newMessage: MessageConstants.NEW_MESSAGE,
     killMessageCache: MessageConstants.KILL_MESSAGE_CACHE,
     receiveMessages: MessageConstants.RECEIVE_MESSAGES,
     editMessage: MessageConstants.EDIT_MESSAGE,
-    getStream: MessageConstants.GET_MESSAGE_STREAM,
-    stopStream: MessageConstants.STOP_MESSAGE_STREAM,
   },
 
   killMessageCache(activityId) {
-    console.log('Store, killing message cache', activityId)
+    // TODO: Refactor to allow behind-the-scene subscripting to changes
     this.setState({ messages: this.state.messages.delete(activityId) })
-  },
-
-  newMessage(activityId, message) {
-    var messagesForActivity = this.state.messages.get(activityId)
-    this.setState({
-      messages: this.state.messages.set(activityId, messagesForActivity.push(message))
-    })
   },
 
   editMessage(activityId, message) {
@@ -49,20 +39,10 @@ export default Marty.createStore({
     })
   },
 
-  getStream(activityId) {
-    console.log('Store, Acquire Stream')
-    StormHttpAPI.streamMessages(activityId, this.messageServerEventListener.bind(this))
-  },
-
-  stopStream() {
-    console.log('Store, Close Stream')
-    StormHttpAPI.closeMessageStream(this.messageServerEventListener)
-  },
-
   messageServerEventListener(event) {
     try {
       var message = JSON.parse(event.data)
-      this.newMessage(message.activityId, message)
+      this.receiveMessages(message.activityId, [message])
     } catch (exp) {
       console.log(exp)
       throw exp
@@ -71,20 +51,18 @@ export default Marty.createStore({
 
   getAll(activityId) {
     var requestId = `activity-${activityId}-messages`
-    console.log('Store getting', requestId)
 
     return this.fetch({
       id: requestId,
       locally: () => {
         if (this.hasAlreadyFetched(requestId)) {
-          return this.state.messages.get(activityId)
+          return this.state.messages.get(activityId).toArray()
         }
-        return undefined
       },
       remotely: () => {
-        // return the promise
         return StormHttpAPI.fetchMessages(activityId)
       }
     })
   }
 })
+

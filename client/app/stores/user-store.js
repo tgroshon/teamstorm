@@ -15,10 +15,8 @@ export default Marty.createStore({
 
   handlers: {
     restoreSession: UserConstants.RESTORE_SESSION,
-    //login: UserConstants.LOGIN,
     destroyTokenAndUser: UserConstants.LOGOUT,
     receiveToken: UserConstants.RECEIVE_TOKEN,
-    createUser: UserConstants.CREATE_USER,
   },
 
   restoreSession() {
@@ -27,10 +25,6 @@ export default Marty.createStore({
     if (user && token) {
       this.setState({user, token})
     }
-  },
-
-  login(email, password) {
-    return StormHttpAPI.login(email, password)
   },
 
   receiveToken(token) {
@@ -57,10 +51,6 @@ export default Marty.createStore({
   getToken() {
     //TODO clone?
     return this.state.token
-  },
-
-  createUser(user) {
-
   },
 
 })

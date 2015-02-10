@@ -1,5 +1,5 @@
 import React from 'react'
-import Router, { Route, DefaultRoute, RouteHandler, Link, NotFoundRoute } from 'react-router'
+import Router, { Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
 import MessageViewController from './components/message-view-controller'
 import ActivityViewController from './components/activity-view-controller'
 import LoginViewController from './components/login-view-controller'

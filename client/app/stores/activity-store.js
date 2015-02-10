@@ -1,6 +1,6 @@
 import Marty from 'marty'
 import { Activity as ActivityConstants } from '../constants'
-import { List, Map } from 'immutable'
+import { Map as iMap } from 'immutable'
 import StormHttpAPI from '../sources/storm-http-api'
 
 export default Marty.createStore({
@@ -8,7 +8,7 @@ export default Marty.createStore({
 
   getInitialState() {
     return {
-      activities: Map()
+      activities: iMap()
     }
   },
 
@@ -17,20 +17,16 @@ export default Marty.createStore({
   },
 
   receiveActivities(activities) {
-    console.log('Store, receiving activities')
-    var newActivityMap = Map()
+    var newActivityMap = iMap()
     activities.forEach((act) => {
       newActivityMap = newActivityMap.set(act.id, act)
     })
-    console.log('Store, setting state of received activities')
-    console.log(newActivityMap.toArray())
     this.setState({
       activities: this.state.activities.merge(newActivityMap)
     })
   },
 
   get(activityId) {
-    console.log('Store, getById')
     return this.fetch({
       id: activityId,
       locally: () => {
@@ -39,14 +35,12 @@ export default Marty.createStore({
         }
       },
       remotely: () => {
-        // return the promise
         return StormHttpAPI.fetchActivities()
       }
     })
   },
 
   getAll() {
-    console.log('Store, get all')
     return this.fetch({
       id: 'activities',
       locally: () => {
@@ -55,8 +49,6 @@ export default Marty.createStore({
         }
       },
       remotely: () => {
-        // return the promise
-        console.log('API Fetch')
         return StormHttpAPI.fetchActivities()
       }
     })

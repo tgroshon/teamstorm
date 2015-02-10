@@ -1,13 +1,12 @@
 import Marty from 'marty'
-import ActionCreators from '../action-creators'
+import SourceActionCreators from '../source-action-creators'
 import pathToUrl from 'path-to-url'
 import RSVP from 'rsvp'
 
 export default Marty.createStateSource({
   type: 'http',
-
+  
   login(email, password) {
-    // TODO get this promise to the caller
     return new RSVP.Promise((resolve, reject) => {
       this.post({
         url: '/login',
@@ -16,31 +15,30 @@ export default Marty.createStateSource({
           password
         }
       }).then((res) => {
-        ActionCreators.receiveToken(res.body.token)
+        SourceActionCreators.receiveToken(res.body.token)
         resolve()
       }).catch(reject)
     })
   },
 
   logout() {
-    ActionCreators.destroyTokenAndUser(res.body.token)
+    SourceActionCreators.destroyTokenAndUser(res.body.token)
   },
 
   fetchMessages(activityId) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     return this.get(url).then((res) => {
-      ActionCreators.receiveMessages(activityId, res.body.messages)
+      SourceActionCreators.receiveMessages(activityId, res.body.messages)
     })
   },
 
   fetchActivities() {
     return this.get('/activity').then((res) => {
-      ActionCreators.receiveActivities(res.body.activities)
+      SourceActionCreators.receiveActivities(res.body.activities)
     })
   },
 
   streamMessages(activityId, listener) {
-    console.log('Source, Streaming from', activityId)
     var url = pathToUrl('/activity/:activityId/messages/stream',
                         {activityId})
     this.evtSource = new EventSource(url)
@@ -56,11 +54,11 @@ export default Marty.createStateSource({
     }
   },
 
-  postMessage(message) {
+  postMessage(activityId, message) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     this.post({ url, body: message })
         .then((res) => {
-          ActionCreators.receiveMessage(res.body)
+          SourceActionCreators.receiveMessage(res.body)
         })
   }
 })

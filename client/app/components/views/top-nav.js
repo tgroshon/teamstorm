@@ -8,7 +8,6 @@ import ActionCreators from '../../action-creators'
 var UserStateMixin = Marty.createStateMixin({
   listenTo: UserStore,
   getState() {
-    console.log('Asking for user-store state')
     return {
       user: UserStore.getUser()
     }
@@ -32,7 +31,6 @@ export default React.createClass({
 
   handleLogout(evt) {
     evt.preventDefault()
-    console.log('Logout Clicked')
     ActionCreators.logout()
     this.setState({user: null})
     this.transitionTo('login')

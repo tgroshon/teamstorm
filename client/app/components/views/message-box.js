@@ -5,7 +5,7 @@ export default React.createClass({
     var message = this.props.message
     var createDate = new Date(message.createDate)
     return (
-      <div>
+      <div className="message-container">
         <div className="message-box">
           {message.payload}
           <br />
