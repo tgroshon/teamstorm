@@ -44,7 +44,7 @@ export default React.createClass({
     return (
       <li key={this.props.activity.id} className="ActivityList__Item">
         <Link
-          to="messages"
+          to="activity"
           params={{activityId: this.props.activity.id}}
           className="ActivityList__ItemLink"
           >

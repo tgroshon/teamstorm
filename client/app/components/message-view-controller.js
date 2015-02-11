@@ -3,7 +3,7 @@ import MessageBox from './views/message-box'
 import MessageStore from '../stores/message-store'
 import Marty from 'marty'
 import ActionCreators from '../action-creators'
-import Router, {Link, RouteHandler} from 'react-router'
+import Router from 'react-router'
 
 var MessageStateMixin = Marty.createStateMixin({
   listenTo: MessageStore,

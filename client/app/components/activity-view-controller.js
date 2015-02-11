@@ -1,45 +1,37 @@
-import React from 'react'
 import Marty from 'marty'
+import React from 'react'
+import Router from 'react-router'
 import ActivityStore from '../stores/activity-store'
-import ActivityBox from './views/activity-box'
-import Router, {RouteHandler} from 'react-router'
 
 var ActivityStateMixin = Marty.createStateMixin({
   listenTo: ActivityStore,
   getState() {
+    var activityId = this.getParams().activityId
     return {
-      activityResults: ActivityStore.getAll()
+      activityResult: ActivityStore.get(activityId)
     }
   }
 })
 
 export default React.createClass({
-  mixins: [ActivityStateMixin],
+  mixins: [Router.State, ActivityStateMixin],
+
   render() {
-    return this.state.activityResults.when({
+    return this.state.activityResult.when({
       pending() {
-        return <div className="activities-loading">Loading...</div>
+        return <div className="activity-loading">Loading...</div>
       },
       failed(error) {
-        window.BadGuy = error
-        console.log(error)
-        throw error
-        return <div className="activities-error">{error.message}</div>
+        return <div className="activity-error">{error.message}</div>
       },
-      done(activities) {
-        var boxes = activities.map((act) => {
-          return <ActivityBox key={act.id} activity={act} />
-        })
-
+      done(activity) {
         return (
           <div>
-            <ul className="Main__ActivityList">
-              {boxes}
-            </ul>
-            <RouteHandler />
+            {activity.title}
           </div>
         )
       }
     })
   }
 })
+

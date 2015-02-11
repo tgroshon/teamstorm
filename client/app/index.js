@@ -2,8 +2,11 @@ import React from 'react'
 import Router, { Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
 import MessageViewController from './components/message-view-controller'
 import ActivityViewController from './components/activity-view-controller'
+import ActivitiesViewController from './components/activities-view-controller'
 import LoginViewController from './components/login-view-controller'
 import DashboardViewController from './components/dashboard-view-controller'
+import TeamsViewController from './components/teams-view-controller'
+import TeamViewController from './components/team-view-controller'
 import TopNav from './components/views/top-nav'
 import ActionCreators from './action-creators'
 
@@ -45,8 +48,12 @@ var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="login" handler={LoginViewController}/>
     <Route name="signup" handler={LoginViewController}/>
-    <Route name="team" handler={LoginViewController}/>
-    <Route name="activity" path="/activity" handler={ActivityViewController}>
+    <Route name="teams" path="/team" handler={TeamsViewController}>
+      <Route name="team" path=":teamId" handler={TeamViewController}/>
+      <DefaultRoute handler={DefaultAct}/>
+    </Route>
+    <Route name="activities" path="/activity" handler={ActivitiesViewController}>
+      <Route name="activity" path=":activityId" handler={ActivityViewController}/>
       <Route name="messages" path=":activityId/messages" handler={MessageViewController}/>
       <DefaultRoute handler={DefaultAct}/>
     </Route>

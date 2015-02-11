@@ -1,5 +1,4 @@
 import React from 'react'
-import {Button} from 'react-bootstrap'
 import Router, {Navigation} from 'react-router'
 import ActionCreators from '../action-creators'
 

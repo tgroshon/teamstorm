@@ -42,7 +42,7 @@ body {
   margin-right: 10px;
 }
 
-.Main__ActivityList {
+.left-list {
   position: absolute;
   left: 0;
   top: 50px;
@@ -54,8 +54,16 @@ body {
   list-style-type: none;
 }
 
+.Main__ActivityList {
+  @extend .left-list;
+}
+
 .ActivityList__Item {
 
+}
+
+.Main__TeamList {
+  @extend .left-list;
 }
 
 @include keyframes(shading) {

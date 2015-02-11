@@ -70,8 +70,8 @@ export default React.createClass({
       <Navbar className="navbar-fixed-top">
         <Nav>
           <div key={1} className="navbar-brand">TeamStorm</div>
-          <CustomItem key={2} to="team">Teams</CustomItem>
-          <CustomItem key={3} to="activity">Activities</CustomItem>
+          <CustomItem key={2} to="teams">Teams</CustomItem>
+          <CustomItem key={3} to="activities">Activities</CustomItem>
           {this.getUserAuthLink()}
           {this.getDropdown()}
         </Nav>

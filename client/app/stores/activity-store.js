@@ -30,7 +30,7 @@ export default Marty.createStore({
     return this.fetch({
       id: activityId,
       locally: () => {
-        if (this.hasAlreadyFetched(activityId)) {
+        if (this.state.activities.has(activityId)) {
           return this.state.activities.get(activityId)
         }
       },
