@@ -33,9 +33,7 @@ User.prototype.save = function(done) {
 }
 
 User.prototype.toJson = function() {
-  //TODO FIXIT change back to omit after debugging
-  //return _.omit(this, PRIVATE_ATTRS)
-  return this
+  return _.omit(this, PRIVATE_ATTRS)
 }
 
 User.prototype.hashPassword = function(password, done) {

@@ -20,6 +20,9 @@ export default Marty.createConstants({
     'RECEIVE_USER',
     'RECEIVE_TOKEN',
     'CREATE_USER',
+  ],
+  Team: [
+    'RECEIVE_TEAMS',
   ]
 })
 

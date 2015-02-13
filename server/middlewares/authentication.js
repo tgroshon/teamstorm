@@ -23,6 +23,7 @@ module.exports = {
     if (!result) {
       res.sendStatus(401)
     } else {
+      req.user = result
       next()
     }
   },

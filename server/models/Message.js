@@ -61,6 +61,7 @@ Message.objects = {
 
           feed.on("error", function(error) {
             feed.removeAllListeners()
+            conn.close()
             done(error)
           })
 
