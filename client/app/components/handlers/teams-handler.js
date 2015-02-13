@@ -1,7 +1,7 @@
 import React from 'react'
 import Router, {RouteHandler} from 'react-router'
 import {Panel, Alert, Glyphicon, Badge} from 'react-bootstrap'
-import ActionCreators from '../action-creators'
+import ActionCreators from '../../action-creators'
 
 var TeamBox =  React.createClass({
   render() {

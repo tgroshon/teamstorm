@@ -1,6 +1,6 @@
 import React from 'react'
 import Router, {Navigation} from 'react-router'
-import ActionCreators from '../action-creators'
+import ActionCreators from '../../action-creators'
 
 export default React.createClass({
   mixins: [Navigation],

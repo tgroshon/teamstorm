@@ -1,7 +1,7 @@
 import React from 'react'
 import Marty from 'marty'
-import ActivityStore from '../stores/activity-store'
-import ActivityBox from './views/activity-box'
+import ActivityStore from '../../stores/activity-store'
+import ActivityBox from '../views/activity-box'
 import Router, {RouteHandler} from 'react-router'
 
 var ActivityStateMixin = Marty.createStateMixin({
