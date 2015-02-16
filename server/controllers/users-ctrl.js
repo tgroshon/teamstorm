@@ -23,7 +23,11 @@ module.exports = {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
-      res.json({ 'users': users })
+      res.json({
+        'users': users.map(function(user) {
+          return user.toJson()
+        })
+      })
     })
   },
 
@@ -44,7 +48,11 @@ module.exports = {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
-      res.json({ 'users': users })
+      res.json({
+        'users': users.map(function(user) {
+          return user.toJson()
+        })
+      })
     })
   },
 
@@ -56,13 +64,4 @@ module.exports = {
       res.json({ 'token': authService.encode(users.pop())})
     })
   },
-
-  streamIndex: function(req, res) {
-    User.objects.streamAll(function(data) {
-      res.emit(JSON.stringify(data), 'user')
-    }, function(err) {
-      console.log('Ending response', err.message)
-      res.end()
-    })
-  }
 }

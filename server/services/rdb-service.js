@@ -40,9 +40,12 @@ module.exports = {
   all: function rdbServiceGetAll(Klass, done) {
     getConnection(function(err, conn) {
       r.db(config.rdb.name).table(Klass.tableName).run(conn, function(err, cursor) {
-        conn.close()
-        if (err) return done(err)
+        if (err) {
+          conn.close()
+          return done(err)
+        }
         cursor.toArray(function(err, results) {
+          conn.close()
           if (err) return done(err)
           done(err, results.map(function(result) {
             return new Klass(result)
@@ -72,9 +75,12 @@ module.exports = {
       .table(Klass.tableName)
       .getAll(value, {index: index})
       .run(conn, function(err, cursor) {
-        conn.close()
-        if (err) return done(err)
+        if (err) {
+          conn.close()
+          return done(err)
+        }
         cursor.toArray(function(err, results) {
+          conn.close()
           if (err) return done(err)
           done(err, results.map(function(result){
             return new Klass(result)
