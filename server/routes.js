@@ -9,6 +9,7 @@ var sseMiddleware = require('./middlewares/sse-response')
 var authMiddleware = require('./middlewares/authentication')
 
 router.get('/users', usersCtrl.index)
+router.get('/users/search', usersCtrl.search)
 router.post('/users', usersCtrl.create)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
