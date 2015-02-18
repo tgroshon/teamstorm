@@ -1,6 +1,8 @@
 import React from 'react'
+import jQuery from 'jquery'
+window.jQuery = jQuery
+window.$ = jQuery
 import Router, { Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
-
 import MessageViewController from './components/handlers/message-handler'
 import ActivityViewController from './components/handlers/activity-handler'
 import ActivitiesViewController from './components/handlers/activities-handler'

@@ -8,7 +8,7 @@ export default Marty.createStore({
 
   getInitialState() {
     return {
-      teams: null
+      teams: [],
     }
   },
 
@@ -16,8 +16,8 @@ export default Marty.createStore({
     receiveTeams: TeamConstants.RECEIVE_TEAMS,
   },
 
-  receiveTeams() {
-
+  receiveTeams(teams) {
+    this.setState({teams: teams})
   },
 })
 

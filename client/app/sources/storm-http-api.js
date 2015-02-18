@@ -25,6 +25,14 @@ export default Marty.createStateSource({
     SourceActionCreators.destroyTokenAndUser(res.body.token)
   },
 
+  searchUsers(query, done) {
+    var url = '/users/search?q=' + encodeURIComponent(query)
+    console.log('Making request to', url)
+    return this.get(url).then((res) => {
+      done(res.body.users)
+    })
+  },
+
   fetchMessages(activityId) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     return this.get(url).then((res) => {

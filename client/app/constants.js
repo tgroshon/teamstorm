@@ -20,6 +20,8 @@ export default Marty.createConstants({
     'RECEIVE_USER',
     'RECEIVE_TOKEN',
     'CREATE_USER',
+    'RECEIVE_SEARCHED_USERS',
+    'SEARCH_USERS'
   ],
   Team: [
     'RECEIVE_TEAMS',

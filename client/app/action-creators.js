@@ -11,6 +11,10 @@ export default Marty.createActionCreators({
   login: Constants.User.LOGIN(function(email, password) {
     return StormHttpAPI.login(email, password)
   }),
+  searchUsers: Constants.User.SEARCH_USERS(function(query, done) {
+    console.log('In the Action Creator')
+    StormHttpAPI.searchUsers(query, done)
+  }),
 
   restoreSession: Constants.User.RESTORE_SESSION(),
   newMessage: Constants.Message.NEW_MESSAGE(function(activityId, message) {

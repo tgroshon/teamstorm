@@ -10,6 +10,7 @@ export default Marty.createStore({
     return {
       user: null,
       token: null,
+      searchedUsers: []
     }
   },
 
@@ -17,6 +18,11 @@ export default Marty.createStore({
     restoreSession: UserConstants.RESTORE_SESSION,
     destroyTokenAndUser: UserConstants.LOGOUT,
     receiveToken: UserConstants.RECEIVE_TOKEN,
+    receiveSearchedUsers: UserConstants.RECEIVE_SEARCHED_USERS
+  },
+
+  receiveSearchedUsers(users) {
+    this.setState({searchedUsers: users})
   },
 
   restoreSession() {

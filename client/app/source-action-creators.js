@@ -10,5 +10,6 @@ export default Marty.createActionCreators({
 
   receiveToken: Constants.User.RECEIVE_TOKEN(),
   receiveUser: Constants.User.RECEIVE_USER(),
+  receiveSearchedUsers: Constants.User.RECEIVE_SEARCHED_USERS(),
 })
 
