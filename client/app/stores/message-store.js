@@ -1,68 +1,57 @@
-import Marty from 'marty'
 import { Message as MessageConstants } from '../constants'
 import { List, Map as iMap } from 'immutable'
-import StormHttpAPI from '../sources/storm-http-api'
+import assign from 'object-assign'
+import AppDispatcher from '../dispatcher'
+import { EventEmitter } from 'events'
 
-export default Marty.createStore({
+var messages = iMap()
+
+var MessageStore = assign({}, EventEmitter.prototype, {
   name: 'Message',
-
-  getInitialState() {
-    return {
-      messages: iMap()
-    }
-  },
-
-  handlers: {
-    killMessageCache: MessageConstants.KILL_MESSAGE_CACHE,
-    receiveMessages: MessageConstants.RECEIVE_MESSAGES,
-    editMessage: MessageConstants.EDIT_MESSAGE,
-  },
 
   killMessageCache(activityId) {
     // TODO: Refactor to allow behind-the-scene subscripting to changes
-    this.setState({ messages: this.state.messages.delete(activityId) })
+    messages = messages.delete(activityId)
+    this.emit('message')
   },
 
   editMessage(activityId, message) {
     //TODO: lookup the message
   },
 
-  receiveMessages(activityId, messages) {
-    var messagesForActivity = this.state.messages.get(activityId)
+  receiveMessages(activityId, newMessages) {
+    var messagesForActivity = messages.get(activityId)
     if (List.isList(messagesForActivity)) {
-      messagesForActivity = messagesForActivity.concat(List(messages))
+      messagesForActivity = messagesForActivity.concat(List(newMessages))
     } else {
-      messagesForActivity = List(messages)
+      messagesForActivity = List(newMessages)
     }
-    this.setState({
-      messages: this.state.messages.set(activityId, messagesForActivity)
-    })
-  },
-
-  messageServerEventListener(event) {
-    try {
-      var message = JSON.parse(event.data)
-      this.receiveMessages(message.activityId, [message])
-    } catch (exp) {
-      console.log(exp)
-      throw exp
-    }
+    messages = messages.set(activityId, messagesForActivity)
+    this.emit('message')
   },
 
   getAll(activityId) {
-    var requestId = `activity-${activityId}-messages`
-
-    return this.fetch({
-      id: requestId,
-      locally: () => {
-        if (this.hasAlreadyFetched(requestId)) {
-          return this.state.messages.get(activityId).toArray()
-        }
-      },
-      remotely: () => {
-        return StormHttpAPI.fetchMessages(activityId)
-      }
-    })
+    var allMessages = messages.get(activityId)
+    return allMessages ? allMessages.toArray() : []
   }
 })
 
+MessageStore.dispatchToken = AppDispatcher.register((payload) => {
+  var params = payload.params
+
+  switch(payload.type) {
+
+    case MessageConstants.RECEIVE_MESSAGES:
+      MessageStore.receiveMessages(params.activityId, params.messages)
+      break
+
+    case MessageConstants.KILL_MESSAGE_CACHE:
+      MessageStore.killMessageCache(params.activityId)
+      break
+
+    default:
+      // do nothing
+  }
+})
+
+export default MessageStore

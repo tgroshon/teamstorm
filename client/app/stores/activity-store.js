@@ -1,56 +1,49 @@
-import Marty from 'marty'
 import { Activity as ActivityConstants } from '../constants'
 import { Map as iMap } from 'immutable'
-import StormHttpAPI from '../sources/storm-http-api'
+import { EventEmitter } from 'events'
+import assign from 'object-assign'
+import AppDispatcher from '../dispatcher'
 
-export default Marty.createStore({
+var activities = iMap()
+
+var ActivityStore = assign({}, EventEmitter.prototype, {
   name: 'Activity',
 
-  getInitialState() {
-    return {
-      activities: iMap()
-    }
-  },
-
-  handlers: {
-    receiveActivities: ActivityConstants.RECEIVE_ACTIVITIES
-  },
-
-  receiveActivities(activities) {
+  receiveActivities(newActivities) {
     var newActivityMap = iMap()
-    activities.forEach((act) => {
+    newActivities.forEach((act) => {
       newActivityMap = newActivityMap.set(act.id, act)
     })
-    this.setState({
-      activities: this.state.activities.merge(newActivityMap)
-    })
+    activities = activities.merge(newActivityMap)
+    this.emit('activity')
   },
 
   get(activityId) {
-    return this.fetch({
-      id: activityId,
-      locally: () => {
-        if (this.state.activities.has(activityId)) {
-          return this.state.activities.get(activityId)
-        }
-      },
-      remotely: () => {
-        return StormHttpAPI.fetchActivities()
-      }
-    })
+    if (activities.has(activityId)) {
+      return activities.get(activityId)
+    } else {
+      return null
+    }
   },
 
   getAll() {
-    return this.fetch({
-      id: 'activities',
-      locally: () => {
-        if (this.hasAlreadyFetched('activities')) {
-          return this.state.activities.toArray()
-        }
-      },
-      remotely: () => {
-        return StormHttpAPI.fetchActivities()
-      }
-    })
+    return activities.toArray()
   }
 })
+
+ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
+  var params = payload.params
+
+  switch(payload.type) {
+
+    case ActivityConstants.RECEIVE_ACTIVITIES:
+      ActivityStore.receiveActivities(params.activities)
+      break
+
+    default:
+      // do nothing
+  }
+})
+
+export default ActivityStore
+

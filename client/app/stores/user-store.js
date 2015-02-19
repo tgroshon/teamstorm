@@ -1,62 +1,74 @@
-import Marty from 'marty'
+import assign from 'object-assign'
+import { EventEmitter } from 'events'
 import { User as UserConstants } from '../constants'
-import StormHttpAPI from '../sources/storm-http-api'
 import LocalStorage from '../sources/local-storage'
+import AppDispatcher from '../dispatcher'
 
-export default Marty.createStore({
+var user = null
+var token = null
+
+var UserStore = assign({}, EventEmitter.prototype, {
   name: 'User',
 
-  getInitialState() {
-    return {
-      user: null,
-      token: null,
-      searchedUsers: []
-    }
-  },
-
-  handlers: {
-    restoreSession: UserConstants.RESTORE_SESSION,
-    destroyTokenAndUser: UserConstants.LOGOUT,
-    receiveToken: UserConstants.RECEIVE_TOKEN,
-    receiveSearchedUsers: UserConstants.RECEIVE_SEARCHED_USERS
-  },
-
-  receiveSearchedUsers(users) {
-    this.setState({searchedUsers: users})
-  },
-
   restoreSession() {
-    var user = LocalStorage.get('user')
-    var token = LocalStorage.get('token')
+    var lastUser = LocalStorage.get('user')
+    var lastToken = LocalStorage.get('token')
     if (user && token) {
-      this.setState({user, token})
+      user = lastUser
+      token = lastToken
     }
   },
 
-  receiveToken(token) {
-    var decodedPieces = token.split('.').map((segment) => {
+  receiveToken(newToken) {
+    var decodedPieces = newToken.split('.').map((segment) => {
       return window.atob(segment)
     })
     LocalStorage.set('user', decodedPieces[1])
     LocalStorage.set('token', token)
-    this.setState({user: decodedPieces[1], token: token})
+    user = decodedPieces[1]
+    token = newToken
   },
 
   destroyTokenAndUser() {
     console.log('Store, Destroy locals and set state')
     LocalStorage.set('token', "")
     LocalStorage.set('user', "")
-    this.setState({user: null, token: null})
+    user = null
+    token = null
   },
 
   getUser() {
     //TODO clone?
-    return this.state.user
+    return user
   },
 
   getToken() {
     //TODO clone?
-    return this.state.token
+    return token
   },
 
 })
+
+UserStore.dispatchToken = AppDispatcher.register((payload) => {
+  var params = payload.params
+
+  switch(payload.type) {
+
+    case UserConstants.RESTORE_SESSION:
+      UserStore.restoreSession()
+      break
+
+    case UserConstants.RECEIVE_TOKEN:
+      UserStore.receiveToken(params)
+      break
+
+    case UserConstants.LOGOUT:
+      UserStore.destroyTokenAndUser()
+      break
+
+    default:
+      // do nothing
+  }
+})
+
+export default UserStore

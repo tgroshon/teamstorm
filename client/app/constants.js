@@ -1,32 +1,32 @@
-import Marty from 'marty'
+import keyMirror from 'react/lib/keyMirror'
 
-export default Marty.createConstants({
-  Message: [
-    'EDIT_MESSAGE',
-    'NEW_MESSAGE',
-    'RECEIVE_MESSAGES',
-    'GET_MESSAGE_STREAM',
-    'STOP_MESSAGE_STREAM',
-    'KILL_MESSAGE_CACHE',
-  ],
-  Activity: [
-    'RECEIVE_ACTIVITIES',
-    'NEW_ACTIVITY',
-  ],
-  User: [
-    'RESTORE_SESSION',
-    'LOGIN',
-    'LOGOUT',
-    'RECEIVE_USER',
-    'RECEIVE_TOKEN',
-    'CREATE_USER',
-    'RECEIVE_SEARCHED_USERS',
-    'SEARCH_USERS'
-  ],
-  Team: [
-    'RECEIVE_TEAMS',
-  ]
-})
+export default {
+  Message: keyMirror({
+    'EDIT_MESSAGE': null,
+    'NEW_MESSAGE': null,
+    'RECEIVE_MESSAGES': null,
+    'GET_MESSAGE_STREAM': null,
+    'STOP_MESSAGE_STREAM': null,
+    'KILL_MESSAGE_CACHE': null,
+  }),
+  Activity: keyMirror({
+    'RECEIVE_ACTIVITIES': null,
+    'NEW_ACTIVITY': null,
+  }),
+  User: keyMirror({
+    'RESTORE_SESSION': null,
+    'LOGIN': null,
+    'LOGOUT': null,
+    'RECEIVE_USER': null,
+    'RECEIVE_TOKEN': null,
+    'CREATE_USER': null,
+    'RECEIVE_SEARCHED_USERS': null,
+    'SEARCH_USERS': null
+  }),
+  Team: keyMirror({
+    'RECEIVE_TEAMS': null,
+  })
+}
 
 export var strings = {
   types: {

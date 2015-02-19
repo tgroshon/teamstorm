@@ -3,7 +3,7 @@ import Router, {RouteHandler} from 'react-router'
 import {Panel, Alert, Glyphicon, Badge} from 'react-bootstrap'
 import ActionCreators from '../../action-creators'
 
-var TeamBox =  React.createClass({
+var TeamBox = React.createClass({
   render() {
     return (
       <li key={this.props.team.id} className="TeamList__Item">

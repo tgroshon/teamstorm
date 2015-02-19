@@ -1,18 +1,8 @@
 import React from 'react'
-import Marty from 'marty'
 import Router, { Link, Navigation } from 'react-router'
 import { Nav, Navbar, NavItem, DropdownButton, MenuItem } from 'react-bootstrap'
 import UserStore from '../../stores/user-store'
 import ActionCreators from '../../action-creators'
-
-var UserStateMixin = Marty.createStateMixin({
-  listenTo: UserStore,
-  getState() {
-    return {
-      user: UserStore.getUser()
-    }
-  }
-})
 
 var CustomItem = React.createClass({
   render() {
@@ -27,7 +17,25 @@ var CustomItem = React.createClass({
 })
 
 export default React.createClass({
-  mixins: [UserStateMixin, Navigation],
+  mixins: [Navigation],
+
+  getInitialState() {
+    return {
+      user: null
+    }
+  },
+
+  storeUpdate() {
+    this.setState({ user: UserStore.getUser() })
+  },
+
+  componentWillMount() {
+    UserStore.on('user', this.storeUpdate)
+  },
+
+  componentWillUnmount() {
+    UserStore.removeListener(this.storeUpdate)
+  },
 
   handleLogout(evt) {
     evt.preventDefault()

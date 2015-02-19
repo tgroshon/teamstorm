@@ -1,57 +1,59 @@
 import React from 'react'
-import Marty from 'marty'
 import Router from 'react-router'
 import MessageBox from '../views/message-box'
 import MessageStore from '../../stores/message-store'
 import ActionCreators from '../../action-creators'
 
-var MessageStateMixin = Marty.createStateMixin({
-  listenTo: MessageStore,
-  getState() {
-    var activityId = this.getParams().activityId
-    return {
-      messageResults: MessageStore.getAll(activityId)
-    }
-  }
-})
 
 export default React.createClass({
-  mixins: [Router.State, MessageStateMixin],
+  mixins: [Router.State],
+
+  getInitialState() {
+    return {
+      messages: []
+    }
+  },
+
+  storeUpdate() {
+    console.log('Message listener fired')
+    this.setState({
+      messages: MessageStore.getAll(this.getParams().activityId)
+    })
+  },
 
   componentWillMount() {
+    MessageStore.on('message', this.storeUpdate)
+    ActionCreators.fetchMessages(this.getParams().activityId)
     ActionCreators.getMessageStream(this.getParams().activityId)
   },
 
   componentWillReceiveProps() {
     ActionCreators.stopMessageStream()
+    this.setState({ messages: [] })
     ActionCreators.killMessageCache(this.getParams().activityId)
+    ActionCreators.fetchMessages(this.getParams().activityId)
     ActionCreators.getMessageStream(this.getParams().activityId)
   },
 
   componentWillUnmount() {
+    MessageStore.removeListener('message', this.storeUpdate)
     ActionCreators.stopMessageStream()
   },
 
   render() {
-    return this.state.messageResults.when({
-      pending() {
+    if (this.state.messages.length == 0) {
         return <div className="messages-loading">Loading...</div>
-      },
-      failed(error) {
-        return <div className="messages-error">{error.message}</div>
-      },
-      done(messages) {
-        var messageBoxes = messages.map((mess) => {
-          return <MessageBox key={mess.id} message={mess} />
-        })
+    } else {
+      var messageBoxes = this.state.messages.map((mess) => {
+        return <MessageBox key={mess.id} message={mess} />
+      })
 
-        return (
-          <div className="row">
-            {messageBoxes}
-          </div>
-        )
-      }
-    })
+      return (
+        <div className="row">
+          {messageBoxes}
+        </div>
+      )
+    }
   }
 })
 

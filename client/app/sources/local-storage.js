@@ -1,17 +1,16 @@
-import Marty from 'marty'
 import ActionCreators from '../action-creators'
 import pathToUrl from 'path-to-url'
 
-export default Marty.createStateSource({
+export default {
   namespace: 'teamstorm:',
   type: 'localStorage',
 
-  setToken(token) {
-    this.set('token', token)
+  get(key) {
+    return localStorage.getItem(this.namespace + key)
   },
 
-  getToken() {
-    return this.get('token')
-  }
-})
+  set(key, object) {
+    return localStorage.setItem(this.namespace + key, object)
+  },
+}
 

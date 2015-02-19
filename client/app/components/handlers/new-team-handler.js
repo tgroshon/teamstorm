@@ -17,29 +17,6 @@ export default React.createClass({
     })
   },
 
-  findMatches(q, cb) { 
-    console.log('finding match')
-    var stuff = [
-      {
-        type: 'name',
-        value: 'bob'
-      },
-      {
-        type: 'name',
-        value: 'john'
-      },
-      {
-        type: 'name',
-        value: 'jim'
-      },
-      {
-        type: 'name',
-        value: 'stephen'
-      },
-    ]
-    cb(stuff)
-  },
-
 	componentDidMount: function(){
     console.log('Typeahead Mounted')
 		var element = this.getDOMNode()

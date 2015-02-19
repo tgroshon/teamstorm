@@ -8,9 +8,9 @@ export default React.createClass({
   buttonClick() {
     var username = this.refs.username.getDOMNode().value
     var password = this.refs.password.getDOMNode().value
-    var promise = ActionCreators.login(username, password)
+    var loginPromise = ActionCreators.login(username, password)
 
-    promise.then(() => {
+    loginPromise.then(() => {
       this.transitionTo('activity')
     }).catch((err) => {
       // TODO validation error message

@@ -1,37 +1,36 @@
-import Marty from 'marty'
 import React from 'react'
 import Router from 'react-router'
 import ActivityStore from '../../stores/activity-store'
 
-var ActivityStateMixin = Marty.createStateMixin({
-  listenTo: ActivityStore,
-  getState() {
-    var activityId = this.getParams().activityId
-    return {
-      activityResult: ActivityStore.get(activityId)
-    }
-  }
-})
-
 export default React.createClass({
-  mixins: [Router.State, ActivityStateMixin],
+  mixins: [Router.State],
+
+  getInitialState() {
+    return {
+      activity: {}
+    }
+  },
+
+  storeUpdate() {
+    this.setState({
+      activity: ActivityStore.get(this.getParams().activityId)
+    })
+  },
+
+  componentWillMount() {
+    ActivityStore.on('activity', this.storeUpdate)
+  },
+
+  componentWillUnmount() {
+    ActivityStore.removeListener('activity', this.storeUpdate)
+  },
 
   render() {
-    return this.state.activityResult.when({
-      pending() {
-        return <div className="activity-loading">Loading...</div>
-      },
-      failed(error) {
-        return <div className="activity-error">{error.message}</div>
-      },
-      done(activity) {
-        return (
-          <div>
-            {activity.title}
-          </div>
-        )
-      }
-    })
+    return (
+      <div>
+        {this.state.activity.title}
+      </div>
+    )
   }
 })
 
