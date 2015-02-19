@@ -9,7 +9,8 @@ var ATTRS = [
   'id',
   'creator',
   'payload',
-  'activityId'
+  'activityId',
+  'createDate'
 ]
 
 var PRIVATE_ATTRS = [
