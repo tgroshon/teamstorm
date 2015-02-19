@@ -16,4 +16,4 @@ var server = app.listen(3000, function () {
     console.log('App listening at on Port %s', port)
 })
 
-module.exports = server;
+module.exports = server
