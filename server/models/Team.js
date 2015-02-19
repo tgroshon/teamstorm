@@ -56,30 +56,7 @@ Team.objects = {
   },
 
   getByMembership: function(userId, done) {
-    rdb.getConnection(function(conErr, conn) {
-      if (conErr) return done(conErr)
-
-      // TODO: Optimize with a multi-index
-      // http://rethinkdb.com/docs/secondary-indexes/javascript/
-      r.db(config.rdb.name)
-        .table(Team.tableName)
-        .filter(r.row("members").contains(userId))
-        .union(
-          r.db(config.rdb.name)
-            .table(Team.tableName)
-            .filter({creatorId: userId})
-        ).run(conn, function(err, cursor) {
-          if (err) {
-            conn.close()
-            return done(err)
-          }
-
-          cursor.toArray(function(arErr, results) {
-            done(arErr, results || [])
-            conn.close()
-          })
-      })
-    })
+    rdb.getByMembership(Team, userId, done)
   }
 }
 

@@ -52,25 +52,7 @@ Message.objects = {
   },
 
   streamAll: function(activityId, listener, done) {
-    rdb.getConnection(function(err, conn) {
-      r.db(config.rdb.name)
-        .table(Message.tableName)
-        .changes()
-        .filter(r.row('new_val')('activityId').eq(activityId))
-        .run(conn, function(err, feed) {
-          if (err) return done(err)
-
-          feed.on("error", function(error) {
-            feed.removeAllListeners()
-            conn.close()
-            done(error)
-          })
-
-          feed.on("data", function(message) {
-            listener(message.new_val)
-          })
-        })
-    })
+    rdb.streamMessages(Message, activityId, listener, done)
   }
 }
 

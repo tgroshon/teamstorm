@@ -75,31 +75,9 @@ User.objects = {
     rdb.getByIndex(User, 'email', email, done)
   },
 
-  search: function(input, done) {
-    rdb.getConnection(function(cErr, conn) {
-      if (cErr) return done(cErr)
-
-      r.db(config.rdb.name)
-        .table(User.tableName)
-        .filter(function(user) {
-          // case insensitive, fuzzy search
-          var query = '(?i)' + input.split('').join('\\w*')
-          return r.or(
-            user("email").match(query),
-            user("firstName").match(query),
-            user("lastName").match(query)
-          )
-      }).run(conn, function(err, cursor) {
-        if (err) return done(err)
-
-        cursor.toArray(function(aErr, results){
-          conn.close()
-          done(aErr, results.map(function(result) {
-            return new User(result)
-          }))
-        })
-      })
-    })
+  search: function(query, done) {
+    var fields = ['email', 'firstName', 'lastName']
+    rdb.searchUser(User, fields, query, done)
   },
 }
 
