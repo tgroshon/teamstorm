@@ -3,6 +3,7 @@
 require('dotenv').load()
 
 module.exports = {
+  port: 3000,
   rdb: {
     name: process.env.RDB_DB || 'storm',
     host: process.env.RDB_HOST || 'rdb',
