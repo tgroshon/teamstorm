@@ -8,7 +8,7 @@ var app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(multer())
-app.use(express.static('/code/public'))
+app.use(express.static('./public'))
 app.use(routes)
 
 var server = app.listen(config.port, function () {
