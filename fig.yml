@@ -12,7 +12,7 @@ web:
   links:
     - rdb
   environment:
-    VIRTUAL_HOST: stormjs.docker
+    VIRTUAL_HOST: teamstorm.docker
 
 watcher:
   build: .

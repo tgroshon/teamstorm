@@ -6,4 +6,4 @@ WORKDIR /code
 ADD . /code
 RUN npm install --production
 
-CMD npm start
+CMD node /code/server/app.js
