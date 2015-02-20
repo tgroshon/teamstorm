@@ -3,6 +3,6 @@
 require('dotenv').load()
 
 module.exports = {
-  port: 5000,
+  port: process.env.PORT || 80,
 }
 
