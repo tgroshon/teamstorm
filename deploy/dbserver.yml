@@ -1,0 +1,6 @@
+---
+- include: tasks/util-install.yml
+- include: tasks/install-rethinkdb.yml
+- include: tasks/config-rethinkdb.yml
+- include: tasks/config-firewall.yml
+

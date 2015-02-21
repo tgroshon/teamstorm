@@ -1,0 +1,5 @@
+---
+- name: firewall deny outside access to rethinkdb web admin
+  command: iptables -A INPUT -i eth0 -p tcp --dport 8080 -j DROP
+- name: firewall allow local access to rethinkdb web admin
+  command: iptables -I INPUT -i eth0 -s 127.0.0.1 -p tcp --dport 8080 -j ACCEPT

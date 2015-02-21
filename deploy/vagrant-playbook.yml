@@ -1,0 +1,9 @@
+---
+- name: Provision Vagrant Machine
+  hosts: databases
+  remote_user: vagrant
+  sudo: yes
+
+  tasks: 
+    - include: dbserver.yml
+

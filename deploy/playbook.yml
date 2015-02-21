@@ -1,0 +1,33 @@
+---
+- hosts: databases
+  remote_user: vagrant
+  sudo: yes
+  tasks:
+    - name: install the latest version of vim
+      yum: name=vim state=latest
+    - name: install the latest version of psmisc (pstree)
+      yum: name=psmisc state=latest
+
+    - name: download rethinkdb yum repo
+      get_url: url=http://download.rethinkdb.com/centos/6/x86_64/rethinkdb.repo dest=/etc/yum.repos.d/rethinkdb.repo
+    - name: install the latest version of rethinkdb
+      yum: name=rethinkdb state=latest
+
+    - name: create rethinkdb data directory
+      command: rethinkdb create --directory /var/lib/rethinkdb/rethinkdb_data creates=/var/lib/rethinkdb/rethinkdb_data
+    - name: chown and chmod the data directory
+      file: path=/var/lib/rethinkdb/rethinkdb_data recurse=yes state=directory owner=rethinkdb group=rethinkdb mode=755
+    - name: create rethinkdb service for Systemd
+      template: src=assets/rdb.service.j2 dest=/usr/lib/systemd/system/rethinkdb@.service
+    - name: create tmpfiles.d for Systemd
+      template: src=assets/rdb.tempfilesd.j2 dest=/usr/lib/tmpfiles.d/rethinkdb.conf
+    - name: create rethinkdb conf
+      template: src=assets/rdb.conf.j2 dest=/etc/rethinkdb/instances.d/instance1.conf
+    - name: make sure rethinkdb is running
+      service: name=rethinkdb state=started enabled=yes
+
+    - name: firewall deny outside access to rethinkdb web admin
+      command: iptables -A INPUT -i eth0 -p tcp --dport 8080 -j DROP
+    - name: firewall allow local access to rethinkdb web admin
+      command: iptables -I INPUT -i eth0 -s 127.0.0.1 -p tcp --dport 8080 -j ACCEPT
+
