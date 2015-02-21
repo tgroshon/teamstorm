@@ -14,7 +14,8 @@
     "build": "gulp build",
     "watch": "gulp",
     "migrate": "klei-migrate run",
-    "test": "mocha --harmony \"test/unit/**/*.spec.js\" --reporter min",
+    "test": "npm run test-unit && npm run test-integration",
+    "test-unit": "mocha --harmony \"test/unit/**/*.spec.js\" --reporter min",
     "test-integration": "mocha --harmony --reporter spec \"test/integration/**/*spec.js\""
   },
   "dependencies": {
