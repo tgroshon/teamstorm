@@ -12,6 +12,8 @@ router.get('/users', usersCtrl.index)
 router.get('/users/search', usersCtrl.search)
 router.post('/users', usersCtrl.create)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
+
+// TODO remove.  For testing only
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
 
 router.get('/activity/:activityId', activityCtrl.show)

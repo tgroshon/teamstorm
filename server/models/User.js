@@ -34,7 +34,7 @@ User.prototype.save = function(done) {
 }
 
 User.prototype.toJson = function() {
-  return _.omit(this, PRIVATE_ATTRS)
+  return _.pick(_.omit(this, PRIVATE_ATTRS), ATTRS)
 }
 
 User.prototype.hashPassword = function(password, done) {

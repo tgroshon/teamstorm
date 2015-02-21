@@ -33,7 +33,7 @@ Message.prototype.save = function(done) {
 }
 
 Message.prototype.toJson = function() {
-  return _.omit(this, PRIVATE_ATTRS)
+  return _.pick(_.omit(this, PRIVATE_ATTRS), ATTRS)
 }
 
 Message.tableName = config.rdb.tables.messages

@@ -35,7 +35,7 @@ Activity.prototype.save = function(done) {
 }
 
 Activity.prototype.toJson = function() {
-  return _.omit(this, PRIVATE_ATTRS)
+  return _.pick(_.omit(this, PRIVATE_ATTRS), ATTRS)
 }
 
 Activity.tableName = config.rdb.tables.activities

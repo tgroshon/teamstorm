@@ -33,7 +33,7 @@ Team.prototype.save = function(done) {
 }
 
 Team.prototype.toJson = function() {
-  return _.omit(this, PRIVATE_ATTRS)
+  return _.pick(_.omit(this, PRIVATE_ATTRS), ATTRS)
 }
 
 Team.tableName = config.rdb.tables.teams

@@ -61,7 +61,7 @@ module.exports = {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
-      res.json({ 'token': authService.encode(users.pop())})
+      res.json({ 'token': authService.encode(users.pop().toJson())})
     })
   },
 }
