@@ -49,7 +49,7 @@ Activity.objects = {
     rdb.all(Activity, done)
   },
 
-  find: function(id, done) {
+  get: function(id, done) {
     rdb.get(Activity, id, done)
   }
 }

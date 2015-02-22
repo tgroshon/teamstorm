@@ -1,12 +1,12 @@
 
-var request = require('supertest')
-var should = require('should')
-var sinon = require('sinon')
+import request from 'supertest'
+import should from 'should'
+import sinon from 'sinon'
 
-var app = require('../../../server/app.js')
-var rdbService  = require('../../../server/services/rdb-service')
-var authService  = require('../../../server/services/auth-service')
-var UserModel = require('../../../server/models/User')
+import app from '../../../server/app.js'
+import rdbService  from '../../../server/services/rdb-service'
+import authService  from '../../../server/services/auth-service'
+import UserModel from '../../../server/models/User'
 
 describe('Users Controller', () => {
 
@@ -113,7 +113,7 @@ describe('Users Controller', () => {
     })
   })
 
-  describe('#login', () => {
+  describe('#token', () => {
 
     var pwdHash = 'hashedPassword'
     var loginEmail = 'bob@example.com'

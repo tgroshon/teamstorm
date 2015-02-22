@@ -11,7 +11,9 @@ module.exports = {
       }
 
       res.json({
-        'teams': teams
+        'teams': teams.map(function(team) {
+          return team.toJson()
+        })
       })
     })
   },
@@ -31,7 +33,7 @@ module.exports = {
   },
 
   show: function(req, res) {
-    Team.objects.find(req.params.teamId, function (err, team) {
+    Team.objects.get(req.params.teamId, function (err, team) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }

@@ -43,19 +43,6 @@ module.exports = {
     })
   },
 
-  get: function(req, res) {
-    User.objects.getByEmail(req.body.email, function (err, users) {
-      if (err) {
-        return res.status(500).json({ errors: [{ msg: err.message }] })
-      }
-      res.json({
-        'users': users.map(function(user) {
-          return user.toJson()
-        })
-      })
-    })
-  },
-
   token: function(req, res) {
     User.objects.getByEmail(req.body.email, function (err, users) {
       if (err) {

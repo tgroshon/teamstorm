@@ -20,7 +20,7 @@ module.exports = {
   },
 
   show: function(req, res) {
-    Activity.objects.find(req.params.activityId, function (err, activity) {
+    Activity.objects.get(req.params.activityId, function (err, activity) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
@@ -37,7 +37,7 @@ module.exports = {
   },
 
   messageIndex: function(req, res) {
-    Message.objects.byActivity(req.params.activityId, function (err, messages) {
+    Message.objects.getByActivity(req.params.activityId, function (err, messages) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
@@ -56,7 +56,9 @@ module.exports = {
     Message.objects.streamAll(req.params.activityId, function(data) {
       res.emit(JSON.stringify(data), 'message')
     }, function(err) {
-      console.log('Ending response', err.msg)
+      if (err) {
+        console.log('Ending response', err.msg)
+      }
       res.end()
     })
   }

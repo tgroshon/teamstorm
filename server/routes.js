@@ -24,9 +24,11 @@ router.get('/activity/:activityId/messages', activityCtrl.messageIndex)
 router.post('/activity/:activityId/messages', activityCtrl.createMessage)
 
 router.get('/teams', authMiddleware.tokenAuth, teamsCtrl.index)
-router.get('/teams/debug', teamsCtrl.debug)
 router.get('/teams/:teamId', teamsCtrl.show)
 router.post('/teams', teamsCtrl.create)
+
+// TODO For testing only
+router.get('/teams/debug', teamsCtrl.debug)
 
 module.exports = router
 

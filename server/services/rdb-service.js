@@ -16,8 +16,8 @@ module.exports = {
   getConnection: getConnection,
 
   insert: function rdbServiceInsert(Klass, data, done) {
-    getConnection(function(err, conn) {
-      if (err) return done(err)
+    getConnection(function(cErr, conn) {
+      if (cErr) return done(cErr)
 
       var clonedData = _.clone(data)
       _.extend(clonedData, { createDate: r.now() })
@@ -38,9 +38,12 @@ module.exports = {
   },
 
   all: function rdbServiceGetAll(Klass, done) {
-    getConnection(function(err, conn) {
-      r.db(config.rdb.name).table(Klass.tableName).run(conn, function(err, cursor) {
-        if (err) {
+    getConnection(function(cErr, conn) {
+      if (cErr) return done(cErr)
+      r.db(config.rdb.name)
+        .table(Klass.tableName)
+        .run(conn, function(qErr, cursor) {
+        if (qErr) {
           conn.close()
           return done(err)
         }
@@ -56,7 +59,8 @@ module.exports = {
   },
 
   get: function rdbServiceGet(Klass, key, done) {
-    getConnection(function(err, conn) {
+    getConnection(function(cErr, conn) {
+      if (cErr) return done(cErr)
       r.db(config.rdb.name)
         .table(Klass.tableName)
         .get(key)
@@ -70,7 +74,9 @@ module.exports = {
   },
 
   getByIndex: function rdbServiceGetByIndex(Klass, index, value, done) {
-    getConnection(function(err, conn) {
+    getConnection(function(cErr, conn) {
+      if (cErr) return done(cErr)
+
       r.db(config.rdb.name)
       .table(Klass.tableName)
       .getAll(value, {index: index})
@@ -90,7 +96,7 @@ module.exports = {
     })
   },
 
-  searchUser: function (Klass, fields, query, done) {
+  searchUser: function rdbServiceSearchUser(Klass, fields, query, done) {
     getConnection(function(cErr, conn) {
       if (cErr) return done(cErr)
 
@@ -116,7 +122,7 @@ module.exports = {
 
   },
 
-  getByMembership: function (Klass, userId, done) {
+  getByMembership: function rdbServiceGetByMembership(Klass, userId, done) {
     getConnection(function(conErr, conn) {
       if (conErr) return done(conErr)
 
@@ -137,13 +143,17 @@ module.exports = {
 
           cursor.toArray(function(arErr, results) {
             conn.close()
-            done(arErr, results || [])
+            if (!results) results = []
+            done(arErr, results.map(function(result) {
+              return new Klass(result)
+            }))
           })
       })
     })
   },
 
-  streamMessages: function (Klass, activityId, listener, done) {
+  streamMessages: function rdbServiceStreamMessags(Klass, activityId, listener,
+                                                   done) {
     getConnection(function(err, conn) {
       r.db(config.rdb.name)
         .table(Klass.tableName)

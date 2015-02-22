@@ -47,7 +47,7 @@ Message.objects = {
     rdb.all(Message, done)
   },
 
-  byActivity: function(activityId, done) {
+  getByActivity: function(activityId, done) {
     rdb.getByIndex(Message, 'activityId', activityId, done)
   },
 
