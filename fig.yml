@@ -13,10 +13,3 @@ web:
     - rdb
   environment:
     VIRTUAL_HOST: teamstorm.docker
-
-watcher:
-  build: .
-  command: ["npm", "run", "watch"]
-  volumes:
-    - ".:/code"
-
