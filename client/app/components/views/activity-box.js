@@ -23,13 +23,13 @@ export default React.createClass({
   getBsStyle() {
     switch(this.props.activity.type){
       case StringConstants.types.activity.deliverable:
-        return "info"
-        break;
-      case StringConstants.types.activity.discussion:
         return "success"
         break;
-      case StringConstants.types.activity.issue:
+      case StringConstants.types.activity.discussion:
         return "warning"
+        break;
+      case StringConstants.types.activity.issue:
+        return "danger"
         break;
       default:
         return "default"
@@ -48,15 +48,15 @@ export default React.createClass({
           params={{activityId: this.props.activity.id}}
           className="ActivityList__ItemLink"
           >
-          <Alert className="ActivityList__ItemBox" bsStyle={style}>
-            <h4>
+          <div className="ActivityList__ItemBox">
+            <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
               <Glyphicon glyph={icon} className="activity__header-icon" />
               {this.props.activity.title}
             </h4>
             <small>Status: {status}</small>
             <br />
             <small>Created on {createDate.toDateString()}</small>
-          </Alert>
+          </div>
         </Link>
       </li>
     )

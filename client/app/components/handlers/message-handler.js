@@ -53,8 +53,22 @@ export default React.createClass({
       })
 
       return (
-        <div className="row">
-          {messageBoxes}
+        <div className="messages-wrapper">
+          <div className="row message-box-list">
+            {messageBoxes}
+          </div>
+          <div className="row message-box-input-area">
+            <textarea
+              className="form-control message-box-input-textarea"
+              ref="messageInputTextarea"
+              rows="3"
+              maxLength="140"
+              placeholder="Enter your message..."
+             />
+            <button className="btn btn-primary message-box-input-button" ref="messageInputButton">
+              Post
+            </button>
+          </div>
         </div>
       )
     }

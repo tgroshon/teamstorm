@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'messages';
+@import 'activities';
 @import 'mixins';
 
 body {
@@ -54,34 +55,8 @@ body {
   list-style-type: none;
 }
 
-.Main__ActivityList {
-  @extend .left-list;
-}
-
-.ActivityList__Item {
-
-}
 
 .Main__TeamList {
   @extend .left-list;
 }
 
-@include keyframes(shading) {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: .20;
-  }
-  100% {
-    opacity: .40;
-  } 
-}
-.ActivityList__ItemBox {
-  margin-bottom: 5px;
-}
-
-.ActivityList__ItemLink:hover {
-  text-decoration: none;
-  opacity: .8;
-}

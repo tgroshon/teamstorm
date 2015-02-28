@@ -31,11 +31,6 @@ var App = React.createClass({
             <RouteHandler/>
           </div>
         </main>
-        <footer className="bottom__footer">
-          <div className="bottom__copy-container container">
-            <p className="text-muted">&copy; 2014 Tommy Groshong</p>
-          </div>
-        </footer>
       </div>
     )
   }
