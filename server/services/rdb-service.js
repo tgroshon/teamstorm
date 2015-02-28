@@ -5,7 +5,11 @@ var config = require('config')
 var _ = require('lodash')
 
 function getConnection(done) {
-  r.connect({host: config.rdb.host, port: config.rdb.port }, function (err, connection) {
+  r.connect({
+    host: config.rdb.host,
+    port: config.rdb.port,
+    authKey: config.rdb.authKey,
+  }, function (err, connection) {
     if (err) return done(err)
     connection['_id'] = Math.floor(Math.random()*10001)
     done(err, connection)
