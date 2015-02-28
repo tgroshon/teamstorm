@@ -1,0 +1,13 @@
+---
+- name: create rethinkdb data directory
+  command: rethinkdb create --directory /var/lib/rethinkdb/rethinkdb_data creates=/var/lib/rethinkdb/rethinkdb_data
+- name: chown and chmod the data directory
+  file: path=/var/lib/rethinkdb/rethinkdb_data recurse=yes state=directory owner=rethinkdb group=rethinkdb mode=755
+- name: create rethinkdb service for Systemd
+  template: src=assets/rdb.service.j2 dest=/usr/lib/systemd/system/rethinkdb@.service
+- name: create tmpfiles.d for Systemd
+  template: src=assets/rdb.tempfilesd.j2 dest=/usr/lib/tmpfiles.d/rethinkdb.conf
+- name: create rethinkdb conf
+  template: src=assets/rdb.conf.j2 dest=/etc/rethinkdb/instances.d/instance1.conf
+- name: make sure rethinkdb is running
+  service: name=rethinkdb state=started enabled=yes

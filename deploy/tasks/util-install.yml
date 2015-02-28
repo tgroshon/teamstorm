@@ -1,0 +1,5 @@
+---
+- name: install the latest version of vim
+  yum: name=vim state=latest
+- name: install the latest version of psmisc (pstree)
+  yum: name=psmisc state=latest

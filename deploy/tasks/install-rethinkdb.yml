@@ -1,0 +1,6 @@
+---
+- name: download rethinkdb yum repo
+  get_url: url=http://download.rethinkdb.com/centos/6/x86_64/rethinkdb.repo dest=/etc/yum.repos.d/rethinkdb.repo
+- name: install the latest version of rethinkdb
+  yum: name=rethinkdb state=latest
+
