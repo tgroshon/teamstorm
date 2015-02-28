@@ -1,21 +1,35 @@
 import React from 'react'
 import Router, {Navigation} from 'react-router'
 import ActionCreators from '../../action-creators'
+import UserStore from '../../stores/user-store'
 
 export default React.createClass({
   mixins: [Navigation],
 
+  userLoginEvent(evt) {
+    this.transitionTo('activities')
+  },
+
+  userAuthFailEvent(evt) {
+    // TODO Render the failures
+    var errors = UserStore.getValidationErrors()
+    console.log('Validation Errors', errors)
+  },
+
   buttonClick() {
     var username = this.refs.username.getDOMNode().value
     var password = this.refs.password.getDOMNode().value
-    var loginPromise = ActionCreators.login(username, password)
+    ActionCreators.login(username, password)
+  },
 
-    loginPromise.then(() => {
-      this.transitionTo('activity')
-    }).catch((err) => {
-      // TODO validation error message
-      console.log('Login Error', err)
-    })
+  componentWillMount() {
+    UserStore.on('login', this.userLoginEvent)
+    UserStore.on('authfail', this.userAuthFailEvent)
+  },
+
+  componentWillUnmount() {
+    UserStore.removeListener('login', this.userLoginEvent)
+    UserStore.removeListener('authfail', this.userAuthFailEvent)
   },
 
   render() {

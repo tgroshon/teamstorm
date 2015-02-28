@@ -1,22 +1,13 @@
 import { Activity as ActivityConstants } from '../constants'
-import { Map as iMap } from 'immutable'
+import Immutable from 'immutable'
 import { EventEmitter } from 'events'
 import assign from 'object-assign'
 import AppDispatcher from '../dispatcher'
 
-var activities = iMap()
+var activities = Immutable.Map()
 
 var ActivityStore = assign({}, EventEmitter.prototype, {
-  name: 'Activity',
-
-  receiveActivities(newActivities) {
-    var newActivityMap = iMap()
-    newActivities.forEach((act) => {
-      newActivityMap = newActivityMap.set(act.id, act)
-    })
-    activities = activities.merge(newActivityMap)
-    this.emit('activity')
-  },
+  name: 'ActivityStore',
 
   get(activityId) {
     if (activities.has(activityId)) {
@@ -36,8 +27,13 @@ ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
 
-    case ActivityConstants.RECEIVE_ACTIVITIES:
-      ActivityStore.receiveActivities(params.activities)
+    case ActivityConstants.STORE_ACTIVITIES:
+      var newActivityMap = Immutable.Map()
+      params.activities.forEach((act) => {
+        newActivityMap = newActivityMap.set(act.id, act)
+      })
+      activities = activities.merge(newActivityMap)
+      ActivityStore.emit('activity')
       break
 
     default:

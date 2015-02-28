@@ -3,16 +3,17 @@ import StormHttpAPI from '../sources/storm-http-api'
 import LocalStorage from '../sources/local-storage'
 import assign from 'object-assign'
 import AppDispatcher from '../dispatcher'
+import Immutable from 'immutable'
 import { EventEmitter } from 'events'
 
-var teams = []
+var StoreData = Immutable.Map()
 
 var TeamStore = assign({}, EventEmitter.prototype, {
   name: 'Team',
 
-  receiveTeams(teams) {
-    teams = teams
-  },
+  getTeams() {
+    StoreData.get('teams')
+  }
 })
 
 TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
@@ -20,8 +21,8 @@ TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
 
   switch(payload.type) {
 
-    case TeamConstants.RECEIVE_TEAMS:
-      TeamStore.receiveTeams(params)
+    case TeamConstants.STORE_TEAMS:
+      StoreData.set('teams', Immutable.fromJS(params.teams))
       break
 
     default:

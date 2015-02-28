@@ -1,94 +1,157 @@
 import pathToUrl from 'path-to-url'
-import RSVP from 'rsvp'
 import request from 'superagent'
 import AppDispatcher from './dispatcher'
 import Constants from './constants'
+import HttpAPI from './sources/http-api'
+import LocalStorage from './sources/local-storage'
 
+/*
+ * Private Helper Functions
+ */
+function persistToken(token) {
+  console.log('Saving token')
+  return LocalStorage.set('token', token)
+}
+
+function destroyToken() {
+  console.log('Destroying Token')
+  return LocalStorage.remove('token')
+}
+
+function lookupToken() {
+  var token = LocalStorage.get('token')
+  console.log('Looking up Token', !!token)
+  return token
+}
+
+function streamListener(event) {
+  try {
+    var message = JSON.parse(event.data)
+    AppDispatcher.dispatch({
+      type: Constants.Message.STORE_MESSAGES,
+      params: {
+        activityId: message.activityId,
+        messages: [message]
+      }
+    })
+  } catch (exp) {
+    console.log(exp)
+    throw exp
+  }
+}
+
+function decodeUserFromToken(token) {
+  var decodedPieces = token.split('.').map((segment) => {
+    return window.atob(segment)
+  })
+  return decodedPieces[1]
+}
+
+/*
+ * Public Interface of Action Creators
+ */
 export default {
-  type: 'http',
   
   login(email, password) {
-    return new RSVP.Promise((resolve, reject) => {
-      request
-        .post('/login')
-        .send({email,password})
-        .end((res) => {
-          AppDispatcher.dispatch({
-            type: Constants.User.RECEIVE_TOKEN,
-            params: res.body.token
-          })
-          resolve()
-        }).catch(reject)
+    HttpAPI.login(email, password, (err, res) => {
+      if (err) {
+        return AppDispatcher.dispatch({
+          type: Constants.User.FAILED_AUTH,
+          params: err
+        })
+      }
+      persistToken(res.body.token)
+      AppDispatcher.dispatch({
+        type: Constants.User.STORE_USER,
+        params: decodeUserFromToken(res.body.token)
+      })
     })
   },
 
   logout() {
+    destroyToken()
     AppDispatcher.dispatch({
       type: Constants.User.LOGOUT
     })
   },
 
   restoreSession() {
-    AppDispatcher.dispatch({
-      type: Constants.User.RESTORE_SESSION
-    })
+    var token = lookupToken()
+    if (token) {
+      AppDispatcher.dispatch({
+        type: Constants.User.STORE_USER,
+        params: decodeUserFromToken(token)
+      })
+    }
   },
 
-  searchUsers(query, done) {
-    var url = '/users/search'
-    request
-      .get(url)
-      .query({q: query})
-      .end((res) => {
-        done(res.body.users)
+  searchUsers(query) {
+    var token = lookupToken()
+    if (token) {
+      HttpAPI.searchUsers(token, query, (err, res) => {
+
       })
+    }
   },
 
   fetchMessages(activityId) {
-    var url = pathToUrl('/activity/:activityId/messages', {activityId})
-    request
-      .get(url)
-      .end((res) => {
+    var token = lookupToken()
+    AppDispatcher.dispatch({
+      type: Constants.Message.PENDING_MESSAGE_REQUEST,
+    })
+    if (token) {
+      HttpAPI.fetchMessages(token, activityId, (err, res) => {
+        if (err) {
+          //TODO logging
+          return
+        }
         AppDispatcher.dispatch({
-          type: Constants.Message.RECEIVE_MESSAGES,
+          type: Constants.Message.STORE_MESSAGES,
           params: {
             activityId,
             messages: res.body.messages
           }
         })
       })
+    }
   },
 
   fetchActivities() {
-    request
-      .get('/activity')
-      .end((res) => {
+    var token = lookupToken()
+    if (token) {
+      HttpAPI.fetchActivities(token, (err, res) => {
+        if (err) {
+          //TODO logging
+          return
+        }
         AppDispatcher.dispatch({
-          type: Constants.Activity.RECEIVE_ACTIVITIES,
+          type: Constants.Activity.STORE_ACTIVITIES,
           params: {
             activities: res.body.activities
           }
         })
       })
+    }
   },
 
   postMessage(activityId, message) {
-    var url = pathToUrl('/activity/:activityId/messages', {activityId})
-    request
-      .post(url)
-      .send(message)
-      .end((res) => {
-        console.log('Posted', res.body)
+    var token = lookupToken()
+    if (token) {
+      HttpAPI.postMessage(token, activityId, message, (err, res) => {
+        
       })
+    }
+  },
+
+  getMessageStream(activityId) {
+    var token = lookupToken()
+    if (token) {
+      HttpAPI.getMessageStream(token, activityId, streamListener)
+    }
   },
 
   stopMessageStream() {
-    if (this.evtSource) {
-      console.log('Source, Closing Stream')
-      this.evtSource.removeEventListener('message', this._streamListener)
-      this.evtSource.close()
-      this.evtSource = null
-    }
+    HttpAPI.stopMessageStream(streamListener)
   },
 
   killMessageCache(activityId) {
@@ -97,29 +160,4 @@ export default {
       params: {activityId}
     })
   },
-
-  getMessageStream(activityId) {
-    var url = pathToUrl('/activity/:activityId/messages/stream',
-                        {activityId})
-    this.evtSource = new EventSource(url)
-    this.evtSource.addEventListener('message', this._streamListener)
-  },
-
-  _streamListener() {
-    try {
-      var message = JSON.parse(event.data)
-      AppDispatcher.dispatch({
-        type: Constants.Message.RECEIVE_MESSAGES,
-        params: {
-          activityId: message.activityId,
-          messages: [message]
-        }
-      })
-    } catch (exp) {
-      console.log(exp)
-      throw exp
-    }
-  },
-
 }
-

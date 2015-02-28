@@ -10,19 +10,21 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      messages: []
+      messages: MessageStore.getAll(),
+      pending: MessageStore.pendingRequest()
     }
   },
 
   storeUpdate() {
     console.log('Message listener fired')
     this.setState({
-      messages: MessageStore.getAll(this.getParams().activityId)
+      messages: MessageStore.getAll(this.getParams().activityId),
+      pending: MessageStore.pendingRequest()
     })
   },
 
   componentWillMount() {
-    MessageStore.on('message', this.storeUpdate)
+    MessageStore.on('change', this.storeUpdate)
     ActionCreators.fetchMessages(this.getParams().activityId)
     ActionCreators.getMessageStream(this.getParams().activityId)
   },
@@ -36,16 +38,18 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    MessageStore.removeListener('message', this.storeUpdate)
+    MessageStore.removeListener('change', this.storeUpdate)
     ActionCreators.stopMessageStream()
   },
 
   render() {
-    if (this.state.messages.length == 0) {
-        return <div className="messages-loading">Loading...</div>
+    if (this.state.pending) {
+      return <div className="messages-loading">Loading...</div>
+    } else if (this.state.messages.length == 0) {
+        return <div className="messages-empty">Empty...</div>
     } else {
       var messageBoxes = this.state.messages.map((mess) => {
-        return <MessageBox key={mess.id} message={mess} />
+        return <MessageBox key={mess.get('id')} message={mess} />
       })
 
       return (

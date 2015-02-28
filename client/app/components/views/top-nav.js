@@ -21,26 +21,25 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      user: null
+      authenticated: UserStore.authenticated()
     }
   },
 
   storeUpdate() {
-    this.setState({ user: UserStore.getUser() })
+    this.setState({ authenticated: UserStore.authenticated() })
   },
 
   componentWillMount() {
-    UserStore.on('user', this.storeUpdate)
+    UserStore.on('change', this.storeUpdate)
   },
 
   componentWillUnmount() {
-    UserStore.removeListener(this.storeUpdate)
+    UserStore.removeListener('change', this.storeUpdate)
   },
 
   handleLogout(evt) {
     evt.preventDefault()
     ActionCreators.logout()
-    this.setState({user: null})
     this.transitionTo('login')
   },
 

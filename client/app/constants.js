@@ -4,27 +4,27 @@ export default {
   Message: keyMirror({
     'EDIT_MESSAGE': null,
     'NEW_MESSAGE': null,
-    'RECEIVE_MESSAGES': null,
+    'STORE_MESSAGES': null,
     'GET_MESSAGE_STREAM': null,
     'STOP_MESSAGE_STREAM': null,
     'KILL_MESSAGE_CACHE': null,
+    'PENDING_MESSAGE_REQUEST': null,
   }),
   Activity: keyMirror({
-    'RECEIVE_ACTIVITIES': null,
+    'STORE_ACTIVITIES': null,
     'NEW_ACTIVITY': null,
+    'PENDING_ACTIVITY_REQUEST': null,
   }),
   User: keyMirror({
-    'RESTORE_SESSION': null,
-    'LOGIN': null,
     'LOGOUT': null,
-    'RECEIVE_USER': null,
-    'RECEIVE_TOKEN': null,
-    'CREATE_USER': null,
-    'RECEIVE_SEARCHED_USERS': null,
-    'SEARCH_USERS': null
+    'FAILED_AUTH': null,
+    'STORE_USER': null,
+    'STORE_SEARCHED_USERS': null,
+    'PENDING_AUTH_REQUEST': null,
   }),
   Team: keyMirror({
-    'RECEIVE_TEAMS': null,
+    'STORE_TEAMS': null,
+    'PENDING_TEAM_REQUEST': null,
   })
 }
 

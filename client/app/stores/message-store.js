@@ -1,37 +1,22 @@
-import { Message as MessageConstants } from '../constants'
-import { List, Map as iMap } from 'immutable'
+import Immutable from 'immutable'
 import assign from 'object-assign'
-import AppDispatcher from '../dispatcher'
 import { EventEmitter } from 'events'
+import AppDispatcher from '../dispatcher'
+import { Message as MessageConstants } from '../constants'
 
-var messages = iMap()
+var StoreData = Immutable.Map({
+  pending: false
+})
 
 var MessageStore = assign({}, EventEmitter.prototype, {
-  name: 'Message',
+  name: 'MessageStore',
 
-  killMessageCache(activityId) {
-    // TODO: Refactor to allow behind-the-scene subscripting to changes
-    messages = messages.delete(activityId)
-    this.emit('message')
-  },
-
-  editMessage(activityId, message) {
-    //TODO: lookup the message
-  },
-
-  receiveMessages(activityId, newMessages) {
-    var messagesForActivity = messages.get(activityId)
-    if (List.isList(messagesForActivity)) {
-      messagesForActivity = messagesForActivity.concat(List(newMessages))
-    } else {
-      messagesForActivity = List(newMessages)
-    }
-    messages = messages.set(activityId, messagesForActivity)
-    this.emit('message')
+  pendingRequest() {
+    return StoreData.get('pending')
   },
 
   getAll(activityId) {
-    var allMessages = messages.get(activityId)
+    var allMessages = StoreData.get(activityId)
     return allMessages ? allMessages.toArray() : []
   }
 })
@@ -41,13 +26,28 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
 
-    case MessageConstants.RECEIVE_MESSAGES:
-      MessageStore.receiveMessages(params.activityId, params.messages)
+    case MessageConstants.STORE_MESSAGES:
+      var messagesForActivity = StoreData.get(params.activityId)
+      var messages = Immutable.fromJS(params.messages)
+      if (Immutable.List.isList(messagesForActivity)) {
+        messagesForActivity = messagesForActivity.concat(messages)
+      } else {
+        messagesForActivity = messages
+      }
+      StoreData = StoreData.set(params.activityId, messagesForActivity)
+      StoreData = StoreData.set('pending', false)
+
+      MessageStore.emit('change')
       break
 
     case MessageConstants.KILL_MESSAGE_CACHE:
-      MessageStore.killMessageCache(params.activityId)
+      StoreData = StoreData.delete(params.activityId)
+      MessageStore.emit('change')
       break
+
+    case MessageConstants.PENDING_MESSAGE_REQUEST:
+      StoreData = StoreData.set('pending', true)
+      MessageStore.emit('change')
 
     default:
       // do nothing
