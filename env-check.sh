@@ -1,5 +1,5 @@
 if [ "$NODE_ENV" = "production" ]
 then
-  exit 0
+  npm run autobuild
 fi
-exit 1
+exit 0

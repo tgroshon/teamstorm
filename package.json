@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "node server/app.js",
-    "postinstall": "./is-production.sh && npm install && gulp build",
+    "postinstall": "./env-check.sh",
+    "autobuild": "npm install && gulp build",
     "build": "gulp build",
     "watch": "gulp",
     "migrate": "klei-migrate run",
