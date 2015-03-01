@@ -13,3 +13,4 @@ web:
     - rdb
   environment:
     VIRTUAL_HOST: teamstorm.docker
+    NODE_ENV: development
