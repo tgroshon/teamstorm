@@ -20,8 +20,13 @@ router.get('/activity/:activityId', activityCtrl.show)
 router.get('/activity', activityCtrl.index)
 router.post('/activity', activityCtrl.create)
 router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.streamMessages)
-router.get('/activity/:activityId/messages', activityCtrl.messageIndex)
-router.post('/activity/:activityId/messages', activityCtrl.createMessage)
+router.get('/activity/:activityId/messages',
+            authMiddleware.tokenAuth,
+            activityCtrl.messageIndex)
+
+router.post('/activity/:activityId/messages',
+            authMiddleware.tokenAuth,
+            activityCtrl.createMessage)
 
 router.get('/teams', authMiddleware.tokenAuth, teamsCtrl.index)
 router.get('/teams/:teamId', teamsCtrl.show)

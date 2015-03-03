@@ -31,12 +31,12 @@ module.exports = {
         .insert(clonedData, {conflict: 'update', returnChanges: true})
         .run(conn, function(dbErr, results) {
           conn.close()
-          if (err) return done(err)
+          if (dbErr) return done(dbErr)
 
           var changedValues = results.changes.map(function(change) {
             return change['new_val']
           })
-          done(err, changedValues)
+          done(dbErr, changedValues)
         })
     })
   },

@@ -20,12 +20,24 @@ var UserStore = assign({}, EventEmitter.prototype, {
 
   getValidationErrors() {
     return StoreData.get('validationErrors')
-  }
+  },
+
+  getSearchResults() {
+    return StoreData.get('searchResults').toJS()
+  },
+
 })
 
 UserStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
+
+    case UserConstants.STORE_SEARCH_RESULTS:
+      StoreData = StoreData.merge({
+        searchResults: payload.params.users
+      })
+      UserStore.emit('searchresults')
+      break
 
     case UserConstants.STORE_USER:
       StoreData = StoreData.merge({

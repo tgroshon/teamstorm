@@ -16,7 +16,6 @@ export default React.createClass({
   },
 
   storeUpdate() {
-    console.log('Message listener fired')
     this.setState({
       messages: MessageStore.getAll(this.getParams().activityId),
       pending: MessageStore.pendingRequest()
@@ -42,6 +41,12 @@ export default React.createClass({
     ActionCreators.stopMessageStream()
   },
 
+  handleCreate() {
+    var messageText = this.refs.messageInputTextarea.getDOMNode().value
+    ActionCreators.postMessage(this.getParams().activityId, messageText)
+    this.refs.messageInputTextarea.getDOMNode().value = ''
+  },
+
   render() {
     if (this.state.pending) {
       return <div className="messages-loading">Loading...</div>
@@ -65,7 +70,7 @@ export default React.createClass({
               maxLength="140"
               placeholder="Enter your message..."
              />
-            <button className="btn btn-primary message-box-input-button" ref="messageInputButton">
+            <button onClick={this.handleCreate} className="btn btn-primary message-box-input-button">
               Post
             </button>
           </div>

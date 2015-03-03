@@ -46,7 +46,15 @@ module.exports = {
   },
 
   createMessage: function(req, res) {
-    var message = new Message(req.body)
+    var creator = req.user.id
+    var payload = req.body.payload
+    var activityId = req.params.activityId
+
+    var message = new Message({
+      creator: creator,
+      payload: payload,
+      activityId: activityId
+    })
     message.save(function() {
       res.json(message.toJson())
     })

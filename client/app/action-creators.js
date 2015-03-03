@@ -89,7 +89,12 @@ export default {
     var token = lookupToken()
     if (token) {
       HttpAPI.searchUsers(token, query, (err, res) => {
-
+        AppDispatcher.dispatch({
+          type: Constants.User.STORE_SEARCH_RESULTS,
+          params: {
+            users: res.body.users
+          }
+        })
       })
     }
   },

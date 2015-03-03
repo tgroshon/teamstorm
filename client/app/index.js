@@ -2,7 +2,7 @@ import React from 'react'
 import jQuery from 'jquery'
 window.jQuery = jQuery
 window.$ = jQuery
-import Router, { Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
+import Router, { Link, Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
 import MessageViewController from './components/handlers/message-handler'
 import ActivityViewController from './components/handlers/activity-handler'
 import ActivitiesViewController from './components/handlers/activities-handler'
@@ -39,7 +39,13 @@ var App = React.createClass({
 var DefaultAct = React.createClass({
   render() {
     return (
-      <h1>Choose an activity</h1>
+      <div>
+        <Link to="new-activity">
+          <span className="glyphicon glyphicon-plus" aria-hidden="true" />
+          New Activity
+        </Link>
+        <h1>Choose an activity</h1>
+      </div>
     )
   }
 })
@@ -47,7 +53,13 @@ var DefaultAct = React.createClass({
 var DefaultTeam = React.createClass({
   render() {
     return (
-      <h1>Choose a Team</h1>
+      <div>
+        <Link to="new-team">
+          <span className="glyphicon glyphicon-plus" aria-hidden="true" />
+          New Team
+        </Link>
+        <h1>Choose a Team</h1>
+      </div>
     )
   }
 })

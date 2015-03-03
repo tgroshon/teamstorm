@@ -21,6 +21,7 @@ export default {
     'STORE_USER': null,
     'STORE_SEARCHED_USERS': null,
     'PENDING_AUTH_REQUEST': null,
+    'STORE_SEARCH_RESULTS': null,
   }),
   Team: keyMirror({
     'STORE_TEAMS': null,

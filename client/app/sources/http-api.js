@@ -16,6 +16,7 @@ export default {
     var url = '/users/search'
     request
       .get(url)
+      .set('jwt', token)
       .query({q: query})
       .end(done)
   },
@@ -24,12 +25,14 @@ export default {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     request
       .get(url)
+      .set('jwt', token)
       .end(done)
   },
 
   fetchActivities(token, done) {
     request
       .get('/activity')
+      .set('jwt', token)
       .end(done)
   },
 
@@ -37,7 +40,8 @@ export default {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     request
       .post(url)
-      .send(message)
+      .set('jwt', token)
+      .send({payload: message})
       .end(done)
   },
 
