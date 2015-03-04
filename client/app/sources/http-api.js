@@ -21,6 +21,21 @@ export default {
       .end(done)
   },
 
+  fetchTeams(token, done) {
+    request
+      .get('/teams')
+      .set('jwt', token)
+      .end(done)
+  },
+
+  postTeam(token, team, done) {
+    request
+      .post('/teams')
+      .set('jwt', token)
+      .send(team)
+      .end(done)
+  },
+
   fetchMessages(token, activityId, done) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     request

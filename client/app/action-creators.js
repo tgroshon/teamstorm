@@ -9,19 +9,15 @@ import LocalStorage from './sources/local-storage'
  * Private Helper Functions
  */
 function persistToken(token) {
-  console.log('Saving token')
   return LocalStorage.set('token', token)
 }
 
 function destroyToken() {
-  console.log('Destroying Token')
   return LocalStorage.remove('token')
 }
 
 function lookupToken() {
-  var token = LocalStorage.get('token')
-  console.log('Looking up Token', !!token)
-  return token
+  return LocalStorage.get('token')
 }
 
 function streamListener(event) {
@@ -93,6 +89,26 @@ export default {
           type: Constants.User.STORE_SEARCH_RESULTS,
           params: {
             users: res.body.users
+          }
+        })
+      })
+    }
+  },
+
+  fetchTeams() {
+    var token = lookupToken()
+    AppDispatcher.dispatch({
+      type: Constants.Team.PENDING_TEAM_REQUEST,
+    })
+    if (token) {
+      HttpAPI.fetchTeams(token, (err, res) => {
+        if (err) {
+          return
+        }
+        AppDispatcher.dispatch({
+          type: Constants.Team.STORE_TEAMS,
+          params: {
+            teams: res.body.teams
           }
         })
       })
