@@ -16,21 +16,32 @@ router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
 // TODO remove.  For testing only
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
 
-router.get('/activity/:activityId', activityCtrl.show)
-router.get('/activity', activityCtrl.index)
-router.post('/activity', activityCtrl.create)
-router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.streamMessages)
+router.get('/activity/:activityId',
+            authMiddleware.tokenAuth,
+            activityCtrl.show)
+router.get('/activity',
+            authMiddleware.tokenAuth,
+            activityCtrl.index)
+router.post('/activity',
+            authMiddleware.tokenAuth,
+            activityCtrl.create)
 router.get('/activity/:activityId/messages',
             authMiddleware.tokenAuth,
             activityCtrl.messageIndex)
-
 router.post('/activity/:activityId/messages',
             authMiddleware.tokenAuth,
             activityCtrl.createMessage)
+router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.streamMessages)
 
-router.get('/teams', authMiddleware.tokenAuth, teamsCtrl.index)
-router.get('/teams/:teamId', teamsCtrl.show)
-router.post('/teams', teamsCtrl.create)
+router.get('/teams',
+           authMiddleware.tokenAuth,
+           teamsCtrl.index)
+router.get('/teams/:teamId',
+           authMiddleware.tokenAuth,
+           teamsCtrl.show)
+router.post('/teams',
+           authMiddleware.tokenAuth,
+            teamsCtrl.create)
 
 // TODO For testing only
 router.get('/teams/debug', teamsCtrl.debug)

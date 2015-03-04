@@ -9,12 +9,16 @@ import authService  from '../../../server/services/auth-service'
 import TeamKlass from '../../../server/models/Team'
 
 describe('Teams Controller', () => {
+  var userData
+  var token
+  var userId
+  beforeEach(() => {
+    userId = 'fakeId'
+    userData = {id: userId, firstName: 'Bob'}
+    token = authService.encode(userData)
+  })
 
   describe('#index', () => {
-
-    var userId = 'fakeId'
-    var userData = {id: userId, firstName: 'Bob'}
-    var token = authService.encode(userData)
     var rdbReturnedData = new TeamKlass({name: 'My Team'})
     beforeEach(() => {
       sinon.stub(rdbService, 'getByMembership', (Klass, id, cb) => {
@@ -61,6 +65,7 @@ describe('Teams Controller', () => {
     it('looks up a team by id', (done) => {
       request(app)
         .get('/teams/' + teamId)
+        .set('jwt', token)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -91,6 +96,7 @@ describe('Teams Controller', () => {
     it('receives team data and persists to database', (done) => {
       request(app)
         .post('/teams')
+        .set('jwt', token)
         .send(teamData)
         .expect('Content-Type', /json/)
         .expect(200)

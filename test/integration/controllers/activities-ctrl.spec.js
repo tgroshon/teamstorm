@@ -5,10 +5,20 @@ var sinon = require('sinon')
 
 var app = require('../../../server/app')
 var rdbService  = require('../../../server/services/rdb-service')
+var authService  = require('../../../server/services/auth-service')
 var ActivityKlass = require('../../../server/models/Activity')
 var MessageKlass = require('../../../server/models/Message')
 
 describe('Activities Controller', () => {
+  var userData
+  var token
+  var userId
+
+  beforeEach(() => {
+    userId = 'fakeId'
+    userData = {id: userId, firstName: 'Bob'}
+    token = authService.encode(userData)
+  })
 
   describe('#index', () => {
 
@@ -26,6 +36,7 @@ describe('Activities Controller', () => {
     it('Gets list of all activity objects', (done) => {
       request(app)
         .get('/activity')
+        .set('jwt', token)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -55,6 +66,7 @@ describe('Activities Controller', () => {
     it('looks up an activity by id', (done) => {
       request(app)
         .get('/activity/' + actId)
+        .set('jwt', token)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -85,6 +97,7 @@ describe('Activities Controller', () => {
     it('receives activity data and persists to database', (done) => {
       request(app)
         .post('/activity')
+        .set('jwt', token)
         .send(actData)
         .expect(200)
         .end((err, res) => {
@@ -116,6 +129,7 @@ describe('Activities Controller', () => {
     it('lists messages for an activity', (done) => {
       request(app)
         .get('/activity/' + activityId + '/messages')
+        .set('jwt', token)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
@@ -130,12 +144,13 @@ describe('Activities Controller', () => {
   describe('#createMessage', () => {
 
     var activityId = 'fakeActivityId'
-    var messageData = {activityId, payload: 'A New Message'}
-    var rdbReturnedData = new MessageKlass(messageData)
+    var payload = 'A New Message'
+    var messageData = {payload}
+    var rdbReturnedData = new MessageKlass({payload, activityId})
+
     beforeEach(() => {
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
         Klass.should.eql(MessageKlass)
-        data.should.eql(messageData)
         cb(null, [rdbReturnedData])
       })
     })
@@ -143,62 +158,19 @@ describe('Activities Controller', () => {
       rdbService.insert.restore()
     })
 
-    it('lists messages for an activity', (done) => {
+    it('creates a message for an activity', (done) => {
       request(app)
         .post('/activity/' + activityId + '/messages')
+        .set('jwt', token)
         .send(messageData)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err)
 
-          res.body.should.eql(messageData)
+          res.body.should.eql(rdbReturnedData.toJson())
           sinon.assert.calledOnce(rdbService.insert)
           done()
         })
     })
   })
-
-  // describe('#streamMessages', () => {
-
-  //   var actId = 'fakeActId'
-  //   var rdbReturnedData = new MessageKlass({activityId: actId, payload: 'Streaming messages' })
-  //   beforeEach(() => {
-  //     sinon.stub(rdbService, 'streamMessages', function(Klass, id, listener, cb) {
-  //       Klass.should.eql(MessageKlass)
-  //       id.should.eql(actId)
-  //       listener(rdbReturnedData)
-  //       listener(rdbReturnedData)
-  //     })
-  //   })
-  //   afterEach(() => {
-  //     rdbService.streamMessages.restore()
-  //   })
-
-  //   it('lists messages for an activity', (done) => {
-  //     function binaryParser(res, callback) {
-  //       res.setEncoding('ascii');
-  //       res.data = '';
-  //       res.on('data', function (chunk) {
-  //         console.log('data', chunk)
-  //         res.data += chunk;
-  //       });
-  //       res.on('end', function () {
-  //         console.log('End')
-  //         callback(null, new Buffer(res.data, 'ascii'));
-  //       });
-  //     }
-  //     request(app)
-  //       .get('/activity/' + actId + '/messages/stream')
-  //       .expect(200)
-  //       .parse(binaryParser)
-  //       .end((err, res) => {
-  //         console.log('Supertest#End')
-  //         if (err) return done(err)
-
-  //         done()
-  //       })
-
-  //   })
-  // })
 })
-
