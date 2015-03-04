@@ -48,35 +48,36 @@ export default React.createClass({
   },
 
   render() {
+    var displayData
     if (this.state.pending) {
-      return <div className="messages-loading">Loading...</div>
+      displayData = <div className="messages-loading">Loading...</div>
     } else if (this.state.messages.length == 0) {
-        return <div className="messages-empty">Empty...</div>
+      displayData = <div className="messages-empty">Empty...</div>
     } else {
-      var messageBoxes = this.state.messages.map((mess) => {
+      displayData = this.state.messages.map((mess) => {
         return <MessageBox key={mess.get('id')} message={mess} />
       })
-
-      return (
-        <div className="messages-wrapper">
-          <div className="row message-box-list">
-            {messageBoxes}
-          </div>
-          <div className="row message-box-input-area">
-            <textarea
-              className="form-control message-box-input-textarea"
-              ref="messageInputTextarea"
-              rows="3"
-              maxLength="140"
-              placeholder="Enter your message..."
-             />
-            <button onClick={this.handleCreate} className="btn btn-primary message-box-input-button">
-              Post
-            </button>
-          </div>
-        </div>
-      )
     }
+
+    return (
+      <div className="messages-wrapper">
+        <div className="row message-box-list">
+          {displayData}
+        </div>
+        <div className="row message-box-input-area">
+          <textarea
+            className="form-control message-box-input-textarea"
+            ref="messageInputTextarea"
+            rows="3"
+            maxLength="140"
+            placeholder="Enter your message..."
+           />
+          <button onClick={this.handleCreate} className="btn btn-primary message-box-input-button">
+            Post
+          </button>
+        </div>
+      </div>
+    )
   }
 })
 
