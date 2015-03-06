@@ -40,7 +40,7 @@ function decodeUserFromToken(token) {
   var decodedPieces = token.split('.').map((segment) => {
     return window.atob(segment)
   })
-  return decodedPieces[1]
+  return JSON.parse(decodedPieces[1])
 }
 
 /*
@@ -59,7 +59,9 @@ export default {
       persistToken(res.body.token)
       AppDispatcher.dispatch({
         type: Constants.User.STORE_USER,
-        params: decodeUserFromToken(res.body.token)
+        params: {
+          user: decodeUserFromToken(res.body.token)
+        }
       })
     })
   },
@@ -76,7 +78,9 @@ export default {
     if (token) {
       AppDispatcher.dispatch({
         type: Constants.User.STORE_USER,
-        params: decodeUserFromToken(token)
+        params: {
+          user: decodeUserFromToken(token)
+        }
       })
     }
   },

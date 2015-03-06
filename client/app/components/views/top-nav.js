@@ -58,11 +58,12 @@ export default React.createClass({
       return [
         <CustomItem key={2} to="teams">Teams</CustomItem>,
         <CustomItem key={3} to="activities">Activities</CustomItem>,
-        <MenuItem key={4} onClick={this.handleLogout}>Logout</MenuItem>
+        <CustomItem key={4} to="account">Account</CustomItem>,
+        <MenuItem key={5} onClick={this.handleLogout}>Logout</MenuItem>
       ]
     } else {
       return (
-        <CustomItem key={4} to="login">Login</CustomItem>
+        <CustomItem key={2} to="login">Login</CustomItem>
       )
     }
   },

@@ -37,6 +37,7 @@ UserStore.dispatchToken = AppDispatcher.register((payload) => {
         searchResults: payload.params.users
       })
       UserStore.emit('searchresults')
+      UserStore.emit('change')
       break
 
     case UserConstants.STORE_USER:
@@ -61,6 +62,8 @@ UserStore.dispatchToken = AppDispatcher.register((payload) => {
         validationErrors: payload.params.validationErrors
       })
       UserStore.emit('authfail')
+      UserStore.emit('change')
+      break
 
     default:
       // do nothing

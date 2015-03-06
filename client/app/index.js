@@ -12,6 +12,7 @@ import TeamsViewController from './components/handlers/teams-handler'
 import TeamViewController from './components/handlers/team-handler'
 import NewTeamHandler from './components/handlers/new-team-handler'
 import NewActivityHandler from './components/handlers/new-activity-handler'
+import AccountHandler from './components/handlers/account-handler'
 import TopNav from './components/views/top-nav'
 import ActionCreators from './action-creators'
 
@@ -68,6 +69,7 @@ var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="login" handler={LoginViewController}/>
     <Route name="signup" handler={LoginViewController}/>
+    <Route name="account" handler={AccountHandler}/>
     <Route name="teams" path="/team" handler={TeamsViewController}>
       <Route name="new-team" path="new" handler={NewTeamHandler} />
       <Route name="team" path=":teamId" handler={TeamViewController}/>

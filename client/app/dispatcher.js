@@ -15,14 +15,11 @@ function queueAction(payload) {
 function startProcessing() {
   isProcessing = true
   while (actionQueue.length > 0) {
-    logger.trace('Queue has objects', actionQueue)
     if (dispatcher.isDispatching()) {
-      logger.trace('reschedule for later')
       timeoutId = setTimeout(startProcessing, 100)
       return
     }
     var payload = actionQueue.shift()
-    logger.trace('Ready to process', payload)
     dispatcher.dispatch(payload)
   }
   isProcessing = false
@@ -34,7 +31,6 @@ var AppDispatcher = {
   },
 
   dispatch(payload) {
-    logger.trace('Payload received. Queuing')
     queueAction(payload)
   },
 
