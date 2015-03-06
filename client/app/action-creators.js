@@ -37,10 +37,7 @@ function streamListener(event) {
 }
 
 function decodeUserFromToken(token) {
-  var decodedPieces = token.split('.').map((segment) => {
-    return window.atob(segment)
-  })
-  return JSON.parse(decodedPieces[1])
+  return JSON.parse(window.atob(token.split('.')[1]))
 }
 
 /*

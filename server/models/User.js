@@ -49,8 +49,8 @@ User.tableName = config.rdb.tables.users
 
 User.authenticate = function(email, password, done) {
   User.objects.getByEmail(email, function(err, userResults) {
+    if (err || !userResults || userResults.length === 0) return done(err)
     var user = userResults.pop()
-    if (err || !user) return done(err)
     authService.compare(password, user.hash, function (err, result) {
       if (err || !result) return done(err)
       done(err, user)
