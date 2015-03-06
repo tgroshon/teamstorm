@@ -1,12 +1,14 @@
 import React from 'react'
 import TokenInput, {Option as ComboboxOption} from 'react-tokeninput'
+import Router, { Navigation } from 'react-router'
 import {without, uniq} from 'lodash'
 import UserStore from '../../stores/user-store'
 import ActionCreators from '../../action-creators'
 
 export default React.createClass({
-  
   displayName: 'NewTeam',
+
+  mixins: [ Navigation ],
 
   getInitialState() {
     return {
@@ -21,6 +23,10 @@ export default React.createClass({
 
   componentWillUnmount() {
     UserStore.removeListener('searchresults', this.storeChange)
+  },
+
+  handleCancel() {
+    this.transitionTo('/team')
   },
 
   handleChange(value) {
@@ -48,8 +54,9 @@ export default React.createClass({
   handleInput(userInput) {
     if (userInput === '') {
       return this.setState({options: []})
+    } else if (userInput.length > 2) {
+      ActionCreators.searchUsers(userInput)
     }
-    ActionCreators.searchUsers(userInput)
   },
 
   storeChange() {
@@ -78,20 +85,27 @@ export default React.createClass({
     var options = this.state.options.length ? this.renderComboboxOptions() : [];
 
 		return (
-      <div className="input-group">
-        <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Team name..." />
-        <TokenInput
-          onChange={this.handleChange}
-          onInput={this.handleInput}
-          onSelect={this.handleSelect}
-          onRemove={this.handleRemove}
-          selected={this.state.selected}
-          menuContent={options}
-        />
-        <button className="btn btn-success">
-          <span className="glyphicon glyphicon-plus" aria-hidden="true" />
-          Create
-        </button>
+      <div className="row">
+        <div className="col-md-6 form-group">
+          <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Team name..." />
+          <TokenInput
+            onChange={this.handleChange}
+            onInput={this.handleInput}
+            onSelect={this.handleSelect}
+            onRemove={this.handleRemove}
+            selected={this.state.selected}
+            className="form-control"
+            menuContent={options}
+          />
+          <button className="btn btn-success">
+            <span className="glyphicon glyphicon-plus" aria-hidden="true" />
+            Create
+          </button>
+          <button className="btn btn-danger" onClick={this.handleCancel}>
+            <span className="glyphicon glyphicon-minus" aria-hidden="true" />
+            Cancel
+          </button>
+        </div>
       </div>
 		)
 	}

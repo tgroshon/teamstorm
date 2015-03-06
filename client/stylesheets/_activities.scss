@@ -10,13 +10,16 @@
   width: 270px;
   overflow: auto;
   padding-left: 0;
+  margin-bottom: 0;
   list-style-type: none;
+  background-color: #eeeeee;
+  border-right: 1px solid #dddddd
 }
 
 .ActivityList__ItemBox {
   padding: 10px;
-  border-bottom: 1px solid;
-  border-right: 1px solid;
+  border-bottom: 1px solid #dddddd;
+  background-color: #ffffff;
 }
 
 .ActivityList__ItemBoxHeader {
@@ -25,6 +28,7 @@
 
 .ActivityList__ItemBox:hover {
   background-color: #efefef;
+  border-bottom: 1px solid #cccccc;
 }
 
 .ActivityList__ItemLink:hover {

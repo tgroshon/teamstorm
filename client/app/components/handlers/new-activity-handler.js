@@ -1,13 +1,21 @@
 import React from 'react'
 import {Input} from 'react-bootstrap'
+import Router, { Navigation } from 'react-router'
 import ActionCreators from '../../action-creators'
 
 export default React.createClass({
+  displayName: 'NewActivityHandler',
   
+  mixins: [ Navigation ],
+
   handleCreate() {
     var title = this.refs.title.getValue()
     var type = this.refs.type.getValue()
     var team = this.refs.team.getValue()
+  },
+
+  handleCancel() {
+    this.transitionTo('/activity')
   },
 
   render() {
@@ -26,6 +34,10 @@ export default React.createClass({
         <button className="btn btn-success" onClick={this.handleCreate}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true" />
           Create
+        </button>
+        <button className="btn btn-danger" onClick={this.handleCancel}>
+          <span className="glyphicon glyphicon-minus" aria-hidden="true" />
+          Cancel
         </button>
       </div>
     )

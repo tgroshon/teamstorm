@@ -22,7 +22,6 @@ TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
   switch(payload.type) {
 
     case TeamConstants.STORE_TEAMS:
-      console.log('Storing Teams', params.teams)
       StoreData = StoreData.set('teams', Immutable.fromJS(params.teams))
       TeamStore.emit('change')
       break
