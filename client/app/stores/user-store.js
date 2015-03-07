@@ -1,8 +1,10 @@
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
-import { User as UserConstants } from '../constants'
+import Constants from '../constants'
 import AppDispatcher from '../dispatcher'
 import Immutable from 'immutable'
+
+const UserConstants = Constants.User
 
 var StoreData = Immutable.Map()
 

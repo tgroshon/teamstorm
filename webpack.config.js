@@ -5,8 +5,7 @@ module.exports = {
 	context: __dirname + '/client',
 	entry: {
 		client: [
-			'6to5/polyfill',
-			'6to5/runtime',
+			'babel/polyfill',
 			'./app/index.js'
 		]
 	},
@@ -15,7 +14,7 @@ module.exports = {
 			{
 				test: /\.jsx?$/i,
 				exclude: /node_modules/,
-				loader: '6to5'
+				loader: 'babel-loader?experimental&optional=runtime'
 			}
 		],
 	},

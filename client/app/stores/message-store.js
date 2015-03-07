@@ -2,7 +2,9 @@ import Immutable from 'immutable'
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
 import AppDispatcher from '../dispatcher'
-import { Message as MessageConstants } from '../constants'
+import Constants from '../constants'
+
+const MessageConstants = Constants.Message
 
 var StoreData = Immutable.Map({
   pending: false

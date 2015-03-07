@@ -1,8 +1,10 @@
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
-import { Error as ErrorConstants } from '../constants'
-import AppDispatcher from '../dispatcher'
 import Immutable from 'immutable'
+import Constants from '../constants'
+import AppDispatcher from '../dispatcher'
+
+const ErrorConstants = Constants.Error
 
 var StoreData = Immutable.Map()
 

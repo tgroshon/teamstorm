@@ -1,8 +1,10 @@
-import { Team as TeamConstants } from '../constants'
 import assign from 'object-assign'
-import AppDispatcher from '../dispatcher'
 import Immutable from 'immutable'
 import { EventEmitter } from 'events'
+import AppDispatcher from '../dispatcher'
+import Constants from '../constants'
+
+const TeamConstants = Constants.Team
 
 var StoreData = Immutable.Map({
   teams: Immutable.List()

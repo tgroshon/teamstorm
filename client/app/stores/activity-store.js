@@ -1,8 +1,10 @@
-import { Activity as ActivityConstants } from '../constants'
 import Immutable from 'immutable'
 import { EventEmitter } from 'events'
 import assign from 'object-assign'
 import AppDispatcher from '../dispatcher'
+import Constants from '../constants'
+
+const ActivityConstants = Constants.Activity
 
 var activities = Immutable.Map()
 
