@@ -5,3 +5,4 @@ public/
 *.flags.json
 .env*
 .vagrant
+babel.json
