@@ -19,18 +19,18 @@
     "test-integration": "mocha --harmony --reporter spec \"test/integration/**/*spec.js\""
   },
   "dependencies": {
-    "bcrypt": "0.8.0",
+    "bcrypt": "0.8.1",
     "body-parser": "1.10.1",
-    "config": "1.9.0",
+    "config": "1.12.0",
     "dotenv": "0.4.0",
-    "express": "4.10.6",
+    "express": "4.12.0",
     "jwt-simple": "0.2.0",
     "klei-migrate": "0.6.2",
     "lodash": "2.4.1",
-    "multer": "0.1.7",
+    "multer": "0.1.8",
     "object-assign": "2.0.0",
     "path-to-url": "0.1.0",
-    "rethinkdb": "1.15.0-0",
+    "rethinkdb": "1.16.2",
     "rsvp": "3.0.14",
     "superagent": "0.21.0"
   },
