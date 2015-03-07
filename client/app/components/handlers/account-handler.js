@@ -1,7 +1,10 @@
 import React from 'react'
 import UserStore from '../../stores/user-store'
+import ErrorStore from '../../stores/error-store'
+import Constants from '../../constants'
 import ActionCreators from '../../action-creators'
 
+console.log(Constants.Error.ERR_HTTP_USER_UPDATE)
 export default React.createClass({
   displayName: 'AccountPage',
 
@@ -9,22 +12,31 @@ export default React.createClass({
     return {
       user: UserStore.getUser(),
       previousChanges: {},
-      editing: false
+      editing: false,
+      httpError: null
     }
   },
 
-  storeUpdate() {
+  userStoreUpdate() {
     this.setState({
       user: UserStore.getUser()
     })
   },
 
+  errorStoreUpdate() {
+    this.setState({
+      httpError: ErrorStore.get(Constants.Error.ERR_HTTP_USER_UPDATE)
+    })
+  },
+
   componentWillMount() {
-    UserStore.on('login', this.storeUpdate)
+    UserStore.on('login', this.userStoreUpdate)
+    ErrorStore.on(Constants.Error.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
   },
 
   componentWillUnmount() {
-    UserStore.removeListener('login', this.storeUpdate)
+    UserStore.removeListener('login', this.userStoreUpdate)
+    ErrorStore.removeListener(Constants.Error.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
   },
 
   dataChanged(newData) {
@@ -65,6 +77,11 @@ export default React.createClass({
       return <div />
     }
     
+    // TODO Better error handling UX
+    if (this.state.httpError) {
+      return <div>HTTP Error: {this.state.httpError.message}</div>
+    }
+
     var user = this.state.user
 
     var mapFn

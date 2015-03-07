@@ -1,7 +1,6 @@
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
 import { User as UserConstants } from '../constants'
-import LocalStorage from '../sources/local-storage'
 import AppDispatcher from '../dispatcher'
 import Immutable from 'immutable'
 

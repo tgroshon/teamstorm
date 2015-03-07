@@ -82,10 +82,25 @@ export default {
     }
   },
 
+  clearError(name) {
+    AppDispatcher.dispatch({
+      type: Constants.Error.CLEAR_ERR,
+      params: { name }
+    })
+  },
+
   updateUser(newData) {
     var token = lookupToken()
     if (token) {
       HttpAPI.putUser(token, newData, (err, res) => {
+        if (err) {
+          return AppDispatcher.dispatch({
+            type: Constants.Error.ERR_HTTP_USER_UPDATE,
+            params: {
+              error: err
+            }
+          })
+        }
         persistToken(res.body.token)
         AppDispatcher.dispatch({
           type: Constants.User.STORE_USER,

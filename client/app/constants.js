@@ -26,6 +26,10 @@ export default {
   Team: keyMirror({
     'STORE_TEAMS': null,
     'PENDING_TEAM_REQUEST': null,
+  }),
+  Error: keyMirror({
+    'ERR_HTTP_USER_UPDATE': null,
+    'CLEAR_ERR': null,
   })
 }
 
