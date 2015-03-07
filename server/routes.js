@@ -9,8 +9,9 @@ var sseMiddleware = require('./middlewares/sse-response')
 var authMiddleware = require('./middlewares/authentication')
 
 router.get('/users', usersCtrl.index)
-router.get('/users/search', usersCtrl.search)
 router.post('/users', usersCtrl.create)
+router.put('/users', authMiddleware.tokenAuth, usersCtrl.update)
+router.get('/users/search', authMiddleware.tokenAuth, usersCtrl.search)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
 
 // TODO remove.  For testing only
@@ -31,16 +32,18 @@ router.get('/activity/:activityId/messages',
 router.post('/activity/:activityId/messages',
             authMiddleware.tokenAuth,
             activityCtrl.createMessage)
-router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.streamMessages)
+router.get('/activity/:activityId/messages/stream',
+            sseMiddleware,
+            activityCtrl.streamMessages)
 
 router.get('/teams',
-           authMiddleware.tokenAuth,
-           teamsCtrl.index)
+            authMiddleware.tokenAuth,
+            teamsCtrl.index)
 router.get('/teams/:teamId',
-           authMiddleware.tokenAuth,
-           teamsCtrl.show)
+            authMiddleware.tokenAuth,
+            teamsCtrl.show)
 router.post('/teams',
-           authMiddleware.tokenAuth,
+            authMiddleware.tokenAuth,
             teamsCtrl.create)
 
 // TODO For testing only

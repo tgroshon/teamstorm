@@ -44,14 +44,20 @@ describe('Users Controller', () => {
   describe('#search', () => {
 
     var reqQuery = 'gmail'
-    var allUsers = [new UserModel({firstName: 'bob'})]
+    var userData = {firstName: 'bob'}
+    var model = new UserModel(userData)
+    var allUsers = [model]
+    var token
+
     beforeEach(() => {
+      token = authService.encode(userData)
       sinon.stub(rdbService, 'searchUser', (UserKlass, fields, query, cb) => {
         query.should.eql(reqQuery)
         UserKlass.should.eql(UserModel)
         cb(null, allUsers)
       })
     })
+
     afterEach(() => {
       rdbService.searchUser.restore()
     })
@@ -59,6 +65,7 @@ describe('Users Controller', () => {
     it('sends requested query to database and returns matches', (done) => {
       request(app)
         .get('/users/search')
+        .set('jwt', token)
         .query({q: reqQuery})
         .expect('Content-Type', /json/)
         .expect(200)
@@ -79,10 +86,14 @@ describe('Users Controller', () => {
     var userData = { firstName: 'bob', password: 'pwd1' }
     var hashedPassword = 'hashedPassword'
     var rdbReturnedData = {firstName: 'bob'}
+    var token = 'theToken'
     beforeEach(() => {
       sinon.stub(authService, 'hash', (password, cb) => {
         password.should.eql(userData.password)
         cb(null, hashedPassword)
+      })
+      sinon.stub(authService, 'encode', (user) => {
+        return token
       })
       sinon.stub(rdbService, 'insert', (UserKlass, data, cb) => {
         UserKlass.should.eql(UserModel)
@@ -93,6 +104,7 @@ describe('Users Controller', () => {
     afterEach(() => {
       rdbService.insert.restore()
       authService.hash.restore()
+      authService.encode.restore()
     })
 
     it('receives user data and persists to database', (done) => {
@@ -104,10 +116,74 @@ describe('Users Controller', () => {
         .end((err, res) => {
           if (err) return done(err)
 
-          res.body.should.eql(rdbReturnedData)
+          var expected = {
+            firstName: rdbReturnedData.firstName,
+            token: token
+          }
+          res.body.should.eql(expected)
           sinon.assert.calledOnce(rdbService.insert)
           sinon.assert.calledOnce(authService.hash)
+          done()
+        })
+    })
+  })
 
+  describe('#update', () => {
+
+    var userId = '1'
+    var newFirstName = 'Bob'
+    var rdbReturnedData = {id: userId, firstName: newFirstName}
+    var hash = 'evilHash'
+    var token
+
+    beforeEach(() => {
+      token = authService.encode(rdbReturnedData)
+      sinon.stub(rdbService, 'insert', (UserKlass, data, cb) => {
+        UserKlass.should.eql(UserModel)
+        data.should.not.have.property('hash')
+        cb(null, [rdbReturnedData])
+      })
+    })
+
+    afterEach(() => {
+      rdbService.insert.restore()
+    })
+
+    it('receives user data and updates DB user', (done) => {
+      request(app)
+        .put('/users')
+        .set('jwt', token)
+        .send({
+          id: userId,
+          firstName: newFirstName
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+
+          res.body.should.have.property('firstName', newFirstName)
+          sinon.assert.calledOnce(rdbService.insert)
+          done()
+        })
+    })
+
+    it('ignores a password hash', (done) => {
+      request(app)
+        .put('/users')
+        .set('jwt', token)
+        .send({
+          id: userId,
+          firstName: newFirstName,
+          hash: hash
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) return done(err)
+
+          res.body.should.have.property('firstName', newFirstName)
+          sinon.assert.calledOnce(rdbService.insert)
           done()
         })
     })
@@ -119,6 +195,7 @@ describe('Users Controller', () => {
     var loginEmail = 'bob@example.com'
     var loginPassword = 'pwd1'
     var rdbReturnedData = new UserModel({email: loginEmail, hash: pwdHash})
+
     beforeEach(() => {
       sinon.stub(authService, 'compare', (password, hash, cb) => {
         password.should.eql(loginPassword)
@@ -132,6 +209,7 @@ describe('Users Controller', () => {
         cb(null, [rdbReturnedData])
       })
     })
+
     afterEach(() => {
       authService.compare.restore()
       rdbService.getByIndex.restore()
@@ -153,7 +231,6 @@ describe('Users Controller', () => {
           res.body.should.have.property('token', expectedToken)
           sinon.assert.calledTwice(rdbService.getByIndex)
           sinon.assert.calledOnce(authService.compare)
-
           done()
         })
     })

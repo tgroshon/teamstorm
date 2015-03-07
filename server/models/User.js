@@ -11,7 +11,8 @@ var ATTRS = [
   'email',
   'firstName',
   'lastName',
-  'hash'
+  'hash',
+  'token'
 ]
 
 var PRIVATE_ATTRS = [

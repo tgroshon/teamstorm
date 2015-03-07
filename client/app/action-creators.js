@@ -20,6 +20,10 @@ function lookupToken() {
   return LocalStorage.get('token')
 }
 
+function decodeUserFromToken(token) {
+  return JSON.parse(window.atob(token.split('.')[1]))
+}
+
 function streamListener(event) {
   try {
     var message = JSON.parse(event.data)
@@ -34,10 +38,6 @@ function streamListener(event) {
     console.log(exp)
     throw exp
   }
-}
-
-function decodeUserFromToken(token) {
-  return JSON.parse(window.atob(token.split('.')[1]))
 }
 
 /*
@@ -78,6 +78,21 @@ export default {
         params: {
           user: decodeUserFromToken(token)
         }
+      })
+    }
+  },
+
+  updateUser(newData) {
+    var token = lookupToken()
+    if (token) {
+      HttpAPI.putUser(token, newData, (err, res) => {
+        persistToken(res.body.token)
+        AppDispatcher.dispatch({
+          type: Constants.User.STORE_USER,
+          params: {
+            user: decodeUserFromToken(res.body.token)
+          }
+        })
       })
     }
   },

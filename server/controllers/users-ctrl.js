@@ -43,6 +43,21 @@ module.exports = {
     })
   },
 
+  update: function(req, res) {
+    var updatedUser = req.body
+    if (req.user.id !== updatedUser.id) {
+      return res.status(401).json({ errors: [{ msg: 'Cannot update other users'}] })
+    }
+
+    var newUser = new User(updatedUser)
+    delete newUser.hash // Prevent Updating passwd hash here
+    newUser.save(function(err) {
+      if (err) throw err
+      newUser.token = authService.encode(newUser)
+      res.json(newUser.toJson())
+    })
+  },
+
   token: function(req, res) {
     User.objects.getByEmail(req.body.email, function (err, users) {
       if (err) {

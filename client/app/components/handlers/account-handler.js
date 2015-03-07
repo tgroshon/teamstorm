@@ -1,5 +1,6 @@
 import React from 'react'
 import UserStore from '../../stores/user-store'
+import ActionCreators from '../../action-creators'
 
 export default React.createClass({
   displayName: 'AccountPage',
@@ -7,6 +8,7 @@ export default React.createClass({
   getInitialState() {
     return {
       user: UserStore.getUser(),
+      previousChanges: {},
       editing: false
     }
   },
@@ -25,33 +27,101 @@ export default React.createClass({
     UserStore.removeListener('login', this.storeUpdate)
   },
 
-  handleClick() {
-    if (this.state.editing) {
-      this.setState({ editing: false })
-    } else {
-      this.setState({ editing: true })
+  dataChanged(newData) {
+    var sameData
+    this.state.user.forEach((value, key) => {
+      sameData = newData[key] === value
+      return sameData
+    })
+    return !sameData
+  },
+
+  handleCancel() {
+    this.setState({ editing: false })
+  },
+
+  handleSave() {
+    var updatedUser = {
+      id: this.state.user.get('id'),
+      email: this.refs.emailInput.getDOMNode().value,
+      firstName: this.refs.firstNameInput.getDOMNode().value,
+      lastName: this.refs.lastNameInput.getDOMNode().value
     }
+    this.setState({
+      editing: false,
+      previousChanges: updatedUser
+    })
+    if (this.dataChanged(updatedUser)) {
+      ActionCreators.updateUser(updatedUser)
+    }
+  },
+
+  handleEdit() {
+    this.setState({ editing: true })
   },
 
   render() {
     if (!this.state.user) {
-      return false
+      return <div />
     }
     
     var user = this.state.user
-    var DisplayData = this.state.editing ? InputTable : AccountTable
-    var buttonText = this.state.editing ? 'Save' : 'Edit'
+
+    var mapFn
+    var actionButtons
+    if (this.state.editing) {
+      mapFn = (attr) => {
+        return <input type="text" ref={attr + 'Input'} className="form-control" defaultValue={user.get(attr)} />
+      }
+      actionButtons = [
+        <button key="0" className="btn btn-primary action-btn" onClick={this.handleSave}>
+          Save
+        </button>,
+        <button key="1" className="btn btn-danger action-btn" onClick={this.handleCancel}>
+          Cancel
+        </button>
+      ]
+    } else {
+      mapFn = (attr) => {
+        return <span>{user.get(attr)}</span>
+      }
+      actionButtons = (
+        <button className="btn btn-primary action-btn" onClick={this.handleEdit}>
+          Edit
+        </button>
+      )
+    }
+
+    var ATTRIBUTES = ['firstName', 'lastName', 'email']
+    var dataCells = ATTRIBUTES.map(mapFn)
 
     return (
       <div className="container">
         <div className="row">
           <h2>Account</h2>
           <div className="col-md-6">
-            <DisplayData user={user} />
+            <table className="table table-bordered">
+              <tr>
+                <td>First Name</td>
+                <td>
+                  {dataCells[0]}
+                </td>
+              </tr>
+              <tr>
+                <td>Last Name</td>
+                <td>
+                  {dataCells[1]}
+                </td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>
+                  {dataCells[2]}
+                </td>
+              </tr>
+            </table>
             <div className="form-group">
-              <button className="btn btn-primary" onClick={this.handleClick}>
-                {buttonText}
-              </button>
+              {actionButtons}
             </div>
           </div>
         </div>
@@ -60,52 +130,3 @@ export default React.createClass({
   }
 })
 
-var InputTable = React.createClass({
-  render() {
-    var user = this.props.user
-    return (
-      <table className="table table-bordered">
-        <tr>
-          <td>First Name</td>
-          <td>
-            <input type="text" className="form-control" defaultValue={user.get('firstName')} />
-          </td>
-        </tr>
-        <tr>
-          <td>Last Name</td>
-          <td>
-            <input type="text" className="form-control" defaultValue={user.get('lastName')} />
-          </td>
-        </tr>
-        <tr>
-          <td>Email</td>
-          <td>
-            <input type="text" className="form-control" defaultValue={user.get('email')} />
-          </td>
-        </tr>
-      </table>
-    )
-  }
-})
-
-var AccountTable = React.createClass({
-  render() {
-    var user = this.props.user
-    return (
-      <table className="table table-bordered">
-        <tr>
-          <td>First Name</td>
-          <td>{user.get('firstName')}</td>
-        </tr>
-        <tr>
-          <td>Last Name</td>
-          <td>{user.get('lastName')}</td>
-        </tr>
-        <tr>
-          <td>Email</td>
-          <td>{user.get('email')}</td>
-        </tr>
-      </table>
-    )
-  }
-})

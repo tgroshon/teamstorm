@@ -21,6 +21,14 @@ export default {
       .end(done)
   },
 
+  putUser(token, user, done) {
+    request
+      .put('/users')
+      .set('jwt', token)
+      .send(user)
+      .end(done)
+  },
+
   fetchTeams(token, done) {
     request
       .get('/teams')
