@@ -13,27 +13,34 @@ describe('Activities Controller', () => {
   var userData
   var token
   var userId
-
+  var fakeTeam
   beforeEach(() => {
     userId = 'fakeId'
     userData = {id: userId, firstName: 'Bob'}
     token = authService.encode(userData)
+    fakeTeam = {id: 'bob'}
   })
 
   describe('#index', () => {
 
     var rdbReturnData = new ActivityKlass({title: 'My Activity'})
+
     beforeEach(() => {
-      sinon.stub(rdbService, 'all', function(Klass, cb) {
-        Klass.should.eql(ActivityKlass)
+      sinon.stub(rdbService, 'getByIndex', function(Klass, index, value, cb) {
+        value.should.be.an.Array // In this instance
         cb(null, [rdbReturnData])
       })
-    })
-    afterEach(() => {
-      rdbService.all.restore()
+      sinon.stub(rdbService, 'getByMembership', function(Klass, userId, cb) {
+        cb(null, [fakeTeam])
+      })
     })
 
-    it('Gets list of all activity objects', (done) => {
+    afterEach(() => {
+      rdbService.getByIndex.restore()
+      rdbService.getByMembership.restore()
+    })
+
+    it('Gets list of all activity objects for my teams', (done) => {
       request(app)
         .get('/activity')
         .set('jwt', token)
@@ -42,7 +49,8 @@ describe('Activities Controller', () => {
           if (err) return done(err)
 
           res.body.should.have.property('activities', [rdbReturnData.toJson()])
-          sinon.assert.calledOnce(rdbService.all)
+          sinon.assert.calledOnce(rdbService.getByIndex)
+          sinon.assert.calledOnce(rdbService.getByMembership)
           done()
         })
     })

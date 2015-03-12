@@ -47,7 +47,10 @@ router.post('/teams',
             teamsCtrl.create)
 
 // TODO For testing only
-router.get('/teams/debug', teamsCtrl.debug)
+router.get('/debug/teams', teamsCtrl.debug)
+router.get('/debug/activity',
+            authMiddleware.tokenAuth,
+            activityCtrl.debug)
 
 module.exports = router
 

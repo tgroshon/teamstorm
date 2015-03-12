@@ -81,22 +81,25 @@ module.exports = {
     getConnection(function(cErr, conn) {
       if (cErr) return done(cErr)
 
+      value = Array.isArray(value) ? r.args(value) : value
+
       r.db(config.rdb.name)
-      .table(Klass.tableName)
-      .getAll(value, {index: index})
-      .run(conn, function(err, cursor) {
-        if (err) {
-          conn.close()
-          return done(err)
-        }
-        cursor.toArray(function(err, results) {
-          conn.close()
-          if (err) return done(err)
-          done(err, results.map(function(result){
-            return new Klass(result)
-          }))
+        .table(Klass.tableName)
+        .getAll(value, {index: index})
+        .distinct()
+        .run(conn, function(err, cursor) {
+          if (err) {
+            conn.close()
+            return done(err)
+          }
+          cursor.toArray(function(err, results) {
+            conn.close()
+            if (err) return done(err)
+            done(err, results.map(function(result){
+              return new Klass(result)
+            }))
+          })
         })
-      })
     })
   },
 
@@ -139,7 +142,9 @@ module.exports = {
           r.db(config.rdb.name)
             .table(Klass.tableName)
             .filter({creatorId: userId})
-        ).run(conn, function(err, cursor) {
+        )
+        .distinct()
+        .run(conn, function(err, cursor) {
           if (err) {
             conn.close()
             return done(err)

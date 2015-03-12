@@ -51,6 +51,10 @@ Activity.objects = {
 
   get: function(id, done) {
     rdb.get(Activity, id, done)
+  },
+
+  getByTeamIds: function(teamIds, done) {
+    rdb.getByIndex(Activity, 'teamId', teamIds, done)
   }
 }
 

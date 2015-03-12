@@ -2,10 +2,33 @@
 
 var Message = require('../models/Message')
 var Activity = require('../models/Activity')
+var Team = require('../models/Team')
 
 module.exports = {
 
   index: function(req, res) {
+    Team.objects.getByMembership(req.user.id, function (err, teams) {
+      if (err) {
+        return res.status(500).json({ errors: [{ msg: err.message }] })
+      }
+
+      var teamIds = teams.map(function(team) { return team.id })
+
+      Activity.objects.getByTeamIds(teamIds, function (actErr, activities) {
+        if (actErr) {
+          return res.status(500).json({ errors: [{ msg: actErr.message }] })
+        }
+
+        res.json({
+          'activities': activities.map(function(act) {
+            return act.toJson()
+          })
+        })
+      })
+    })
+  },
+
+  debug: function(req, res) {
     Activity.objects.all(function (err, activities) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
