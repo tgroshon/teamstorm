@@ -31,11 +31,11 @@ export default React.createClass({
         <Input type="select" ref="team" label="Team">
           {teams}
         </Input>
-        <button className="btn btn-success" onClick={this.handleCreate}>
+        <button className="btn btn-success action-btn" onClick={this.handleCreate}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true" />
           Create
         </button>
-        <button className="btn btn-danger" onClick={this.handleCancel}>
+        <button className="btn btn-danger action-btn" onClick={this.handleCancel}>
           <span className="glyphicon glyphicon-minus" aria-hidden="true" />
           Cancel
         </button>

@@ -40,24 +40,32 @@ export default React.createClass({
     var icon = this.getIcon()
     var style = this.getBsStyle()
     var createDate = new Date(this.props.activity.createDate)
-    var status = this.props.activity.isClosed === "false" ? "Closed" : "Active"
+    var isActive = this.props.activity.isActive === "false" ? false : true
+    var statusMessage = isActive === "false" ? "Closed" : "Active"
     return (
       <li key={this.props.activity.id} className="ActivityList__Item">
-        <Link
-          to="messages"
-          params={{activityId: this.props.activity.id}}
-          className="ActivityList__ItemLink"
-          >
           <div className="ActivityList__ItemBox">
-            <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
-              <Glyphicon glyph={icon} className="activity__header-icon" />
-              {this.props.activity.title}
-            </h4>
-            <small>Status: {status}</small>
+          <Link to="activity"
+            params={{activityId: this.props.activity.id}}
+            className="ActivityList__ItemLink"
+            >
+              <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
+                <Glyphicon glyph={icon} className="activity__header-icon" />
+                {this.props.activity.title}
+              </h4>
+            </Link>
+            <small className={"text-" + (isActive ? 'success' : 'danger')}>
+              Status: {statusMessage}
+            </small>
             <br />
             <small>Created on {createDate.toDateString()}</small>
+          <Link to="messages"
+            params={{activityId: this.props.activity.id}}
+            className="ActivityList__MessageLink"
+            >
+            <p>Messages</p>
+          </Link>
           </div>
-        </Link>
       </li>
     )
   }

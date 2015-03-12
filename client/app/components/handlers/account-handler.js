@@ -4,7 +4,6 @@ import ErrorStore from '../../stores/error-store'
 import Constants from '../../constants'
 import ActionCreators from '../../action-creators'
 
-console.log(Constants.Error.ERR_HTTP_USER_UPDATE)
 export default React.createClass({
   displayName: 'AccountPage',
 
@@ -48,10 +47,6 @@ export default React.createClass({
     return !sameData
   },
 
-  handleCancel() {
-    this.setState({ editing: false })
-  },
-
   handleSave() {
     var updatedUser = {
       id: this.state.user.get('id'),
@@ -70,6 +65,10 @@ export default React.createClass({
 
   handleEdit() {
     this.setState({ editing: true })
+  },
+
+  handleCancel() {
+    this.setState({ editing: false })
   },
 
   render() {
