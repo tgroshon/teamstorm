@@ -72,7 +72,7 @@ module.exports = {
           conn.close()
           if (err) return done(err)
 
-          done(err, new Klass(data))
+          done(err, data ? new Klass(data) : null)
         })
     })
   },

@@ -18,10 +18,11 @@ var PRIVATE_ATTRS = [
 ]
 
 function Message(payload) {
-  var cleanAttrs = _.pick(payload, ATTRS)
-  Object.keys(cleanAttrs).forEach(function(key) {
-    this[key] = cleanAttrs[key]
-  }.bind(this))
+  this.merge(payload)
+}
+
+Message.prototype.merge = function(data) {
+  _.extend(this, _.pick(data, ATTRS))
 }
 
 Message.prototype.save = function(done) {

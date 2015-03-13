@@ -14,6 +14,7 @@ describe('Activities Controller', () => {
   var token
   var userId
   var fakeTeam
+
   beforeEach(() => {
     userId = 'fakeId'
     userData = {id: userId, firstName: 'Bob'}
@@ -91,6 +92,7 @@ describe('Activities Controller', () => {
 
     var actData = {title: 'My New Team'}
     var rdbReturnedData = new ActivityKlass(actData)
+
     beforeEach(() => {
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
         Klass.should.eql(ActivityKlass)
@@ -98,6 +100,7 @@ describe('Activities Controller', () => {
         cb(null, [rdbReturnedData])
       })
     })
+
     afterEach(() => {
       rdbService.insert.restore()
     })
@@ -107,7 +110,7 @@ describe('Activities Controller', () => {
         .post('/activity')
         .set('jwt', token)
         .send(actData)
-        .expect(200)
+        .expect(201)
         .end((err, res) => {
           if (err) return done(err)
 
@@ -118,6 +121,55 @@ describe('Activities Controller', () => {
     })
   })
 
+  describe('#update', () => {
+
+    var actId = 'someId'
+    var teamId = 'someTeamId'
+    var newActivityData = {id: actId, teamId: teamId, title: 'New Act'}
+    var oldActivityData = {id: actId, teamId: teamId, title: 'Old Act'}
+    var newActivity = new ActivityKlass(newActivityData)
+    var oldActivity = new ActivityKlass(oldActivityData)
+
+    beforeEach(() => {
+      sinon.stub(rdbService, 'get', (Klass, id, cb) => {
+        Klass.should.eql(ActivityKlass)
+        id.should.eql(actId)
+        cb(null, oldActivity)
+      })
+      sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
+        Klass.should.eql(ActivityKlass)
+        data.should.eql(newActivityData)
+        cb(null, [newActivityData])
+      })
+      sinon.stub(rdbService, 'getByMembership', (Klass, id, cb) => {
+        id.should.eql(userId)
+        cb(null, [{id: teamId}])
+      })
+    })
+
+    afterEach(() => {
+      rdbService.insert.restore()
+      rdbService.getByMembership.restore()
+      rdbService.get.restore()
+    })
+
+    it('receives activity data, checks team membership, and updates Activity', (done) => {
+      request(app)
+        .put('/activity')
+        .set('jwt', token)
+        .send(newActivityData)
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err)
+
+          res.body.should.eql(newActivity.toJson())
+          sinon.assert.calledOnce(rdbService.insert)
+          sinon.assert.calledOnce(rdbService.getByMembership)
+          sinon.assert.calledOnce(rdbService.get)
+          done()
+        })
+    })
+  })
   describe('#messageIndex', () => {
 
     var activityId = 'fakeActivityId'
@@ -171,7 +223,7 @@ describe('Activities Controller', () => {
         .post('/activity/' + activityId + '/messages')
         .set('jwt', token)
         .send(messageData)
-        .expect(200)
+        .expect(201)
         .end((err, res) => {
           if (err) return done(err)
 

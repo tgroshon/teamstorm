@@ -19,12 +19,12 @@ var ATTRS = [
 var PRIVATE_ATTRS = []
 
 function Activity(payload) {
-  var cleanAttrs = _.pick(payload, ATTRS)
-  Object.keys(cleanAttrs).forEach(function(key) {
-    this[key] = cleanAttrs[key]
-  }.bind(this))
+  this.merge(payload)
 }
 
+Activity.prototype.merge = function(data) {
+  _.extend(this, _.pick(data, ATTRS))
+}
 
 Activity.prototype.save = function(done) {
   Activity.objects.insert(this, function(err, newActivityColl) {
