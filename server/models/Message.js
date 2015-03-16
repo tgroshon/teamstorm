@@ -9,6 +9,7 @@ var ATTRS = [
   'id',
   'creator',
   'payload',
+  'category',
   'activityId',
   'createDate'
 ]

@@ -64,7 +64,7 @@ export default {
     request
       .post(url)
       .set('jwt', token)
-      .send({payload: message})
+      .send(message)
       .end(done)
   },
 

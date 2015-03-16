@@ -186,10 +186,10 @@ export default {
     }
   },
 
-  postMessage(activityId, message) {
+  postMessage(activityId, payload, category) {
     var token = lookupToken()
     if (token) {
-      HttpAPI.postMessage(token, activityId, message, (err, res) => {
+      HttpAPI.postMessage(token, activityId, {payload, category}, (err, res) => {
         
       })
     }

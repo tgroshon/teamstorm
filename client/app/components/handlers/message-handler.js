@@ -3,6 +3,8 @@ import Router from 'react-router'
 import MessageBox from '../views/message-box'
 import MessageStore from '../../stores/message-store'
 import ActionCreators from '../../action-creators'
+import { Input } from 'react-bootstrap'
+import RadioGroup from '../views/radio-group'
 
 
 export default React.createClass({
@@ -42,9 +44,12 @@ export default React.createClass({
   },
 
   handleCreate() {
-    var messageText = this.refs.messageInputTextarea.getDOMNode().value
-    ActionCreators.postMessage(this.getParams().activityId, messageText)
-    this.refs.messageInputTextarea.getDOMNode().value = ''
+    var text = this.refs.messageInputTextarea.getDOMNode().value
+    var category = this.refs.messageInputCategory.getCheckedValue()
+    if (text.trim() !== '') {
+      ActionCreators.postMessage(this.getParams().activityId, text, category)
+      this.refs.messageInputTextarea.getDOMNode().value = ''
+    }
   },
 
   render() {
@@ -54,25 +59,50 @@ export default React.createClass({
     } else if (this.state.messages.length == 0) {
       displayData = <div className="messages-empty">Empty...</div>
     } else {
-      displayData = this.state.messages.map((mess) => {
-        return <MessageBox key={mess.get('id')} message={mess} />
-      })
+      var categorizedMessages = this.state.messages.reduce((result, mess) => {
+        var pointer = result[mess.get('category')]
+        var list = Array.isArray(pointer) ? pointer : []
+        result[mess.get('category')] = list.concat([<MessageBox key={mess.get('id')} message={mess} />])
+        return result
+      }, {})
+
+      displayData = (
+        <div className="row MessageList">
+          <div className="MessageList__category">
+            <h4 className="MessageList__category--header">Is</h4>
+            {categorizedMessages.is || categorizedMessages[undefined]}
+          </div>
+          <div className="MessageList__category">
+            <h4 className="MessageList__category--header">Is Not</h4>
+            {categorizedMessages.isnot}
+          </div>
+        </div>
+      )
     }
 
     return (
-      <div className="messages-wrapper">
-        <div className="row message-box-list">
-          {displayData}
-        </div>
-        <div className="row message-box-input-area">
+      <div className="MessagesWrapper">
+        {displayData}
+        <div className="row MessageInputArea">
           <textarea
-            className="form-control message-box-input-textarea"
+            className="form-control MessageInputArea__textarea"
             ref="messageInputTextarea"
             rows="3"
             maxLength="140"
             placeholder="Enter your message..."
            />
-          <button onClick={this.handleCreate} className="btn btn-primary message-box-input-button">
+          <RadioGroup name="fruit" ref="messageInputCategory" value="is">
+            <label className="MessageInputArea__category">
+              <input type="radio" value="is" /> Is
+            </label>
+            <label className="MessageInputArea__category">
+              <input type="radio" value="isnot"/> Is Not
+            </label>
+          </RadioGroup>
+          <button ref="messageInputButton"
+            onClick={this.handleCreate}
+            className="btn btn-primary MessageInputArea__button"
+          >
             Post
           </button>
         </div>

@@ -112,14 +112,11 @@ module.exports = {
   },
 
   createMessage: function(req, res) {
-    var creator = req.user.id
-    var payload = req.body.payload
-    var activityId = req.params.activityId
-
     var message = new Message({
-      creator: creator,
-      payload: payload,
-      activityId: activityId
+      creator: req.user.id,
+      payload: req.body.payload,
+      category: req.body.category,
+      activityId: req.params.activityId
     })
     message.save(function() {
       res.status(201).json(message.toJson())

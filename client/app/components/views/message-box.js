@@ -4,12 +4,13 @@ export default React.createClass({
   render() {
     var message = this.props.message
     var createDate = new Date(message.get('createDate'))
+    var category = message.get('category') === 'isnot' ? 'Is Not' : 'Is'
     return (
-      <div className="message-box-container">
-        <div className="message-box fade-in">
+      <div className="MessageBox">
+        <div className="MessageBox__container fade-in">
           {message.get('payload')}
           <br />
-          <span className="message-box-date">{createDate.toDateString()}</span>
+          <span className="MessageBox__date">{createDate.toDateString()}</span>
         </div>
       </div>
     )
