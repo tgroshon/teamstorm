@@ -4,7 +4,7 @@ import {Input} from 'react-bootstrap'
 export default React.createClass({
   displayName: 'NewActivityForm',
 
-  getActivity() {
+  getFormData() {
     return {
       title: this.refs.title.getValue(),
       type: this.refs.type.getValue(),

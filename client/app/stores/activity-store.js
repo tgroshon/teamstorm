@@ -30,10 +30,9 @@ ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
   switch(payload.type) {
 
     case ActivityConstants.STORE_ACTIVITIES:
-      var newActivityMap = Immutable.Map()
-      params.activities.forEach((act) => {
-        newActivityMap = newActivityMap.set(act.id, act)
-      })
+      var newActivityMap = params.activities.reduce((map, act) => {
+        return map.set(act.id, act)
+      }, Immutable.Map())
       activities = activities.merge(newActivityMap)
       ActivityStore.emit('activity')
       break

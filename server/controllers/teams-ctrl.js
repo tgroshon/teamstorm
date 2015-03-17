@@ -43,9 +43,11 @@ module.exports = {
   },
 
   create: function(req, res) {
-    var team = new Team(req.body)
+    var params = req.body
+    params.creatorId = req.user.id
+    var team = new Team(params)
     team.save(function() {
-      res.json(team.toJson())
+      res.status(201).json(team.toJson())
     })
   },
 

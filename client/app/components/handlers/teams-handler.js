@@ -47,7 +47,8 @@ export default React.createClass({
   },
 
   render() {
-    var teams = this.state.teams.map((team) => {
+    console.log(this.state.teams)
+    var teams = this.state.teams.map(team => {
       return <TeamBox key={team.get('id')} team={team} />
     })
 

@@ -81,12 +81,13 @@ describe('Teams Controller', () => {
   describe('#create', () => {
 
     var teamData = {name: 'My Team'}
-    var rdbReturnedData = new TeamKlass(teamData)
+    var teamWithUser
     beforeEach(() => {
+      teamWithUser = {name: 'My Team', creatorId: userId}
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
         Klass.should.eql(TeamKlass)
-        data.should.eql(teamData)
-        cb(null, [rdbReturnedData])
+        data.should.eql(teamWithUser)
+        cb(null, [new TeamKlass(data)])
       })
     })
     afterEach(() => {
@@ -99,11 +100,11 @@ describe('Teams Controller', () => {
         .set('jwt', token)
         .send(teamData)
         .expect('Content-Type', /json/)
-        .expect(200)
+        .expect(201)
         .end((err, res) => {
           if (err) return done(err)
 
-          res.body.should.eql(teamData)
+          res.body.should.eql(teamWithUser)
           sinon.assert.calledOnce(rdbService.insert)
           done()
         })

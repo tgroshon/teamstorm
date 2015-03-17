@@ -1,12 +1,11 @@
-'use strict'
+import express from 'express'
+import usersCtrl from './controllers/users-ctrl'
+import teamsCtrl from './controllers/teams-ctrl'
+import activityCtrl from './controllers/activity-ctrl'
+import sseMiddleware from './middlewares/sse-response'
+import authMiddleware from './middlewares/authentication'
 
-var express = require('express')
 var router = express.Router()
-var usersCtrl = require('./controllers/users-ctrl')
-var teamsCtrl = require('./controllers/teams-ctrl')
-var activityCtrl = require('./controllers/activity-ctrl')
-var sseMiddleware = require('./middlewares/sse-response')
-var authMiddleware = require('./middlewares/authentication')
 
 router.get('/users', usersCtrl.index)
 router.post('/users', usersCtrl.create)
@@ -31,4 +30,4 @@ router.get('/debug/teams', teamsCtrl.debug)
 router.get('/debug/activity', authMiddleware.tokenAuth, activityCtrl.debug)
 router.get('/token', authMiddleware.tokenAuth, authMiddleware.stub)
 
-module.exports = router
+export default router

@@ -7,7 +7,7 @@ import Constants from '../constants'
 const TeamConstants = Constants.Team
 
 var StoreData = Immutable.Map({
-  teams: Immutable.List()
+  teams: Immutable.Map()
 })
 
 var TeamStore = assign({}, EventEmitter.prototype, {
@@ -24,7 +24,12 @@ TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
   switch(payload.type) {
 
     case TeamConstants.STORE_TEAMS:
-      StoreData = StoreData.set('teams', Immutable.fromJS(params.teams))
+      let teams = Immutable.fromJS(params.teams)
+      let newTeamMap = teams.reduce((map, team) => {
+        return map.set(team.get('id'), team)
+      }, Immutable.Map())
+      let latestTeams = StoreData.get('teams').merge(newTeamMap)
+      StoreData = StoreData.set('teams', latestTeams)
       TeamStore.emit('change')
       break
 
