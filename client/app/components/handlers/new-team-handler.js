@@ -3,7 +3,7 @@ import TokenInput, {Option as ComboboxOption} from 'react-tokeninput'
 import Router, { Navigation } from 'react-router'
 import {without, uniq} from 'lodash'
 import UserStore from '../../stores/user-store'
-import ActionCreators from '../../action-creators'
+import UserActions from '../../actions/users'
 
 export default React.createClass({
   displayName: 'NewTeam',
@@ -55,7 +55,7 @@ export default React.createClass({
     if (userInput === '') {
       return this.setState({options: []})
     } else if (userInput.length > 2) {
-      ActionCreators.searchUsers(userInput)
+      UserActions.searchUsers(userInput)
     }
   },
 

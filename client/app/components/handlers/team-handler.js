@@ -1,7 +1,6 @@
 import React from 'react'
 import Router, {RouteHandler, Link} from 'react-router'
 import {Panel, Alert, Glyphicon, Badge} from 'react-bootstrap'
-import ActionCreators from '../../action-creators'
 
 export default React.createClass({
 

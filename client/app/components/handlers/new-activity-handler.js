@@ -1,17 +1,40 @@
 import React from 'react'
 import {Input} from 'react-bootstrap'
 import Router, { Navigation } from 'react-router'
-import ActionCreators from '../../action-creators'
+import TeamActions from '../../actions/teams'
+import ActivityActions from '../../actions/activities'
+import NewActivityForm from '../views/new-activity-form'
+import TeamStore from '../../stores/team-store'
 
 export default React.createClass({
   displayName: 'NewActivityHandler',
   
   mixins: [ Navigation ],
 
+  getInitialState() {
+    return {
+      teams: TeamStore.getTeams()
+    }
+  },
+
+  storeUpdate() {
+    this.setState({
+      teams: TeamStore.getTeams()
+    })
+  },
+
+  componentWillMount() {
+    TeamStore.on('change', this.storeUpdate)
+    TeamActions.fetchTeams()
+  },
+
+  componentWillUnmount() {
+    TeamStore.removeListener('change', this.storeUpdate)
+  },
+
   handleCreate() {
-    var title = this.refs.title.getValue()
-    var type = this.refs.type.getValue()
-    var team = this.refs.team.getValue()
+    var act = this.refs.newActivityForm.getActivity()
+    ActivityActions.createActivity(act.title, act.type, act.teamId)
   },
 
   handleCancel() {
@@ -19,26 +42,15 @@ export default React.createClass({
   },
 
   render() {
-    var teams = <option value="team1">My Team</option>
     return (
-      <div className="input-group">
-        <Input type="text" ref="title" label="Title" />
-        <Input type="select" ref="type" label='Activity Type' defaultValue="deliverable">
-          <option value="deliverable">Deliverable</option>
-          <option value="discussion">Discussion</option>
-          <option value="issue">Issue</option>
-        </Input>
-        <Input type="select" ref="team" label="Team">
-          {teams}
-        </Input>
-        <button className="btn btn-success action-btn" onClick={this.handleCreate}>
-          <span className="glyphicon glyphicon-plus" aria-hidden="true" />
-          Create
-        </button>
-        <button className="btn btn-danger action-btn" onClick={this.handleCancel}>
-          <span className="glyphicon glyphicon-minus" aria-hidden="true" />
-          Cancel
-        </button>
+      <div>
+        <h3>New Activity</h3>
+        <NewActivityForm
+          ref='newActivityForm'
+          handleCreate={this.handleCreate}
+          handleCancel={this.handleCancel}
+          teams={this.state.teams}
+          />
       </div>
     )
   }

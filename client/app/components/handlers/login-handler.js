@@ -1,6 +1,6 @@
 import React from 'react'
 import Router, {Navigation} from 'react-router'
-import ActionCreators from '../../action-creators'
+import UserActions from '../../actions/users'
 import UserStore from '../../stores/user-store'
 
 export default React.createClass({
@@ -19,7 +19,7 @@ export default React.createClass({
   buttonClick() {
     var username = this.refs.username.getDOMNode().value
     var password = this.refs.password.getDOMNode().value
-    ActionCreators.login(username, password)
+    UserActions.login(username, password)
   },
 
   componentWillMount() {

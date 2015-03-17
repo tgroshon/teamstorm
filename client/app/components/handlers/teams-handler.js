@@ -1,7 +1,7 @@
 import React from 'react'
 import Router, {RouteHandler, Link} from 'react-router'
 import {Glyphicon, Badge} from 'react-bootstrap'
-import ActionCreators from '../../action-creators'
+import TeamActions from '../../actions/teams'
 import TeamStore from '../../stores/team-store'
 
 var TeamBox = React.createClass({
@@ -39,7 +39,7 @@ export default React.createClass({
 
   componentWillMount() {
     TeamStore.on('change', this.storeUpdate)
-    ActionCreators.fetchTeams()
+    TeamActions.fetchTeams()
   },
 
   componentWillUnmount() {

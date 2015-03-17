@@ -2,7 +2,7 @@ import React from 'react'
 import Router, {RouteHandler} from 'react-router'
 import ActivityStore from '../../stores/activity-store'
 import ActivityBox from '../views/activity-box'
-import ActionCreators from '../../action-creators'
+import ActivityActions from '../../actions/activities'
 
 export default React.createClass({
   getInitialState() {
@@ -17,7 +17,7 @@ export default React.createClass({
 
   componentWillMount() {
     ActivityStore.on('activity', this.storeUpdate)
-    ActionCreators.fetchActivities()
+    ActivityActions.fetchActivities()
   },
 
   componentWillUnmount() {

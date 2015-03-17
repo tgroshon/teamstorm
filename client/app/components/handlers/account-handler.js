@@ -2,7 +2,7 @@ import React from 'react'
 import UserStore from '../../stores/user-store'
 import ErrorStore from '../../stores/error-store'
 import Constants from '../../constants'
-import ActionCreators from '../../action-creators'
+import UserActions from '../../actions/users'
 
 export default React.createClass({
   displayName: 'AccountPage',
@@ -59,7 +59,7 @@ export default React.createClass({
       previousChanges: updatedUser
     })
     if (this.dataChanged(updatedUser)) {
-      ActionCreators.updateUser(updatedUser)
+      UserActions.updateUser(updatedUser)
     }
   },
 

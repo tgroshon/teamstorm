@@ -2,7 +2,7 @@ import React from 'react'
 import Router from 'react-router'
 import MessageBox from '../views/message-box'
 import MessageStore from '../../stores/message-store'
-import ActionCreators from '../../action-creators'
+import MessageActions from '../../actions/messages'
 import { Input } from 'react-bootstrap'
 import RadioGroup from '../views/radio-group'
 
@@ -26,28 +26,28 @@ export default React.createClass({
 
   componentWillMount() {
     MessageStore.on('change', this.storeUpdate)
-    ActionCreators.fetchMessages(this.getParams().activityId)
-    ActionCreators.getMessageStream(this.getParams().activityId)
+    MessageActions.fetchMessages(this.getParams().activityId)
+    MessageActions.getMessageStream(this.getParams().activityId)
   },
 
   componentWillReceiveProps() {
-    ActionCreators.stopMessageStream()
+    MessageActions.stopMessageStream()
     this.setState({ messages: [] })
-    ActionCreators.killMessageCache(this.getParams().activityId)
-    ActionCreators.fetchMessages(this.getParams().activityId)
-    ActionCreators.getMessageStream(this.getParams().activityId)
+    MessageActions.killMessageCache(this.getParams().activityId)
+    MessageActions.fetchMessages(this.getParams().activityId)
+    MessageActions.getMessageStream(this.getParams().activityId)
   },
 
   componentWillUnmount() {
     MessageStore.removeListener('change', this.storeUpdate)
-    ActionCreators.stopMessageStream()
+    MessageActions.stopMessageStream()
   },
 
   handleCreate() {
     var text = this.refs.messageInputTextarea.getDOMNode().value
     var category = this.refs.messageInputCategory.getCheckedValue()
     if (text.trim() !== '') {
-      ActionCreators.postMessage(this.getParams().activityId, text, category)
+      MessageActions.createMessage(this.getParams().activityId, text, category)
       this.refs.messageInputTextarea.getDOMNode().value = ''
     }
   },

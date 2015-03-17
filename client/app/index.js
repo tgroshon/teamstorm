@@ -1,7 +1,4 @@
 import React from 'react'
-import jQuery from 'jquery'
-window.jQuery = jQuery
-window.$ = jQuery
 import Router, { Link, Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
 import MessageViewController from './components/handlers/message-handler'
 import ActivityViewController from './components/handlers/activity-handler'
@@ -14,11 +11,11 @@ import NewTeamHandler from './components/handlers/new-team-handler'
 import NewActivityHandler from './components/handlers/new-activity-handler'
 import AccountHandler from './components/handlers/account-handler'
 import TopNav from './components/views/top-nav'
-import ActionCreators from './action-creators'
+import UserActions from './actions/users'
 
 var App = React.createClass({
   componentWillMount() {
-    ActionCreators.restoreSession()
+    UserActions.restoreSession()
   },
 
   render() {

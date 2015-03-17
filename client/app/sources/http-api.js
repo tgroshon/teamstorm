@@ -44,6 +44,14 @@ export default {
       .end(done)
   },
 
+  postActivity(token, activity, done) {
+    request
+      .post('/activity')
+      .set('jwt', token)
+      .send(activity)
+      .end(done)
+  },
+
   fetchMessages(token, activityId, done) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     request

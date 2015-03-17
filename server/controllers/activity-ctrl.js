@@ -55,6 +55,8 @@ module.exports = {
   create: function(req, res) {
     var params = req.body
     delete params.id
+    params.creator = req.user.id
+    params.isActive = true
     var activity = new Activity(params)
     activity.save(function() {
       res.status(201).json(activity.toJson())

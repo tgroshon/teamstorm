@@ -10,7 +10,7 @@ var ATTRS = [
   'title',
   'type',
   'teamId',
-  'isClosed',
+  'isActive',
   'creator',
   'createDate',
   'updateDate',
