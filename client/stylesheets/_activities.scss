@@ -2,20 +2,6 @@
 
 }
 
-.Main__ActivityList {
-  position: absolute;
-  left: 0;
-  top: 50px;
-  bottom: 0;
-  width: 270px;
-  overflow: auto;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-  background-color: #eeeeee;
-  border-right: 1px solid #dddddd
-}
-
 .ActivityList__ItemBox {
   padding: 10px;
   border-bottom: 1px solid #dddddd;
@@ -30,11 +16,6 @@
   text-decoration: underline;
 }
 
-// .ActivityList__ItemBox:hover {
-//   background-color: #efefef;
-//   border-bottom: 1px solid #cccccc;
-// }
-
 .ActivityList__ItemLink:hover {
   text-decoration: none;
 }
@@ -42,3 +23,14 @@
 .ActivityList__MessageLink {
   float: right;
 }
+
+.activity__header-icon {
+  margin-bottom: 4px;
+  margin-left: 1px;
+  margin-right: 10px;
+}
+
+.activity__header-badge {
+  margin-right: 10px;
+}
+

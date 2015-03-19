@@ -4,6 +4,7 @@ import MessageViewController from './components/handlers/message-handler'
 import ActivityViewController from './components/handlers/activity-handler'
 import ActivitiesViewController from './components/handlers/activities-handler'
 import LoginViewController from './components/handlers/login-handler'
+import NewUserViewController from './components/handlers/new-user-handler'
 import DashboardViewController from './components/handlers/dashboard-handler'
 import TeamsViewController from './components/handlers/teams-handler'
 import TeamViewController from './components/handlers/team-handler'
@@ -24,8 +25,8 @@ var App = React.createClass({
         <header className="top__header">
           <TopNav />
         </header>
-        <main className="main__wrapper">
-          <div className="main__application">
+        <main className="Main__wrapper">
+          <div className="Main__application">
             <RouteHandler/>
           </div>
         </main>
@@ -65,7 +66,7 @@ var DefaultTeam = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="login" handler={LoginViewController}/>
-    <Route name="signup" handler={LoginViewController}/>
+    <Route name="signup" handler={NewUserViewController}/>
     <Route name="account" handler={AccountHandler}/>
     <Route name="teams" path="/team" handler={TeamsViewController}>
       <Route name="new-team" path="new" handler={NewTeamHandler} />

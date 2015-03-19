@@ -5,6 +5,13 @@ var EventSourceCache = {}
 
 export default {
 
+  postUser(user, done) {
+    request
+      .post('/users')
+      .send(user)
+      .end(done)
+  },
+
   login(email, password, done) {
     request
       .post('/login')
@@ -13,9 +20,8 @@ export default {
   },
 
   searchUsers(token, query, done) {
-    var url = '/users/search'
     request
-      .get(url)
+      .get('/users/search')
       .set('jwt', token)
       .query({q: query})
       .end(done)

@@ -44,28 +44,28 @@ export default React.createClass({
     var statusMessage = isActive === "false" ? "Closed" : "Active"
     return (
       <li key={this.props.activity.id} className="ActivityList__Item">
-          <div className="ActivityList__ItemBox">
+        <div className="ActivityList__ItemBox">
           <Link to="activity"
             params={{activityId: this.props.activity.id}}
             className="ActivityList__ItemLink"
             >
-              <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
-                <Glyphicon glyph={icon} className="activity__header-icon" />
-                {this.props.activity.title}
-              </h4>
-            </Link>
-            <small className={"text-" + (isActive ? 'success' : 'danger')}>
-              Status: {statusMessage}
-            </small>
-            <br />
-            <small>Created on {createDate.toDateString()}</small>
+            <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
+              <Glyphicon glyph={icon} className="activity__header-icon" />
+              {this.props.activity.title}
+            </h4>
+          </Link>
+          <small className={"text-" + (isActive ? 'success' : 'danger')}>
+            Status: {statusMessage}
+          </small>
+          <br />
+          <small>Created on {createDate.toDateString()}</small>
           <Link to="messages"
             params={{activityId: this.props.activity.id}}
             className="ActivityList__MessageLink"
             >
             <p>Messages</p>
           </Link>
-          </div>
+        </div>
       </li>
     )
   }

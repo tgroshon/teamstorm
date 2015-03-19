@@ -4,10 +4,42 @@ import HttpAPI from '../sources/http-api'
 import LocalStorage from '../sources/local-storage'
 
 function _decodeUserFromToken(token) {
-  return JSON.parse(window.atob(token.split('.')[1]))
+  try {
+    return JSON.parse(window.atob(token.split('.')[1]))
+  } catch (e) {
+    AppDispatcher.dispatch({
+      type: Constants.Error.ERR_DECODE_TOKEN,
+      params: {
+        error: e
+      }
+    })
+  }
 }
 
 export default {
+  signup(email, firstName, lastName, password) {
+    if (!LocalStorage.get('token')) {
+      let user = {email, password, firstName, lastName}
+      HttpAPI.postUser(user, (err, res) => {
+        if (err) {
+          return AppDispatcher.dispatch({
+            type: Constants.Error.ERR_HTTP_POST_USER,
+            params: {
+              error: err,
+              data: user
+            }
+          })
+        }
+        AppDispatcher.dispatch({
+          type: Constants.User.STORE_USER,
+          params: {
+            user: _decodeUserFromToken(res.body.token)
+          }
+        })
+      })
+    }
+  },
+
   login(email, password) {
     HttpAPI.login(email, password, (err, res) => {
       if (err) {

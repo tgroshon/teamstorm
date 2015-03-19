@@ -29,9 +29,11 @@ export default {
   }),
   Error: keyMirror({
     'ERR_HTTP_USER_UPDATE': null,
+    'ERR_HTTP_POST_USER': null,
     'ERR_HTTP_POST_MESSAGE': null,
     'ERR_HTTP_POST_ACTIVITY': null,
     'ERR_HTTP_POST_TEAM': null,
+    'ERR_DECODE_TOKEN': null,
     'CLEAR_ERR': null,
   })
 }
