@@ -5,12 +5,13 @@ import AppDispatcher from '../dispatcher'
 import Constants from '../constants'
 
 const TeamConstants = Constants.Team
+const UserConstants = Constants.User
 
-var StoreData = Immutable.Map({
+let StoreData = Immutable.Map({
   teams: Immutable.Map()
 })
 
-var TeamStore = assign({}, EventEmitter.prototype, {
+let TeamStore = assign({}, EventEmitter.prototype, {
   name: 'Team',
 
   getTeams() {
@@ -18,8 +19,8 @@ var TeamStore = assign({}, EventEmitter.prototype, {
   }
 })
 
-TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
-  var params = payload.params
+TeamStore.dispatchToken = AppDispatcher.register(payload => {
+  let params = payload.params
 
   switch(payload.type) {
 
@@ -31,6 +32,12 @@ TeamStore.dispatchToken = AppDispatcher.register(function(payload) {
       let latestTeams = StoreData.get('teams').merge(newTeamMap)
       StoreData = StoreData.set('teams', latestTeams)
       TeamStore.emit('change')
+      break
+
+    case UserConstants.LOGOUT:
+      StoreData = Immutable.Map({
+        teams: Immutable.Map()
+      })
       break
 
     default:

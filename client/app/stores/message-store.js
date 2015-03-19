@@ -5,6 +5,7 @@ import AppDispatcher from '../dispatcher'
 import Constants from '../constants'
 
 const MessageConstants = Constants.Message
+const UserConstants = Constants.User
 
 var StoreData = Immutable.Map({
   pending: false
@@ -50,6 +51,12 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
     case MessageConstants.PENDING_MESSAGE_REQUEST:
       StoreData = StoreData.set('pending', true)
       MessageStore.emit('change')
+
+    case UserConstants.LOGOUT:
+      StoreData = Immutable.Map({
+        pending: false
+      })
+      break
 
     default:
       // do nothing

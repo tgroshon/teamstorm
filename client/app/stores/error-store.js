@@ -5,6 +5,7 @@ import Constants from '../constants'
 import AppDispatcher from '../dispatcher'
 
 const ErrorConstants = Constants.Error
+const UserConstants = Constants.User
 
 var StoreData = Immutable.Map()
 
@@ -56,6 +57,10 @@ ErrorStore.dispatchToken = AppDispatcher.register((payload) => {
 
     case ErrorConstants.CLEAR_ERR:
       StoreData = StoreData.delete(payload.params.name)
+      break
+
+    case UserConstants.LOGOUT:
+      StoreData = Immutable.Map()
       break
 
     default:

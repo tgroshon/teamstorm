@@ -5,6 +5,7 @@ import AppDispatcher from '../dispatcher'
 import Constants from '../constants'
 
 const ActivityConstants = Constants.Activity
+const UserConstants = Constants.User
 
 var activities = Immutable.Map()
 
@@ -35,6 +36,10 @@ ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
       }, Immutable.Map())
       activities = activities.merge(newActivityMap)
       ActivityStore.emit('activity')
+      break
+
+    case UserConstants.LOGOUT:
+      activities = Immutable.Map()
       break
 
     default:
