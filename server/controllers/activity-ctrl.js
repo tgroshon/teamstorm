@@ -12,8 +12,11 @@ module.exports = {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
-      var teamIds = teams.map(function(team) { return team.id })
+      if (!teams || teams.length === 0) {
+        return res.json({ 'activities': [] })
+      }
 
+      var teamIds = teams.map(function(team) { return team.id })
       Activity.objects.getByTeamIds(teamIds, function (actErr, activities) {
         if (actErr) {
           return res.status(500).json({ errors: [{ msg: actErr.message }] })

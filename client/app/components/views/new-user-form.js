@@ -10,6 +10,7 @@ function getBlankErrorState() {
     emailError: null
   }
 }
+
 export default React.createClass({
   displayName: 'NewUserForm',
 

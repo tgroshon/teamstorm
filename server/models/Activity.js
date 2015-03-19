@@ -54,6 +54,9 @@ Activity.objects = {
   },
 
   getByTeamIds: function(teamIds, done) {
+    if (!Array.isArray(teamIds) || teamIds.length === 0) {
+      return done(null, [])
+    }
     rdb.getByIndex(Activity, 'teamId', teamIds, done)
   }
 }

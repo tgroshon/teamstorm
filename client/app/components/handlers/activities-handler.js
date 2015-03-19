@@ -25,21 +25,17 @@ export default React.createClass({
   },
 
   render() {
-    if (this.state.activities.length == 0) {
-      return <div className="activities-loading">Loading...</div>
-    } else {
-      var boxes = this.state.activities.map((act) => {
-        return <ActivityBox key={act.id} activity={act} />
-      })
+    var boxes = this.state.activities.map((act) => {
+      return <ActivityBox key={act.id} activity={act} />
+    })
 
-      return (
-        <div>
-          <ul className="Main__ActivityList">
-            {boxes}
-          </ul>
-          <RouteHandler />
-        </div>
-      )
-    }
+    return (
+      <div>
+        <ul className="Main__ActivityList">
+          {boxes}
+        </ul>
+        <RouteHandler />
+      </div>
+    )
   }
 })

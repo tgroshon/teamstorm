@@ -16,6 +16,7 @@ export default React.createClass({
     var teamOptions = this.props.teams.map(team => {
       return <option key={team.get('id')} value={team.get('id')}>{team.get('name')}</option>
     })
+
     return (
       <div className="input-group">
         <Input type="text" ref="title" label="Title" />
