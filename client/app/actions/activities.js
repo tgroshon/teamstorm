@@ -1,5 +1,5 @@
 import AppDispatcher from '../dispatcher'
-import Constants from '../constants'
+import { ActionTypes } from '../constants'
 import HttpAPI from '../sources/http-api'
 import LocalStorage from '../sources/local-storage'
 
@@ -14,7 +14,7 @@ export default {
           return
         }
         AppDispatcher.dispatch({
-          type: Constants.Activity.STORE_ACTIVITIES,
+          type: ActionTypes.STORE_ACTIVITIES,
           params: {
             activities: res.body.activities
           }
@@ -30,7 +30,7 @@ export default {
       HttpAPI.postActivity(token, activity, (err, res) => {
         if (err) {
           return AppDispatcher.dispatch({
-            type: Constants.Error.ERR_HTTP_POST_ACTIVITY,
+            type: ActionTypes.ERR_HTTP_POST_ACTIVITY,
             params: {
               error: err,
               data: activity
@@ -38,7 +38,7 @@ export default {
           })
         }
         AppDispatcher.dispatch({
-          type: Constants.Activity.STORE_ACTIVITIES,
+          type: ActionTypes.STORE_ACTIVITIES,
           params: {
             activities: [res.body]
           }

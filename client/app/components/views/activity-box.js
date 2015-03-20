@@ -1,18 +1,18 @@
 import React from 'react'
 import {Panel, Alert, Glyphicon, Badge} from 'react-bootstrap'
-import ActionConstants, {strings as StringConstants} from '../../constants'
+import { ActivityTypes } from '../../constants'
 import Router, {Link} from 'react-router'
 
 export default React.createClass({
   getIcon() {
     switch(this.props.activity.type){
-      case StringConstants.types.activity.deliverable:
+      case ActivityTypes.deliverable:
         return "th"
         break;
-      case StringConstants.types.activity.discussion:
+      case ActivityTypes.discussion:
         return "list-alt"
         break;
-      case StringConstants.types.activity.issue:
+      case ActivityTypes.issue:
         return "bullhorn"
         break;
       default:
@@ -22,13 +22,13 @@ export default React.createClass({
 
   getBsStyle() {
     switch(this.props.activity.type){
-      case StringConstants.types.activity.deliverable:
+      case ActivityTypes.deliverable:
         return "success"
         break;
-      case StringConstants.types.activity.discussion:
+      case ActivityTypes.discussion:
         return "warning"
         break;
-      case StringConstants.types.activity.issue:
+      case ActivityTypes.issue:
         return "danger"
         break;
       default:
@@ -44,13 +44,10 @@ export default React.createClass({
     var statusMessage = isActive === "false" ? "Closed" : "Active"
     return (
       <li key={this.props.activity.id} className="ActivityList__Item">
-        <div className="ActivityList__ItemBox">
-          <Link to="activity"
-            params={{activityId: this.props.activity.id}}
-            className="ActivityList__ItemLink"
-            >
-            <h4 className={'text-'+ this.getBsStyle() + " ActivityList__ItemBoxHeader"}>
-              <Glyphicon glyph={icon} className="activity__header-icon" />
+        <div className="ItemBox">
+          <Link to="activity" params={{activityId: this.props.activity.id}}>
+            <h4 className={'text-'+ this.getBsStyle() + " ItemBox__Header"}>
+              <Glyphicon glyph={icon} className="ItemBox__Header__Icon" />
               {this.props.activity.title}
             </h4>
           </Link>

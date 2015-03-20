@@ -49,3 +49,21 @@ body {
 .action-btn {
   margin-right: 5px;
 }
+
+.ItemBox {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+  background-color: #ffffff;
+}
+
+.ItemBox__Header {
+  margin-top: 0;
+}
+
+.ItemBox__Header:hover {
+  text-decoration: underline;
+}
+
+.ItemBox__Header__Icon {
+  margin-right: 5px;
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import UserStore from '../../stores/user-store'
 import ErrorStore from '../../stores/error-store'
-import Constants from '../../constants'
+import { ActionTypes } from '../../constants'
 import UserActions from '../../actions/users'
 
 export default React.createClass({
@@ -24,18 +24,18 @@ export default React.createClass({
 
   errorStoreUpdate() {
     this.setState({
-      httpError: ErrorStore.get(Constants.Error.ERR_HTTP_USER_UPDATE)
+      httpError: ErrorStore.get(ActionTypes.ERR_HTTP_USER_UPDATE)
     })
   },
 
   componentWillMount() {
     UserStore.on('login', this.userStoreUpdate)
-    ErrorStore.on(Constants.Error.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
+    ErrorStore.on(ActionTypes.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
   },
 
   componentWillUnmount() {
     UserStore.removeListener('login', this.userStoreUpdate)
-    ErrorStore.removeListener(Constants.Error.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
+    ErrorStore.removeListener(ActionTypes.ERR_HTTP_USER_UPDATE, this.errorStoreUpdate)
   },
 
   dataChanged(newData) {

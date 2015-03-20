@@ -2,10 +2,7 @@ import assign from 'object-assign'
 import Immutable from 'immutable'
 import { EventEmitter } from 'events'
 import AppDispatcher from '../dispatcher'
-import Constants from '../constants'
-
-const TeamConstants = Constants.Team
-const UserConstants = Constants.User
+import { ActionTypes } from '../constants'
 
 let StoreData = Immutable.Map({
   teams: Immutable.Map()
@@ -13,6 +10,10 @@ let StoreData = Immutable.Map({
 
 let TeamStore = assign({}, EventEmitter.prototype, {
   name: 'Team',
+
+  get(teamId) {
+    return StoreData.get('teams').get(teamId)
+  },
 
   getTeams() {
     return StoreData.get('teams').toArray()
@@ -24,7 +25,7 @@ TeamStore.dispatchToken = AppDispatcher.register(payload => {
 
   switch(payload.type) {
 
-    case TeamConstants.STORE_TEAMS:
+    case ActionTypes.STORE_TEAMS:
       let teams = Immutable.fromJS(params.teams)
       let newTeamMap = teams.reduce((map, team) => {
         return map.set(team.get('id'), team)
@@ -34,7 +35,7 @@ TeamStore.dispatchToken = AppDispatcher.register(payload => {
       TeamStore.emit('change')
       break
 
-    case UserConstants.LOGOUT:
+    case ActionTypes.LOGOUT:
       StoreData = Immutable.Map({
         teams: Immutable.Map()
       })

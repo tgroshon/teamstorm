@@ -2,10 +2,7 @@ import Immutable from 'immutable'
 import { EventEmitter } from 'events'
 import assign from 'object-assign'
 import AppDispatcher from '../dispatcher'
-import Constants from '../constants'
-
-const ActivityConstants = Constants.Activity
-const UserConstants = Constants.User
+import { ActionTypes } from '../constants'
 
 var activities = Immutable.Map()
 
@@ -30,7 +27,7 @@ ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
 
-    case ActivityConstants.STORE_ACTIVITIES:
+    case ActionTypes.STORE_ACTIVITIES:
       var newActivityMap = params.activities.reduce((map, act) => {
         return map.set(act.id, act)
       }, Immutable.Map())
@@ -38,7 +35,7 @@ ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
       ActivityStore.emit('activity')
       break
 
-    case UserConstants.LOGOUT:
+    case ActionTypes.LOGOUT:
       activities = Immutable.Map()
       break
 

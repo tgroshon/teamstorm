@@ -49,6 +49,9 @@ export default React.createClass({
 
   render() {
     var activity = this.state.activity
+    if (!activity) {
+      return <div />
+    }
 
     var mapFn
     var actionButtons

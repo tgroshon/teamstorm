@@ -1,5 +1,5 @@
 import AppDispatcher from '../dispatcher'
-import Constants from '../constants'
+import { ActionTypes } from '../constants'
 import HttpAPI from '../sources/http-api'
 import LocalStorage from '../sources/local-storage'
 
@@ -7,7 +7,7 @@ export default {
   fetchTeams() {
     var token = LocalStorage.get('token')
     AppDispatcher.dispatch({
-      type: Constants.Team.PENDING_TEAM_REQUEST,
+      type: ActionTypes.PENDING_TEAM_REQUEST,
     })
     if (token) {
       HttpAPI.fetchTeams(token, (err, res) => {
@@ -15,7 +15,7 @@ export default {
           throw err
         }
         AppDispatcher.dispatch({
-          type: Constants.Team.STORE_TEAMS,
+          type: ActionTypes.STORE_TEAMS,
           params: {
             teams: res.body.teams
           }
@@ -32,7 +32,7 @@ export default {
       HttpAPI.postTeam(token, team, (err, res) => {
         if (err) {
           return AppDispatcher.dispatch({
-            type: Constants.Error.ERR_HTTP_POST_TEAM,
+            type: ActionTypes.ERR_HTTP_POST_TEAM,
             params: {
               error: err,
               data: team
@@ -40,7 +40,7 @@ export default {
           })
         }
         AppDispatcher.dispatch({
-          type: Constants.Team.STORE_TEAMS,
+          type: ActionTypes.STORE_TEAMS,
           params: {
             teams: [res.body]
           }

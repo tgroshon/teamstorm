@@ -2,10 +2,7 @@ import Immutable from 'immutable'
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
 import AppDispatcher from '../dispatcher'
-import Constants from '../constants'
-
-const MessageConstants = Constants.Message
-const UserConstants = Constants.User
+import { ActionTypes } from '../constants'
 
 var StoreData = Immutable.Map({
   pending: false
@@ -29,7 +26,7 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
 
-    case MessageConstants.STORE_MESSAGES:
+    case ActionTypes.STORE_MESSAGES:
       var messagesForActivity = StoreData.get(params.activityId)
       var messages = Immutable.fromJS(params.messages)
       if (Immutable.List.isList(messagesForActivity)) {
@@ -43,16 +40,16 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
       MessageStore.emit('change')
       break
 
-    case MessageConstants.KILL_MESSAGE_CACHE:
+    case ActionTypes.KILL_MESSAGE_CACHE:
       StoreData = StoreData.delete(params.activityId)
       MessageStore.emit('change')
       break
 
-    case MessageConstants.PENDING_MESSAGE_REQUEST:
+    case ActionTypes.PENDING_MESSAGE_REQUEST:
       StoreData = StoreData.set('pending', true)
       MessageStore.emit('change')
 
-    case UserConstants.LOGOUT:
+    case ActionTypes.LOGOUT:
       StoreData = Immutable.Map({
         pending: false
       })

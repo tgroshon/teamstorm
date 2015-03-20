@@ -1,10 +1,8 @@
 import assign from 'object-assign'
 import { EventEmitter } from 'events'
-import Constants from '../constants'
-import AppDispatcher from '../dispatcher'
 import Immutable from 'immutable'
-
-const UserConstants = Constants.User
+import AppDispatcher from '../dispatcher'
+import { ActionTypes } from '../constants'
 
 var StoreData = Immutable.Map()
 
@@ -25,15 +23,14 @@ var UserStore = assign({}, EventEmitter.prototype, {
 
   getSearchResults() {
     return StoreData.get('searchResults').toJS()
-  },
-
+  }
 })
 
 UserStore.dispatchToken = AppDispatcher.register((payload) => {
 
   switch(payload.type) {
 
-    case UserConstants.STORE_SEARCH_RESULTS:
+    case ActionTypes.STORE_SEARCH_RESULTS:
       StoreData = StoreData.merge({
         searchResults: payload.params.users
       })
@@ -41,7 +38,7 @@ UserStore.dispatchToken = AppDispatcher.register((payload) => {
       UserStore.emit('change')
       break
 
-    case UserConstants.STORE_USER:
+    case ActionTypes.STORE_USER:
       StoreData = StoreData.merge({
         user: payload.params.user,
         authenticated: true
@@ -50,14 +47,14 @@ UserStore.dispatchToken = AppDispatcher.register((payload) => {
       UserStore.emit('change')
       break
 
-    case UserConstants.LOGOUT:
+    case ActionTypes.LOGOUT:
       StoreData = StoreData.remove('user')
       StoreData = StoreData.set('authenticated', false)
       UserStore.emit('logout')
       UserStore.emit('change')
       break
 
-    case UserConstants.FAILED_AUTH:
+    case ActionTypes.FAILED_AUTH:
       StoreData = StoreData.merge({
         authenticated: false,
         validationErrors: payload.params.validationErrors
