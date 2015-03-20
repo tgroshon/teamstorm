@@ -19,16 +19,29 @@ module.exports = {
   },
 
   index: function(req, res) {
-    User.objects.all(function (err, users) {
-      if (err) {
-        return res.status(500).json({ errors: [{ msg: err.message }] })
-      }
-      res.json({
-        'users': users.map(function(user) {
-          return user.toJson()
+    if (req.query.users) {
+      User.objects.multiGet(req.query.users, (err, users) => {
+        if (err) {
+          return res.status(500).json({ errors: [{ msg: err.message }] })
+        }
+        res.json({
+          'users': users.map(function(user) {
+            return user.toJson()
+          })
         })
       })
-    })
+    } else {
+      User.objects.all(function (err, users) {
+        if (err) {
+          return res.status(500).json({ errors: [{ msg: err.message }] })
+        }
+        res.json({
+          'users': users.map(function(user) {
+            return user.toJson()
+          })
+        })
+      })
+    }
   },
 
   create: function(req, res) {

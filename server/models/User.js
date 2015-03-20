@@ -77,6 +77,10 @@ User.objects = {
     rdb.getByIndex(User, 'email', email, done)
   },
 
+  multiGet: function(userIds, done) {
+    rdb.getByIndex(User, null, userIds, done)
+  },
+
   search: function(query, done) {
     var fields = ['email', 'firstName', 'lastName']
     rdb.searchUser(User, fields, query, done)

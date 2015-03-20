@@ -82,12 +82,13 @@ module.exports = {
       if (cErr) return done(cErr)
 
       value = Array.isArray(value) ? r.args(value) : value
+      var searchIndex = index ? {index} : null
 
-      r.db(config.rdb.name)
-        .table(Klass.tableName)
-        .getAll(value, {index: index})
-        .distinct()
-        .run(conn, function(err, cursor) {
+      var rtable = r.db(config.rdb.name).table(Klass.tableName)
+      var query = searchIndex ? rtable.getAll(value, searchIndex)
+                              : rtable.getAll(value)
+
+      query.distinct().run(conn, function(err, cursor) {
           if (err) {
             conn.close()
             return done(err)
