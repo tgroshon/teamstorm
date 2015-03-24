@@ -30,11 +30,15 @@
   right: 10;
 }
 
+.MessagesWrapper__Topic {
+  text-align: center;
+}
+
 .MessageList {
   overflow-y: scroll;
   position: absolute;
   bottom: 110;
-  top: 0;
+  top: 50;
   right: 10;
   left: 0;
   display: inline-flex;

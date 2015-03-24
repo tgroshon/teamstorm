@@ -2,6 +2,7 @@ import React from 'react'
 import Router from 'react-router'
 import MessageBox from '../views/message-box'
 import MessageStore from '../../stores/message-store'
+import ActivityStore from '../../stores/activity-store'
 import MessageActions from '../../actions/messages'
 import { Input } from 'react-bootstrap'
 import RadioGroup from '../views/radio-group'
@@ -80,8 +81,15 @@ export default React.createClass({
       )
     }
 
+    // TODO move to state; listen for store update
+    var activity = ActivityStore.get(this.getParams().activityId)
+    var topic = activity ? activity.title : 'Loading'
+
     return (
       <div className="MessagesWrapper">
+        <div className="row">
+          <h3 className="MessagesWrapper__Topic">{topic}</h3>
+        </div>
         {displayData}
         <div className="row MessageInputArea">
           <textarea
