@@ -27,16 +27,12 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
   switch(payload.type) {
 
     case ActionTypes.STORE_MESSAGES:
-      var messagesForActivity = StoreData.get(params.activityId)
-      var messages = Immutable.fromJS(params.messages)
-      if (Immutable.List.isList(messagesForActivity)) {
-        messagesForActivity = messagesForActivity.concat(messages)
-      } else {
-        messagesForActivity = messages
-      }
-      StoreData = StoreData.set(params.activityId, messagesForActivity)
-      StoreData = StoreData.set('pending', false)
+      var latestMessages = Immutable.fromJS(params.messages).reduce((map, mess) => {
+        return map.set(mess.get('id'), mess)
+      }, StoreData.get(params.activityId) || Immutable.Map())
 
+      StoreData = StoreData.set(params.activityId, latestMessages)
+      StoreData = StoreData.set('pending', false)
       MessageStore.emit('change')
       break
 
