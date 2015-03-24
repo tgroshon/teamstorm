@@ -23,10 +23,10 @@ export default {
     }
   },
 
-  createActivity(title, type, teamId) {
+  createActivity(title, type, teamId, categories) {
     var token = LocalStorage.get('token')
     if (token) {
-      var activity = {title, type, teamId}
+      var activity = {title, type, teamId, categories}
       HttpAPI.postActivity(token, activity, (err, res) => {
         if (err) {
           return AppDispatcher.dispatch({

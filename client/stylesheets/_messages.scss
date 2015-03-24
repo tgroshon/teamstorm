@@ -41,7 +41,6 @@
   top: 50;
   right: 10;
   left: 0;
-  display: inline-flex;
 }
 
 .MessageInputArea {
@@ -71,24 +70,48 @@
   display: block;
 }
 
-.MessageList__category {
+.MessageInputArea__category {
+  display: block;
+}
+
+.MessageList__2col_category {
   display: inline-block;
   position: relative;
   margin: 0;
   float: left;
   width: 50%;
-  height: 400px;
+  height: 100%;
 }
 
-.MessageInputArea__category {
-  display: block;
-}
-
-.MessageList__category:nth-child(2) {
+.MessageList__2col_category:nth-child(2) {
   border-left: 1px solid #cdcdcd;
 }
 
-.MessageList__category--header {
+.MessageList__2col_category--header {
+  text-align: center;
+  border-bottom: 1px solid #cdcdcd;
+}
+.MessageList__2col_category--container {
+  display: inline-flex;
+}
+
+.MessageList__4x4_category {
+  float: left;
+  width: 50%;
+  height: 40%;
+}
+
+.MessageList__4x4_category--container {
+  height: 80%;
+  overflow: scroll;
+}
+
+.MessageList__4x4_category:nth-child(2),
+.MessageList__4x4_category:nth-child(4) {
+  border-left: 1px solid #cdcdcd;
+}
+
+.MessageList__4x4_category--header {
   text-align: center;
   border-bottom: 1px solid #cdcdcd;
 }
@@ -99,5 +122,5 @@
  opacity:0;  /* make things invisible upon start */
  animation:fadeIn ease-in 1;
  animation-fill-mode:forwards;
- animation-duration:0.5s;
+ animation-duration:0.25s;
 }

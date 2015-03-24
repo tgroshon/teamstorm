@@ -6,14 +6,14 @@ import Router, {Link} from 'react-router'
 export default React.createClass({
   getIcon() {
     switch(this.props.activity.type){
-      case ActivityTypes.deliverable:
-        return "th"
+      case ActivityTypes['2col']:
+        return "th-list"
         break;
-      case ActivityTypes.discussion:
+      case ActivityTypes['4x4']:
+        return "th-large"
+        break;
+      case ActivityTypes.list:
         return "list-alt"
-        break;
-      case ActivityTypes.issue:
-        return "bullhorn"
         break;
       default:
         return
@@ -22,13 +22,13 @@ export default React.createClass({
 
   getBsStyle() {
     switch(this.props.activity.type){
-      case ActivityTypes.deliverable:
+      case ActivityTypes['2col']:
         return "success"
         break;
-      case ActivityTypes.discussion:
+      case ActivityTypes['4x4']:
         return "warning"
         break;
-      case ActivityTypes.issue:
+      case ActivityTypes.list:
         return "danger"
         break;
       default:

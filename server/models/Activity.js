@@ -9,6 +9,7 @@ var ATTRS = [
   'id',
   'title',
   'type',
+  'categories',
   'teamId',
   'isActive',
   'creator',

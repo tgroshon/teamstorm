@@ -29,7 +29,7 @@ export var ActionTypes = keyMirror({
 })
 
 export var ActivityTypes = keyMirror({
-  'deliverable': null,
-  'discussion': null,
-  'issue': null,
+  '2col': null,
+  '4x4': null,
+  'list': null,
 })

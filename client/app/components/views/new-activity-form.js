@@ -1,15 +1,74 @@
 import React from 'react'
 import {Input} from 'react-bootstrap'
+import _ from 'lodash'
+import ActivityBuilder from '../activity-builder'
 
 export default React.createClass({
   displayName: 'NewActivityForm',
 
+  getInitialState() {
+    return {
+      isCustomType: false
+    }
+  },
+
+  lookupTemplate() {
+    var template = this.refs.template.getValue()
+    if (template === 'deliverable') {
+      return {
+        type: '2col',
+        categories: [
+          {order: 1, value: "Is"},
+          {order: 2, value: "Is Not"}
+        ]
+      }
+    } else if (template === 'forum') {
+      return {
+        type: 'list',
+        categories: null
+      }
+    } else if (template === 'swot') {
+      return {
+        type: '4x4',
+        categories: [
+          {order: 1, value: "Strengths"},
+          {order: 2, value: "Weaknesses"},
+          {order: 3, value: "Opportunities"},
+          {order: 4, value: "Threats"},
+        ]
+      }
+    } else if (template === 'procon') {
+      return {
+        type: '2col',
+        categories: [
+          {order: 1, value: "Pro"},
+          {order: 2, value: "Con"},
+        ]
+      }
+    }
+  },
+
   getFormData() {
+    var { type, categories } = this.state.isCustomType
+      ? this.refs.builder.getFormData()
+      : this.lookupTemplate()
+
     return {
       title: this.refs.title.getValue(),
-      type: this.refs.type.getValue(),
-      teamId: this.refs.team.getValue()
+      teamId: this.refs.team.getValue(),
+      type,
+      categories
     }
+  },
+
+  handleChange(event) {
+    this.setState({
+      isCustomType: this.refs.template.getValue() === 'custom'
+    })
+  },
+
+  componentDidMount() {
+    console.log('Form', this)
   },
 
   render() {
@@ -20,9 +79,14 @@ export default React.createClass({
     return (
       <div className="input-group">
         <Input type="text" ref="title" label="Title" />
-        <Input type="select" ref="type" label='Activity Type' defaultValue="deliverable">
+        <Input type="select" ref="template" label='Template' onChange={this.handleChange} defaultValue="deliverable">
           <option value="deliverable">Deliverable</option>
+          <option value="forum">Forum</option>
+          <option value="swot">SWOT Analysis</option>
+          <option value="procon">Pros and Cons</option>
+          <option value="custom">Custom</option>
         </Input>
+        <ActivityBuilder ref='builder' enabled={this.state.isCustomType} />
         <Input type="select" ref="team" label="Team">
           {teamOptions}
         </Input>

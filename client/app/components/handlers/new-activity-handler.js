@@ -33,8 +33,8 @@ export default React.createClass({
   },
 
   handleCreate() {
-    var {title, type, teamId} = this.refs.newActivityForm.getFormData()
-    ActivityActions.createActivity(title, type, teamId)
+    var {title, type, teamId, categories} = this.refs.newActivityForm.getFormData()
+    ActivityActions.createActivity(title, type, teamId, categories)
   },
 
   handleCancel() {
