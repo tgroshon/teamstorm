@@ -21,10 +21,7 @@ export default React.createClass({
 
   render() {
     var topic = this.props.activity.title
-
     var categories = this.props.activity.categories
-      ? this.props.activity.categories
-      : [{order:1, value:"is"},{order:2, value:"isnot"}]
 
     var displayData = this.props.messages.length === 0
       ? <div className="messages-empty">Empty...</div>

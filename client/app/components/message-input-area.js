@@ -1,17 +1,19 @@
 import React from 'react'
-import RadioGroup from './radio-group'
+import {Input} from 'react-bootstrap'
 
 export default React.createClass({
   displayName: 'MessageInputArea',
 
   handleCreate(event) {
+    event.preventDefault()
     this.props.onCreate(event)
   },
 
   getFormData() {
+    var categorySelect = this.refs.messageInputCategory
     return {
       text: this.refs.messageInputTextarea.getDOMNode().value,
-      category: this.refs.messageInputCategory.getCheckedValue()
+      category: categorySelect ? categorySelect.getDOMNode().value : null
     }
   },
 
@@ -20,13 +22,22 @@ export default React.createClass({
   },
 
   render() {
-    var categories = this.props.categories.map((cat) => {
-      return (
-        <label key={cat.order} className="MessageInputArea__category">
-          <input type="radio" value={cat.value} /> {cat.value}
-        </label>
+    var categories
+    if (this.props.categories && this.props.categories.length !== 0) {
+      console.log(this.props.categories)
+      var categoryOptions = this.props.categories.map((cat, index) => {
+        return (
+          <option key={index} value={cat.value}>{cat.value}</option>
+        )
+      })
+      categories = (
+        <div className="form-group">
+          <select className="form-control MessageInputArea__category" ref="messageInputCategory">
+            {categoryOptions}
+          </select>
+        </div>
       )
-    })
+    }
 
     return (
       <div className="row MessageInputArea">
@@ -36,15 +47,18 @@ export default React.createClass({
           rows="3"
           maxLength="140"
           placeholder="Enter your message..."
-         />
-        <RadioGroup name="categories" ref="messageInputCategory">
+        />
+        <div className="MessageInputArea__controls form-inline">
           {categories}
-        </RadioGroup>
-        <button ref="messageInputButton"
-          onClick={this.handleCreate}
-          className="btn btn-primary MessageInputArea__button">
-          Post
-        </button>
+          <div className="form-group">
+            <button ref="messageInputButton"
+              onClick={this.handleCreate}
+              className="btn btn-primary MessageInputArea__button"
+            >
+              Post
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

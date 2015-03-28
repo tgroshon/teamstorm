@@ -37,7 +37,7 @@
 .MessageList {
   overflow-y: scroll;
   position: absolute;
-  bottom: 110;
+  bottom: 138;
   top: 50;
   right: 10;
   left: 0;
@@ -65,12 +65,15 @@
   border-color: #bce8f1;
 }
 
-.MessageInputArea__button {
+.MessageInputArea__controls {
   margin-top: 10px;
+}
+.MessageInputArea__button {
   display: block;
 }
 
 .MessageInputArea__category {
+  margin-right: 10px;
   display: block;
 }
 
@@ -98,7 +101,7 @@
 .MessageList__4x4_category {
   float: left;
   width: 50%;
-  height: 40%;
+  height: 50%;
 }
 
 .MessageList__4x4_category--container {
