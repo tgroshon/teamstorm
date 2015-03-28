@@ -32,13 +32,12 @@ export function initFacebookStrategy() {
 			clientID: config.oauth.facebook.clientID,
 			clientSecret: config.oauth.facebook.clientSecret,
 			callbackURL: config.oauth.facebook.callbackURL,
+      profileFields: ['emails', 'first_name', 'last_name'],
 			passReqToCallback: true
 		},
 		function(req, accessToken, refreshToken, profile, done) {
       try {
         console.log('Facebook Data', profile)
-        console.log('Access Token', accessToken)
-        console.log('refreshToken', accessToken)
 
         // Set the provider data and include tokens
         var providerData = profile._json
