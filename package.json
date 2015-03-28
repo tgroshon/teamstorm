@@ -31,6 +31,7 @@
     "object-assign": "2.0.0",
     "passport": "^0.2.1",
     "passport-facebook": "^2.0.0",
+    "passport-google-oauth2": "^0.1.6",
     "path-to-url": "0.1.0",
     "rethinkdb": "1.16.2",
     "rsvp": "3.0.14",

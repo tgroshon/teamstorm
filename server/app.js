@@ -9,7 +9,7 @@ var multer = require('multer')
 var AuthService = require('./services/auth-service') 
 var routes = require('./routes')
 
-AuthService.initFacebookStrategy()
+AuthService.initStrategies()
 
 var app = express()
 app.use(bodyParser.json())

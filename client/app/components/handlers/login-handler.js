@@ -51,6 +51,9 @@ export default React.createClass({
         <a href="/login/facebook">
           <img src="/img/login-facebook.png" alt="Facebook Login Button" />
         </a>
+        <a href="/login/google">
+          <img style={{width: '245px'}} src="/img/login-google.png" alt="Google Login Button" />
+        </a>
       </div>
     )
   }

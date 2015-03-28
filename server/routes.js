@@ -12,9 +12,12 @@ router.get('/users', usersCtrl.index)
 router.post('/users', usersCtrl.create)
 router.put('/users', tokenAuth, usersCtrl.update)
 router.get('/users/search', tokenAuth, usersCtrl.search)
+
 router.post('/login', passwordAuth, usersCtrl.token)
-router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'], session: false }))
+router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'] }))
+router.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'] }))
 router.get('/login/facebook-oauth2callback', OAuth2('facebook'), usersCtrl.redirectWithToken)
+router.get('/login/google-oauth2callback', OAuth2('google'), usersCtrl.redirectWithToken)
 
 router.get('/activity', tokenAuth, activityCtrl.index)
 router.put('/activity', tokenAuth, activityCtrl.update)
