@@ -17,28 +17,6 @@ function _decodeUserFromToken(token) {
 }
 
 export default {
-  signup(email, firstName, lastName, password) {
-    if (!LocalStorage.get('token')) {
-      let user = {email, password, firstName, lastName}
-      HttpAPI.postUser(user, (err, res) => {
-        if (err) {
-          return AppDispatcher.dispatch({
-            type: ActionTypes.ERR_HTTP_POST_USER,
-            params: {
-              error: err,
-              data: user
-            }
-          })
-        }
-        AppDispatcher.dispatch({
-          type: ActionTypes.STORE_USER,
-          params: {
-            user: _decodeUserFromToken(res.body.token)
-          }
-        })
-      })
-    }
-  },
 
   login(email, password) {
     HttpAPI.login(email, password, (err, res) => {

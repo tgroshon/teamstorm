@@ -64,7 +64,6 @@ export default React.createClass({
     } else {
       return [
         <CustomItem key={2} to="login">Login</CustomItem>,
-        <CustomItem key={3} to="signup">Sign Up</CustomItem>
       ]
     }
   },
