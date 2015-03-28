@@ -1,11 +1,9 @@
-
 import request from 'supertest'
 import should from 'should'
 import sinon from 'sinon'
-
 import app from '../../../server/app.js'
-import rdbService  from '../../../server/services/rdb-service'
-import authService  from '../../../server/services/auth-service'
+import rdbService from '../../../server/services/rdb-service'
+import * as authService from '../../../server/services/auth-service'
 import UserModel from '../../../server/models/User'
 
 describe('Users Controller', () => {
@@ -229,7 +227,7 @@ describe('Users Controller', () => {
 
           var expectedToken = authService.encode({email: loginEmail})
           res.body.should.have.property('token', expectedToken)
-          sinon.assert.calledTwice(rdbService.getByIndex)
+          sinon.assert.calledOnce(rdbService.getByIndex)
           sinon.assert.calledOnce(authService.compare)
           done()
         })

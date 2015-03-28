@@ -1,17 +1,16 @@
-
 import request from 'supertest'
 import should from 'should'
 import sinon from 'sinon'
-
 import app from '../../../server/app.js'
 import rdbService  from '../../../server/services/rdb-service'
-import authService  from '../../../server/services/auth-service'
+import * as authService from '../../../server/services/auth-service'
 import TeamKlass from '../../../server/models/Team'
 
 describe('Teams Controller', () => {
   var userData
   var token
   var userId
+
   beforeEach(() => {
     userId = 'fakeId'
     userData = {id: userId, firstName: 'Bob'}

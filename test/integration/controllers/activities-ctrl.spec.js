@@ -1,13 +1,11 @@
-
-var request = require('supertest')
-var should = require('should')
-var sinon = require('sinon')
-
-var app = require('../../../server/app')
-var rdbService  = require('../../../server/services/rdb-service')
-var authService  = require('../../../server/services/auth-service')
-var ActivityKlass = require('../../../server/models/Activity')
-var MessageKlass = require('../../../server/models/Message')
+import request from 'supertest'
+import should from 'should'
+import sinon from 'sinon'
+import app from '../../../server/app'
+import rdbService from '../../../server/services/rdb-service'
+import * as authService from '../../../server/services/auth-service'
+import ActivityKlass from '../../../server/models/Activity'
+import MessageKlass from '../../../server/models/Message'
 
 describe('Activities Controller', () => {
   var userData
