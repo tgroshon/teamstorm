@@ -12,6 +12,7 @@ module.exports = {
       if (!user) {
         res.sendStatus(401)
       } else {
+        req.user = user
         next()
       }
     })
@@ -23,7 +24,7 @@ module.exports = {
     if (!result) {
       res.sendStatus(401)
     } else {
-      req.user = result
+      req.user = new User(result)
       next()
     }
   },

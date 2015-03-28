@@ -3,6 +3,7 @@ import config from 'config'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
+import User from '../models/User'
 
 export function decode(token) {
   try {
@@ -36,8 +37,6 @@ export function initFacebookStrategy() {
 		},
 		function(req, accessToken, refreshToken, profile, done) {
       try {
-        console.log('Facebook Data', profile)
-
         // Set the provider data and include tokens
         var providerData = profile._json
         providerData.accessToken = accessToken
@@ -49,15 +48,22 @@ export function initFacebookStrategy() {
           lastName: profile.name.familyName,
           displayName: profile.displayName,
           email: profile.emails[0].value,
-          username: profile.username,
-          provider: 'facebook',
-          providerIdentifierField: 'id',
-          providerData: providerData
+          facebookData: providerData
         }
 
-        console.log('Parsed Data', userProfile)
-        // TODO Save the user OAuth profile
-        done(null, userProfile)
+        User.objects.getByEmail(userProfile.email, (err, users) => {
+          if (err) return done(err)
+
+          if (users.length === 0) {
+            req.user = new User(userProfile)
+            req.user.save((saveErr) => {
+              done(saveErr, req.user)
+            })
+          } else {
+            req.user = users.pop()
+            done(null, req.user)
+          }
+        })
       } catch (e) {
         done(e)
       }

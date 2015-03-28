@@ -14,9 +14,14 @@ router.put('/users', authMiddleware.tokenAuth, usersCtrl.update)
 router.get('/users/search', authMiddleware.tokenAuth, usersCtrl.search)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
 router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'], session: false }))
-router.get('/login/facebook-oauth2callback', passport.authenticate('facebook', { successRedirect: '/',
-                                                                                 failureRedirect: '/',
-                                                                                 session: false }))
+router.get('/login/facebook-oauth2callback',
+           function (req, res, next) {
+            passport.authenticate('facebook', err => {
+              next(err)
+            })(req, res, next);
+           },
+           usersCtrl.token
+          )
 
 router.get('/activity', authMiddleware.tokenAuth, activityCtrl.index)
 router.put('/activity', authMiddleware.tokenAuth, activityCtrl.update)
