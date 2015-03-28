@@ -13,7 +13,7 @@ router.post('/users', usersCtrl.create)
 router.put('/users', authMiddleware.tokenAuth, usersCtrl.update)
 router.get('/users/search', authMiddleware.tokenAuth, usersCtrl.search)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
-router.get('/login/facebook', passport.authenticate('facebook', { session: false }))
+router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email'], session: false }))
 router.get('/login/facebook-oauth2callback', passport.authenticate('facebook', { successRedirect: '/',
                                                                                  failureRedirect: '/',
                                                                                  session: false }))

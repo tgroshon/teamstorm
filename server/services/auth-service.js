@@ -32,7 +32,6 @@ export function initFacebookStrategy() {
 			clientID: config.oauth.facebook.clientID,
 			clientSecret: config.oauth.facebook.clientSecret,
 			callbackURL: config.oauth.facebook.callbackURL,
-      profileFields: ['emails', 'first_name', 'last_name'],
 			passReqToCallback: true
 		},
 		function(req, accessToken, refreshToken, profile, done) {
