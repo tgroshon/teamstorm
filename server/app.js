@@ -6,9 +6,12 @@ var config = require('config')
 var express = require('express')
 var bodyParser = require('body-parser')
 var multer = require('multer') 
+var AuthService = require('./services/auth-service') 
 var routes = require('./routes')
-var app = express()
 
+AuthService.initFacebookStrategy()
+
+var app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(multer())

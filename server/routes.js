@@ -4,6 +4,7 @@ import teamsCtrl from './controllers/teams-ctrl'
 import activityCtrl from './controllers/activity-ctrl'
 import sseMiddleware from './middlewares/sse-response'
 import authMiddleware from './middlewares/authentication'
+import passport from 'passport'
 
 var router = express.Router()
 
@@ -12,6 +13,10 @@ router.post('/users', usersCtrl.create)
 router.put('/users', authMiddleware.tokenAuth, usersCtrl.update)
 router.get('/users/search', authMiddleware.tokenAuth, usersCtrl.search)
 router.post('/login', authMiddleware.passwordAuth, usersCtrl.token)
+router.get('/login/facebook', passport.authenticate('facebook', { session: false }))
+router.get('/login/facebook-oauth2callback', passport.authenticate('facebook', { successRedirect: '/',
+                                                                                 failureRedirect: '/',
+                                                                                 session: false }))
 
 router.get('/activity', authMiddleware.tokenAuth, activityCtrl.index)
 router.put('/activity', authMiddleware.tokenAuth, activityCtrl.update)

@@ -47,6 +47,10 @@ export default React.createClass({
         </label>
         <br />
         <button onClick={this.buttonClick} className="btn btn-primary">Login</button>
+        <hr />
+        <a href="/login/facebook">
+          <img src="/img/login-facebook.png" alt="Facebook Login Button" />
+        </a>
       </div>
     )
   }

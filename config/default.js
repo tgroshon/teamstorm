@@ -16,6 +16,18 @@ module.exports = {
       activities: 'activities',
     }
   },
+  oauth: {
+    google: {
+      clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_OAUTH_CALLBACK_URL
+    },
+    facebook: {
+      clientID: process.env.FACEBOOK_OAUTH_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET,
+      callbackURL: process.env.FACEBOOK_OAUTH_CALLBACK_URL
+    }
+  },
   secrets: {
     authToken: process.env.AUTH_TOKEN_SECRET || 'd93nf90ao8wnb9sgzwr9h3l1]4'
   }
