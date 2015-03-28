@@ -10,6 +10,7 @@ import TeamsViewController from './components/handlers/teams-handler'
 import TeamViewController from './components/handlers/team-handler'
 import NewTeamHandler from './components/handlers/new-team-handler'
 import NewActivityHandler from './components/handlers/new-activity-handler'
+import OAuth2Handler from './components/handlers/oauth2-handler'
 import AccountHandler from './components/handlers/account-handler'
 import TopNav from './components/views/top-nav'
 import UserActions from './actions/users'
@@ -79,6 +80,7 @@ var routes = (
       <Route name="messages" path=":activityId/messages" handler={MessageViewController}/>
       <DefaultRoute handler={DefaultAct}/>
     </Route>
+    <Route name="oauth2redirect" path="/oauth2redirect" handler={OAuth2Handler} />
     <DefaultRoute handler={DashboardViewController}/>
   </Route>
 )

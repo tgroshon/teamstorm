@@ -48,13 +48,17 @@ export default {
           params: err
         })
       }
-      LocalStorage.set('token', res.body.token)
-      AppDispatcher.dispatch({
-        type: ActionTypes.STORE_USER,
-        params: {
-          user: _decodeUserFromToken(res.body.token)
-        }
-      })
+      this.userFromToken(res.body.token)
+    })
+  },
+
+  userFromToken(token) {
+    LocalStorage.set('token', token)
+    AppDispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      params: {
+        user: _decodeUserFromToken(token)
+      }
     })
   },
 

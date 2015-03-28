@@ -1,35 +1,40 @@
-'use strict'
+import passport from 'passport'
+import { decode } from '../services/auth-service'
+import User from '../models/User'
 
-var authService = require('../services/auth-service')
-var User = require('../models/User')
+export function passwordAuth(req, res, next) {
+  User.authenticate(req.body.email, req.body.password, (err, user) => {
+    if (err) return next(err)
 
-module.exports = {
-  
-  passwordAuth: function(req, res, next) {
-    User.authenticate(req.body.email, req.body.password, function(err, user) {
-      if (err) return next(err)
-
-      if (!user) {
-        res.sendStatus(401)
-      } else {
-        req.user = user
-        next()
-      }
-    })
-  },
-
-  tokenAuth: function(req, res, next) {
-    var token = req.get('jwt')
-    var result = authService.decode(token)
-    if (!result) {
+    if (!user) {
       res.sendStatus(401)
     } else {
-      req.user = new User(result)
+      req.user = user
       next()
     }
-  },
+  })
+}
 
-  stub: function(req, res) {
-    res.sendStatus(200)
+export function tokenAuth(req, res, next) {
+  var token = req.get('jwt')
+  var result = decode(token)
+  if (!result) {
+    res.sendStatus(401)
+  } else {
+    req.user = new User(result)
+    next()
   }
+}
+
+export function OAuth2(provider) {
+  return (req, res, next) => {
+    var middleware = passport.authenticate(provider, err => {
+      next(err)
+    })
+    middleware(req, res, next)
+  }
+}
+
+export function stub(req, res) {
+  res.sendStatus(200)
 }

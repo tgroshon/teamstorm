@@ -74,4 +74,8 @@ module.exports = {
   token: function(req, res) {
     res.json({ 'token': authService.encode(req.user.toJson())})
   },
+
+  redirectWithToken: function(req, res) {
+    res.redirect('/#/oauth2redirect?token=' + authService.encode(req.user.toJson()))
+  }
 }
