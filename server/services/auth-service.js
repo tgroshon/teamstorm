@@ -1,10 +1,8 @@
-'use strict'
-
-var jwt = require('jwt-simple')
-var config = require('config')
-var bcrypt = require('bcrypt')
-var passport = require('passport')
-var FacebookStrategy = require('passport-facebook').Strategy
+import jwt from 'jwt-simple'
+import config from 'config'
+import bcrypt from 'bcrypt'
+import passport from 'passport'
+import { Strategy as FacebookStrategy } from 'passport-facebook'
 
 export function decode(token) {
   try {
@@ -37,29 +35,34 @@ export function initFacebookStrategy() {
 			passReqToCallback: true
 		},
 		function(req, accessToken, refreshToken, profile, done) {
-			// Set the provider data and include tokens
-			var providerData = profile._json
-			providerData.accessToken = accessToken
-			providerData.refreshToken = refreshToken
+      try {
+        console.log('Facebook Data', profile)
+        console.log('Access Token', accessToken)
+        console.log('refreshToken', accessToken)
 
-			// Create the user OAuth profile
-			var userProfile = {
-				firstName: profile.name.givenName,
-				lastName: profile.name.familyName,
-				displayName: profile.displayName,
-				email: profile.emails[0].value,
-				username: profile.username,
-				provider: 'facebook',
-				providerIdentifierField: 'id',
-				providerData: providerData
-			}
+        // Set the provider data and include tokens
+        var providerData = profile._json
+        providerData.accessToken = accessToken
+        providerData.refreshToken = refreshToken
 
-			// TODO Save the user OAuth profile
-      console.log('Facebook Data', profile)
-      console.log('Parsed Data', userProfile)
-      console.log('Access Token', accessToken)
-      console.log('refreshToken', accessToken)
-      done(null, userProfile)
+        // Create the user OAuth profile
+        var userProfile = {
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          displayName: profile.displayName,
+          email: profile.emails[0].value,
+          username: profile.username,
+          provider: 'facebook',
+          providerIdentifierField: 'id',
+          providerData: providerData
+        }
+
+        console.log('Parsed Data', userProfile)
+        // TODO Save the user OAuth profile
+        done(null, userProfile)
+      } catch (e) {
+        done(e)
+      }
 		}
 	))
 }
