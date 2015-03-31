@@ -8,6 +8,7 @@ import DashboardViewController from './components/handlers/dashboard-handler'
 import TeamsViewController from './components/handlers/teams-handler'
 import TeamViewController from './components/handlers/team-handler'
 import NewTeamHandler from './components/handlers/new-team-handler'
+import EditTeamHandler from './components/handlers/edit-team-handler'
 import NewActivityHandler from './components/handlers/new-activity-handler'
 import OAuth2Handler from './components/handlers/oauth2-handler'
 import AccountHandler from './components/handlers/account-handler'
@@ -69,6 +70,7 @@ var routes = (
     <Route name="account" handler={AccountHandler}/>
     <Route name="teams" path="/team" handler={TeamsViewController}>
       <Route name="new-team" path="new" handler={NewTeamHandler} />
+      <Route name="edit-team" path=":teamId/edit" handler={EditTeamHandler} />
       <Route name="team" path=":teamId" handler={TeamViewController}/>
       <DefaultRoute handler={DefaultTeam}/>
     </Route>

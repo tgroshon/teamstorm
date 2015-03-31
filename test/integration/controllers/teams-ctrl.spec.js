@@ -51,14 +51,14 @@ describe('Teams Controller', () => {
     var teamId = 'fakeTeamId'
     var rdbReturnedData = new TeamKlass({id: teamId, name: 'My Team'})
     beforeEach(() => {
-      sinon.stub(rdbService, 'get', (Klass, id, cb) => {
+      sinon.stub(rdbService, 'getTeam', (Klass, id, cb) => {
         Klass.should.eql(TeamKlass)
         id.should.eql(teamId)
         cb(null, rdbReturnedData)
       })
     })
     afterEach(() => {
-      rdbService.get.restore()
+      rdbService.getTeam.restore()
     })
 
     it('looks up a team by id', (done) => {
@@ -71,7 +71,7 @@ describe('Teams Controller', () => {
           if (err) return done(err)
 
           res.body.should.eql(rdbReturnedData.toJson())
-          sinon.assert.calledOnce(rdbService.get)
+          sinon.assert.calledOnce(rdbService.getTeam)
           done()
         })
     })

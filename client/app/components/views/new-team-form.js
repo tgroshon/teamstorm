@@ -1,17 +1,36 @@
 import React from 'react'
 import UserStore from '../../stores/user-store'
+import TeamStore from '../../stores/team-store'
 import UserActions from '../../actions/users'
-import {without, uniq} from 'lodash'
+import TeamActions from '../../actions/teams'
+import { without, uniq } from 'lodash'
 import TokenInput, {Option as ComboboxOption} from 'react-tokeninput'
+
+function addUserAbbrName(user) {
+  return Object.assign({
+    name: user.firstName + ' ' + user.lastName.charAt(0) + '.'
+  }, user)
+}
 
 export default React.createClass({
   displayName: 'NewTeamForm',
 
+  isInitialRender: true,
+
   getInitialState() {
+    let members = this.props.team 
+      ? this.props.team.members.map(addUserAbbrName)
+      : []
     return {
-      selected: [],
-      options: []
-    };
+      selected: members,
+      options: UserStore.getSearchResults()
+    }
+  },
+
+  storeChange() {
+    this.setState({
+      options: UserStore.getSearchResults()
+    })
   },
 
   componentWillMount() {
@@ -36,13 +55,13 @@ export default React.createClass({
   },
 
   tokenHandleRemove(value) {
-    var selectedOptions = uniq(without(this.state.selected,value))
+    var selectedOptions = uniq(without(this.state.selected, value))
     this.tokenHandleChange(selectedOptions)
   },
 
   tokenHandleSelect(value, combobox) {
     if(typeof value !== 'string') {
-      var selected = uniq(this.state.selected.concat([value]))
+      var selected = uniq(this.state.selected.concat([value]), 'id')
       this.setState({
         selected: selected,
         selectedToken: null
@@ -59,40 +78,41 @@ export default React.createClass({
     }
   },
 
-  storeChange() {
-    this.setState({options: UserStore.getSearchResults()})
-  },
-
   renderComboboxOptions() {
-    return this.state.options.map((user) => {
-      if (!user.name) {
-        user.name = user.firstName + ' ' + user.lastName.charAt(0) + '.'
+    return this.state.options.map(potentialMember => {
+      if (!potentialMember.name) {
+        potentialMember = addUserAbbrName(potentialMember)
       }
-      if (!user.displayName) {
-        user.displayName = user.firstName + ' ' + user.lastName + ' (' + user.email + ')'
+      if (!potentialMember.displayName) {
+        potentialMember.displayName = potentialMember.firstName + ' ' + potentialMember.lastName + 
+          ' (' + potentialMember.email + ')'
       }
       return (
-        <ComboboxOption
-          key={user.id}
-          value={user}
-        >{user.displayName}</ComboboxOption>
+        <ComboboxOption key={potentialMember.id} value={potentialMember}>
+          {potentialMember.displayName}
+        </ComboboxOption>
       );
     });
   },
 
   render() {
-    var options = this.state.options.length ? this.renderComboboxOptions() : [];
+    let selectedMembers = this.state.selected
+    let title = this.props.team ? this.props.team.name : ''
+    let memberOptions = this.state.options.length
+      ? this.renderComboboxOptions()
+      : []
+
     return (
       <div className="col-md-6 form-group">
-        <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Team name..." />
+        <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Team name..." defaultValue={title}/>
         <TokenInput
+          className="form-control"
           onChange={this.tokenHandleChange}
           onInput={this.tokenHandleInput}
           onSelect={this.tokenHandleSelect}
           onRemove={this.tokenHandleRemove}
-          selected={this.state.selected}
-          className="form-control"
-          menuContent={options}
+          menuContent={memberOptions}
+          selected={selectedMembers}
         />
         <button className="btn btn-success" onClick={this.props.onCreate}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true" />

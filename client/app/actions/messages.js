@@ -14,7 +14,6 @@ function _streamListener(event) {
       }
     })
   } catch (exp) {
-    console.log(exp)
     throw exp
   }
 }

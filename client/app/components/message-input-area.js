@@ -24,7 +24,6 @@ export default React.createClass({
   render() {
     var categories
     if (this.props.categories && this.props.categories.length !== 0) {
-      console.log(this.props.categories)
       var categoryOptions = this.props.categories.map((cat, index) => {
         return (
           <option key={index} value={cat.value}>{cat.value}</option>

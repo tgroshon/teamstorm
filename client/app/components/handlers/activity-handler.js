@@ -25,14 +25,14 @@ export default React.createClass({
     ActivityStore.on('activity', this.storeUpdate)
   },
 
+  componentWillUnmount() {
+    ActivityStore.removeListener('activity', this.storeUpdate)
+  },
+
   componentWillReceiveProps() {
     this.setState({
       activity: ActivityStore.get(this.getParams().activityId)
     })
-  },
-
-  componentWillUnmount() {
-    ActivityStore.removeListener('activity', this.storeUpdate)
   },
 
   handleSave() {

@@ -8,7 +8,7 @@ import passport from 'passport'
 
 var router = express.Router()
 
-router.get('/users', usersCtrl.index)
+router.get('/users', tokenAuth, usersCtrl.index)
 router.post('/users', usersCtrl.create)
 router.put('/users', tokenAuth, usersCtrl.update)
 router.get('/users/search', tokenAuth, usersCtrl.search)
@@ -30,6 +30,7 @@ router.get('/activity/:activityId/messages/stream', sseMiddleware, activityCtrl.
 router.get('/teams', tokenAuth, teamsCtrl.index)
 router.get('/teams/:teamId', tokenAuth, teamsCtrl.show)
 router.post('/teams', tokenAuth, teamsCtrl.create)
+router.put('/teams', tokenAuth, teamsCtrl.update)
 
 // TODO For testing only
 router.get('/debug/teams', teamsCtrl.debug)

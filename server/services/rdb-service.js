@@ -77,6 +77,30 @@ module.exports = {
     })
   },
 
+  getTeam: function rdbServiceGetTeam(Klass, key, done) {
+    getConnection(function(cErr, conn) {
+      if (cErr) return done(cErr)
+      r.db(config.rdb.name)
+        .table(Klass.tableName)
+        .get(key)
+        .merge(function (team) {
+          return {
+            members: r.db(config.rdb.name)
+              .table('users')
+              .getAll(r.args(team('members')))
+              .without('hash')
+              .coerceTo('array')
+          }
+        })
+        .run(conn, function(err, data) {
+          conn.close()
+          if (err) return done(err)
+
+          done(err, data ? new Klass(data) : null)
+        })
+    })
+  },
+
   getByIndex: function rdbServiceGetByIndex(Klass, index, value, done) {
     getConnection(function(cErr, conn) {
       if (cErr) return done(cErr)
@@ -145,6 +169,15 @@ module.exports = {
             .filter({creatorId: userId})
         )
         .distinct()
+        .merge(function (team) {
+          return {
+            members: r.db(config.rdb.name)
+              .table('users')
+              .getAll(r.args(team('members')))
+              .without('hash')
+              .coerceTo('array')
+          }
+        })
         .run(conn, function(err, cursor) {
           if (err) {
             conn.close()

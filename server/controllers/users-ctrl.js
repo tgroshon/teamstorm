@@ -20,6 +20,7 @@ module.exports = {
 
   index: function(req, res) {
     if (req.query.users) {
+      console.log('Multi')
       User.objects.multiGet(req.query.users, (err, users) => {
         if (err) {
           return res.status(500).json({ errors: [{ msg: err.message }] })
@@ -31,6 +32,7 @@ module.exports = {
         })
       })
     } else {
+      console.log('All')
       User.objects.all(function (err, users) {
         if (err) {
           return res.status(500).json({ errors: [{ msg: err.message }] })

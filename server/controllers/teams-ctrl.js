@@ -51,5 +51,34 @@ module.exports = {
     })
   },
 
+  update: function(req, res) {
+    var params = req.body
+    Team.objects.get(params.id, (err, team) => {
+      if (err) {
+        return res.status(500).json({ errors: [{ msg: err.message }] })
+      }
+
+      if (!team) {
+        return res.status(404).json({ errors: [{ msg: 'No Team Found' }] })
+      }
+
+      if (team.creatorId !== req.user.id) {
+        return res.status(401).json({ errors: [{ msg: 'Permission denied to update this Team' }] })
+      }
+
+      team.merge(params)
+      team.save((dbErr) => {
+        if (err) {
+          return res.status(500).json({ errors: [{ msg: dbErr.message }] })
+        }
+        Team.objects.get(team.id, (err, populatedTeam) => {
+          if (err) {
+            return res.status(500).json({ errors: [{ msg: err.message }] })
+          }
+          res.status(201).json(populatedTeam.toJson())
+        })
+      })
+    })
+  }
 }
 

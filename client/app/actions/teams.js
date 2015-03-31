@@ -47,5 +47,54 @@ export default {
         })
       })
     }
+  },
+
+  getMembers(teamId, memberIds) {
+    var token = LocalStorage.get('token')
+    if (token) {
+      HttpAPI.fetchUsers(token, userIds, (err, res) => {
+        if (err) {
+          return AppDispatcher.dispatch({
+            type: ActionTypes.ERR_HTTP_GET_USERS,
+            params: {
+              error: err
+            }
+          })
+        }
+        AppDispatcher.dispatch({
+          type: ActionTypes.STORE_TEAM_MEMBERS,
+          params: {
+            members: res.body.users,
+            teamId: teamId
+          }
+        })
+      })
+    }
+  },
+
+  editTeam(id, name, memberObjects) {
+    var token = LocalStorage.get('token')
+    if (token) {
+      var members = memberObjects.map(member => { return member.id })
+      var team = {id, name, members}
+      HttpAPI.putTeam(token, team, (err, res) => {
+        if (err) {
+          return AppDispatcher.dispatch({
+            type: ActionTypes.ERR_HTTP_PUT_TEAM,
+            params: {
+              error: err,
+              data: team
+            }
+          })
+        }
+        AppDispatcher.dispatch({
+          type: ActionTypes.STORE_TEAMS,
+          params: {
+            teams: [res.body]
+          }
+        })
+      })
+    }
+
   }
 }

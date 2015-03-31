@@ -23,7 +23,9 @@ export var ActionTypes = keyMirror({
   'ERR_HTTP_POST_USER': null,
   'ERR_HTTP_POST_MESSAGE': null,
   'ERR_HTTP_POST_ACTIVITY': null,
+  'ERR_HTTP_PUT_ACTIVITY': null,
   'ERR_HTTP_POST_TEAM': null,
+  'ERR_HTTP_PUT_TEAM': null,
   'ERR_DECODE_TOKEN': null,
   'CLEAR_ERR': null,
 })

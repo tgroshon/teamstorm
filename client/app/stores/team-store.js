@@ -5,7 +5,8 @@ import AppDispatcher from '../dispatcher'
 import { ActionTypes } from '../constants'
 
 let StoreData = Immutable.Map({
-  teams: Immutable.Map()
+  teams: Immutable.Map(),
+  members: Immutable.Map()
 })
 
 let TeamStore = assign({}, EventEmitter.prototype, {

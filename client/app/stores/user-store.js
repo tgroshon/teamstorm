@@ -4,7 +4,11 @@ import Immutable from 'immutable'
 import AppDispatcher from '../dispatcher'
 import { ActionTypes } from '../constants'
 
-var StoreData = Immutable.Map()
+var StoreData = Immutable.Map({
+  authenticated: false,
+  user: null,
+  searchResults: Immutable.List()
+})
 
 var UserStore = assign({}, EventEmitter.prototype, {
   name: 'UserStore',
@@ -15,10 +19,6 @@ var UserStore = assign({}, EventEmitter.prototype, {
 
   getUser() {
     return StoreData.get('user')
-  },
-
-  getValidationErrors() {
-    return StoreData.get('validationErrors')
   },
 
   getSearchResults() {

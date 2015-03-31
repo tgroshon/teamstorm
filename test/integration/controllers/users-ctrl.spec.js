@@ -11,7 +11,11 @@ describe('Users Controller', () => {
   describe('#index', () => {
 
     var allUsers = [new UserModel({firstName: 'bob'})]
+    var userData = {firstName: 'bob'}
+    var token
+
     beforeEach(() => {
+      token = authService.encode(userData)
       sinon.stub(rdbService, 'all', (UserKlass, cb) => {
         UserModel.should.eql(UserKlass)
         cb(null, allUsers)
@@ -24,6 +28,7 @@ describe('Users Controller', () => {
     it('lists users', (done) => {
       request(app)
         .get('/users')
+        .set('jwt', token)
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {

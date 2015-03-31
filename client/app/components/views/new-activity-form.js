@@ -67,10 +67,6 @@ export default React.createClass({
     })
   },
 
-  componentDidMount() {
-    console.log('Form', this)
-  },
-
   render() {
     var teamOptions = this.props.teams.map(team => {
       return <option key={team.get('id')} value={team.get('id')}>{team.get('name')}</option>

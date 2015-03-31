@@ -16,12 +16,6 @@ export default React.createClass({
     this.transitionTo('activities')
   },
 
-  userAuthFailEvent(evt) {
-    // TODO Render the failures
-    var errors = UserStore.getValidationErrors()
-    console.log('Validation Errors', errors)
-  },
-
   buttonClick() {
     var username = this.refs.username.getDOMNode().value
     var password = this.refs.password.getDOMNode().value
@@ -30,12 +24,10 @@ export default React.createClass({
 
   componentWillMount() {
     UserStore.on('login', this.userLoginEvent)
-    UserStore.on('authfail', this.userAuthFailEvent)
   },
 
   componentWillUnmount() {
     UserStore.removeListener('login', this.userLoginEvent)
-    UserStore.removeListener('authfail', this.userAuthFailEvent)
   },
 
   toggleForm(event) {

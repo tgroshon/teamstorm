@@ -74,7 +74,7 @@ module.exports = {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
-      function memberOfActivityTeam(team) {
+      var memberOfActivityTeam = (team) => {
         return team.id === params.teamId
       }
 

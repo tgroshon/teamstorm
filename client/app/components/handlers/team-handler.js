@@ -1,6 +1,7 @@
 import React from 'react'
 import Router, { Link } from 'react-router'
 import TeamStore from '../../stores/team-store'
+import TeamActions from '../../actions/teams'
 
 export default React.createClass({
 
@@ -8,13 +9,13 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      team: TeamStore.get(this.getParams().teamId)
+      team: TeamStore.get(this.getParams().teamId),
     }
   },
 
   storeUpdate() {
     this.setState({
-      team: TeamStore.get(this.getParams().teamId)
+      team: TeamStore.get(this.getParams().teamId),
     })
   },
 
@@ -24,7 +25,7 @@ export default React.createClass({
 
   componentWillReceiveProps() {
     this.setState({
-      team: TeamStore.get(this.getParams().teamId)
+      team: TeamStore.get(this.getParams().teamId),
     })
   },
 
@@ -33,16 +34,29 @@ export default React.createClass({
   },
 
   render() {
-    var team = this.state.team
+    let team = this.state.team
     if (!team) {
       return <div />
     }
 
+    let memberItems = team.get('members').map(member => {
+      return (
+        <li key={member.get('id')}>
+          {member.get('firstName')} {member.get('lastName')} ({member.get('email')})
+        </li>
+      )
+    }).toArray()
+
     return (
       <div>
-        <h1>
-          {team.get('name')}
-        </h1>
+        <h1>{team.get('name')}</h1>
+        <ul>
+          <strong>Members</strong>
+          {memberItems}
+        </ul>
+        <a href={`/#/team/${team.get('id')}/edit`} className="btn btn-primary">
+          Edit
+        </a>
       </div>
     )
   }

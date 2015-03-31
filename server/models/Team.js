@@ -49,7 +49,7 @@ Team.objects = {
   },
 
   get: function(id, done) {
-    rdb.get(Team, id, done)
+    rdb.getTeam(Team, id, done)
   },
 
   getByCreator: function(creatorId, done) {

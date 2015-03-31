@@ -50,6 +50,14 @@ export default {
       .end(done)
   },
 
+  putTeam(token, team, done) {
+    request
+      .put('/teams')
+      .set('jwt', token)
+      .send(team)
+      .end(done)
+  },
+
   postActivity(token, activity, done) {
     request
       .post('/activity')
@@ -73,6 +81,14 @@ export default {
       .end(done)
   },
 
+  fetchUsers(token, userIds, done) {
+    request
+      .get('/users')
+      .query({ users: userIds })
+      .set('jwt', token)
+      .end(done)
+  },
+
   postMessage(token, activityId, message, done) {
     var url = pathToUrl('/activity/:activityId/messages', {activityId})
     request
@@ -87,13 +103,14 @@ export default {
                         {activityId})
     // TODO refactor to use EventSourceCache
     this.evtSource = new EventSource(url)
+    console.log('Source, Opening Stream', activityId)
     this.evtSource.addEventListener('message', listener)
   },
 
 
   stopMessageStream(listener) {
     if (this.evtSource) {
-      console.log('Source, Closing Stream')
+      console.log('Source, Closing last Stream')
       this.evtSource.removeEventListener('message', listener)
       this.evtSource.close()
       this.evtSource = null
