@@ -2,6 +2,7 @@ import React from 'react'
 import Router, { Link } from 'react-router'
 import { Input } from 'react-bootstrap'
 import ActivityStore from '../../../stores/activity-store'
+import UserStore from '../../../stores/user-store'
 
 export default React.createClass({
   mixins: [Router.State],
@@ -9,30 +10,41 @@ export default React.createClass({
   getInitialState() {
     return {
       activity: ActivityStore.get(this.getParams().activityId),
+      user: UserStore.getUser(),
       previousChanges: {},
       editing: false,
-      httpError: null
+      httpError: null,
+      shouldShowEdit: false
     }
   },
 
-  storeUpdate() {
-    this.setState({
-      activity: ActivityStore.get(this.getParams().activityId)
-    })
+  getStateFromStores() {
+    let user = this.state.user
+    let activity = ActivityStore.get(this.getParams().activityId)
+    let newState = !!activity
+      ? { user, activity, shouldShowEdit: this.shouldShowEditButton(user, activity) }
+      : { user }
+    this.setState(newState)
   },
 
   componentWillMount() {
-    ActivityStore.on('activity', this.storeUpdate)
+    ActivityStore.on('activity', this.getStateFromStores)
+    this.getStateFromStores()
   },
 
   componentWillUnmount() {
-    ActivityStore.removeListener('activity', this.storeUpdate)
+    ActivityStore.removeListener('activity', this.getStateFromStores)
   },
 
   componentWillReceiveProps() {
-    this.setState({
-      activity: ActivityStore.get(this.getParams().activityId)
-    })
+    this.getStateFromStores()
+  },
+
+  shouldShowEditButton(user, activity) {
+    if (user && activity && user.get('id') === activity.creatorId) {
+      return true
+    }
+    return false
   },
 
   handleSave() {
@@ -60,26 +72,26 @@ export default React.createClass({
         switch(attr) {
           case 'type':
             return (
-              <Input type="select" ref={attr + 'Input'} defaultValue="deliverable">
-                <option value="deliverable">Deliverable</option>
-                <option value="discussion">Discussion</option>
-                <option value="issue">Issue</option>
+              <Input type="select" ref={attr + 'Input'} defaultValue={activity.type}>
+                <option value="2col">2 Column</option>
+                <option value="4x4">4x4 Grid</option>
+                <option value="list">List</option>
               </Input>
             )
 
           case 'isActive':
             return (
               <Input type="select" ref={attr + 'Input'} defaultValue="true">
-                <option value="true">True</option>
-                <option value="false">False</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
               </Input>
             )
 
           case 'isClosed':
             return (
               <Input type="select" ref={attr + 'Input'} defaultValue="true">
-                <option value="true">True</option>
-                <option value="false">False</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
               </Input>
             )
 
@@ -97,16 +109,31 @@ export default React.createClass({
       ]
     } else {
       mapFn = (attr) => {
-        return <span>{activity[attr]}</span>
+        let value = activity[attr]
+        if (attr === 'isActive') {
+          value = value ? 'Yes' : 'No'
+        } else if (attr === 'type') {
+          if (value === '2col') {
+            value = '2 Column'
+          } else if (value === '4x4') {
+            value = '4x4 Grid'
+          } else {
+            value = 'List'
+          }
+        }
+        return <span>{value}</span>
       }
-      actionButtons = (
-        <button className="btn btn-primary action-btn" onClick={this.handleEdit}>
-          Edit
-        </button>
-      )
+      // TODO Enable Editing someday
+      // if (this.state.shouldShowEdit) {
+      //   actionButtons = (
+      //     <button className="btn btn-primary action-btn" onClick={this.handleEdit}>
+      //       Edit
+      //     </button>
+      //   )
+      // }
     }
 
-    var ATTRIBUTES = ['title', 'type', 'isClosed']
+    var ATTRIBUTES = ['title', 'type', 'isActive']
     var dataCells = ATTRIBUTES.map(mapFn)
 
     return (

@@ -39,10 +39,7 @@ export default React.createClass({
   },
 
   componentWillReceiveProps() {
-    let team = TeamStore.get(this.getParams().teamId)
-    let user = UserStore.getUser()
-    let showEditButton = this.shouldShowEditButton(user, team)
-    this.setState({team, user, showEditButton})
+    this.storeUpdate()
   },
 
   componentWillUnmount() {

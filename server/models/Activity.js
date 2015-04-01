@@ -12,7 +12,7 @@ var ATTRS = [
   'categories',
   'teamId',
   'isActive',
-  'creator',
+  'creatorId',
   'createDate',
   'updateDate',
 ]

@@ -117,7 +117,7 @@ export default React.createClass({
         />
         <button className="btn btn-success" onClick={this.props.onCreate}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true" />
-          Create
+          Save
         </button>
         <button className="btn btn-danger" onClick={this.props.onCancel}>
           <span className="glyphicon glyphicon-minus" aria-hidden="true" />
