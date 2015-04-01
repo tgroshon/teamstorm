@@ -1,8 +1,9 @@
 import React from 'react'
 import Router, { Navigation } from 'react-router'
-import NewTeamForm from '../views/new-team-form'
+import TeamForm from '../views/team-form'
 import TeamActions from '../../actions/teams'
 import TeamStore from '../../stores/team-store'
+import UserStore from '../../stores/user-store'
 
 export default React.createClass({
   displayName: 'EditTeamHandler',
@@ -12,21 +13,37 @@ export default React.createClass({
   getInitialState() {
     return {
       team: TeamStore.get(this.getParams().teamId),
+      user: UserStore.getUser()
     }
   },
 
   storeUpdate() {
     this.setState({
       team: TeamStore.get(this.getParams().teamId),
+      user: UserStore.getUser()
     })
   },
 
+  checkEditPermission() {
+    if (this.state.user && this.state.team &&
+        this.state.user.get('id') !== this.state.team.get('creatorId')) {
+      return this.transitionTo('team', { teamId: this.state.team.get('id') })
+    }
+  },
+
   componentWillMount() {
+    this.checkEditPermission()
     TeamStore.on('change', this.storeUpdate)
+    UserStore.on('login', this.storeUpdate)
+  },
+
+  componentWillReceiveProps() {
+    this.checkEditPermission()
   },
 
   componentWillUnmount() {
     TeamStore.removeListener('change', this.storeUpdate)
+    UserStore.removeListener('login', this.storeUpdate)
   },
 
   handleCancel() {
@@ -44,11 +61,14 @@ export default React.createClass({
       return <div />
     }
 
+    this.checkEditPermission()
+
 		return (
       <div className="row">
         <h3>Edit Team</h3>
-        <NewTeamForm
+        <TeamForm
           ref="teamForm"
+          user={this.state.user}
           team={this.state.team.toJS()}
           onCreate={this.handleCreate}
           onCancel={this.handleCancel} />

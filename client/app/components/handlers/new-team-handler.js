@@ -1,6 +1,6 @@
 import React from 'react'
 import Router, { Navigation } from 'react-router'
-import NewTeamForm from '../views/new-team-form'
+import TeamForm from '../views/team-form'
 import TeamActions from '../../actions/teams'
 
 export default React.createClass({
@@ -23,7 +23,7 @@ export default React.createClass({
 		return (
       <div className="row">
         <h3>New Team</h3>
-        <NewTeamForm
+        <TeamForm
           ref="userAutocomplete"
           onCreate={this.handleCreate}
           onCancel={this.handleCancel} />

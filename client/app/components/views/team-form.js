@@ -13,7 +13,7 @@ function addUserAbbrName(user) {
 }
 
 export default React.createClass({
-  displayName: 'NewTeamForm',
+  displayName: 'TeamForm',
 
   isInitialRender: true,
 
@@ -40,6 +40,7 @@ export default React.createClass({
   componentWillUnmount() {
     UserStore.removeListener('searchresults', this.storeChange)
   },
+
 
   getFormData() {
     return {
