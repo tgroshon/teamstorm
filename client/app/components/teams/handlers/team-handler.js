@@ -1,8 +1,8 @@
 import React from 'react'
 import Router, { Link, Navigation } from 'react-router'
-import UserStore from '../../stores/user-store'
-import TeamStore from '../../stores/team-store'
-import TeamActions from '../../actions/teams'
+import UserStore from '../../../stores/user-store'
+import TeamStore from '../../../stores/team-store'
+import TeamActions from '../../../actions/teams'
 
 export default React.createClass({
 
@@ -26,7 +26,7 @@ export default React.createClass({
   },
 
   shouldShowEditButton(user, team) {
-    if (user.get('id') === team.get('creatorId')) {
+    if (user && team && user.get('id') === team.get('creatorId')) {
       return true
     }
     return false

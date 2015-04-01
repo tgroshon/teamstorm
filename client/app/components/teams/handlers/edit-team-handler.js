@@ -1,9 +1,9 @@
 import React from 'react'
 import Router, { Navigation } from 'react-router'
-import TeamForm from '../views/team-form'
-import TeamActions from '../../actions/teams'
-import TeamStore from '../../stores/team-store'
-import UserStore from '../../stores/user-store'
+import TeamForm from '../team-form'
+import TeamActions from '../../../actions/teams'
+import TeamStore from '../../../stores/team-store'
+import UserStore from '../../../stores/user-store'
 
 export default React.createClass({
   displayName: 'EditTeamHandler',

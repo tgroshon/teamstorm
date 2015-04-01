@@ -1,7 +1,7 @@
 import React from 'react'
 import Router, {Navigation} from 'react-router'
-import UserActions from '../../actions/users'
-import UserStore from '../../stores/user-store'
+import UserActions from '../../../actions/users'
+import UserStore from '../../../stores/user-store'
 
 export default React.createClass({
   mixins: [Navigation],

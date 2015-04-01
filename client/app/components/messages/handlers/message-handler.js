@@ -1,8 +1,8 @@
 import React from 'react'
 import Router from 'react-router'
-import MessageStore from '../../stores/message-store'
-import ActivityStore from '../../stores/activity-store'
-import MessageActions from '../../actions/messages'
+import MessageStore from '../../../stores/message-store'
+import ActivityStore from '../../../stores/activity-store'
+import MessageActions from '../../../actions/messages'
 import MessagesWrapper from '../messages-wrapper'
 
 export default React.createClass({

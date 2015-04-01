@@ -1,7 +1,7 @@
 import React from 'react'
 import Router, { Link } from 'react-router'
 import { Input } from 'react-bootstrap'
-import ActivityStore from '../../stores/activity-store'
+import ActivityStore from '../../../stores/activity-store'
 
 export default React.createClass({
   mixins: [Router.State],

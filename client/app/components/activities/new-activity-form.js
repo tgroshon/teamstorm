@@ -1,7 +1,7 @@
 import React from 'react'
 import {Input} from 'react-bootstrap'
 import _ from 'lodash'
-import ActivityBuilder from '../activity-builder'
+import ActivityBuilder from './activity-builder'
 
 export default React.createClass({
   displayName: 'NewActivityForm',

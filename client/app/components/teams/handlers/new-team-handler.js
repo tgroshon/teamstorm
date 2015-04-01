@@ -1,7 +1,7 @@
 import React from 'react'
 import Router, { Navigation } from 'react-router'
-import TeamForm from '../views/team-form'
-import TeamActions from '../../actions/teams'
+import TeamForm from '../team-form'
+import TeamActions from '../../../actions/teams'
 
 export default React.createClass({
   displayName: 'NewTeamHandler',

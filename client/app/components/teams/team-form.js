@@ -1,10 +1,10 @@
 import React from 'react'
+import { without, uniq } from 'lodash'
+import TokenInput, {Option as ComboboxOption} from 'react-tokeninput'
 import UserStore from '../../stores/user-store'
 import TeamStore from '../../stores/team-store'
 import UserActions from '../../actions/users'
 import TeamActions from '../../actions/teams'
-import { without, uniq } from 'lodash'
-import TokenInput, {Option as ComboboxOption} from 'react-tokeninput'
 
 function addUserAbbrName(user) {
   return Object.assign({

@@ -1,19 +1,20 @@
 import React from 'react'
 import Router, { Link, Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
-import MessageViewController from './components/handlers/message-handler'
-import ActivityViewController from './components/handlers/activity-handler'
-import ActivitiesViewController from './components/handlers/activities-handler'
-import LoginViewController from './components/handlers/login-handler'
-import DashboardViewController from './components/handlers/dashboard-handler'
-import TeamsViewController from './components/handlers/teams-handler'
-import TeamViewController from './components/handlers/team-handler'
-import NewTeamHandler from './components/handlers/new-team-handler'
-import EditTeamHandler from './components/handlers/edit-team-handler'
-import NewActivityHandler from './components/handlers/new-activity-handler'
-import OAuth2Handler from './components/handlers/oauth2-handler'
-import AccountHandler from './components/handlers/account-handler'
-import TopNav from './components/views/top-nav'
 import UserActions from './actions/users'
+
+import MessageHandler from './components/messages/handlers/message-handler'
+import ActivityHandler from './components/activities/handlers/activity-handler'
+import ActivitiesHandler from './components/activities/handlers/activities-handler'
+import NewActivityHandler from './components/activities/handlers/new-activity-handler'
+import DashboardHandler from './components/common/handlers/dashboard-handler'
+import TeamsHandler from './components/teams/handlers/teams-handler'
+import TeamHandler from './components/teams/handlers/team-handler'
+import NewTeamHandler from './components/teams/handlers/new-team-handler'
+import EditTeamHandler from './components/teams/handlers/edit-team-handler'
+import LoginHandler from './components/users/handlers/login-handler'
+import OAuth2Handler from './components/users/handlers/oauth2-handler'
+import AccountHandler from './components/users/handlers/account-handler'
+import TopNav from './components/common/handlers/navigation-handler'
 
 var App = React.createClass({
   componentWillMount() {
@@ -66,22 +67,22 @@ var DefaultTeam = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="login" handler={LoginViewController}/>
+    <Route name="login" handler={LoginHandler}/>
     <Route name="account" handler={AccountHandler}/>
-    <Route name="teams" path="/team" handler={TeamsViewController}>
+    <Route name="teams" path="/team" handler={TeamsHandler}>
       <Route name="new-team" path="new" handler={NewTeamHandler} />
       <Route name="edit-team" path=":teamId/edit" handler={EditTeamHandler} />
-      <Route name="team" path=":teamId" handler={TeamViewController}/>
+      <Route name="team" path=":teamId" handler={TeamHandler}/>
       <DefaultRoute handler={DefaultTeam}/>
     </Route>
-    <Route name="activities" path="/activity" handler={ActivitiesViewController}>
+    <Route name="activities" path="/activity" handler={ActivitiesHandler}>
       <Route name="new-activity" path="new" handler={NewActivityHandler} />
-      <Route name="activity" path=":activityId" handler={ActivityViewController}/>
-      <Route name="messages" path=":activityId/messages" handler={MessageViewController}/>
+      <Route name="activity" path=":activityId" handler={ActivityHandler}/>
+      <Route name="messages" path=":activityId/messages" handler={MessageHandler}/>
       <DefaultRoute handler={DefaultAct}/>
     </Route>
     <Route name="oauth2redirect" path="/oauth2redirect" handler={OAuth2Handler} />
-    <DefaultRoute handler={DashboardViewController}/>
+    <DefaultRoute handler={DashboardHandler}/>
   </Route>
 )
 

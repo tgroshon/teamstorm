@@ -1,8 +1,8 @@
 import React from 'react'
 import Router, { Link, Navigation } from 'react-router'
 import { Nav, Navbar, NavItem, DropdownButton, MenuItem } from 'react-bootstrap'
-import UserStore from '../../stores/user-store'
-import UserActions from '../../actions/users'
+import UserStore from '../../../stores/user-store'
+import UserActions from '../../../actions/users'
 
 var CustomItem = React.createClass({
   render() {

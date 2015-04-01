@@ -1,6 +1,6 @@
 import React from 'react'
 import Router, {RouteHandler, Link} from 'react-router'
-import UserActions from '../../actions/users'
+import UserActions from '../../../actions/users'
 
 function parseQueryString( queryString ) {
   var params = {}, queries, temp, i, l

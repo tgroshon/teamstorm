@@ -1,10 +1,10 @@
 import React from 'react'
 import {Input} from 'react-bootstrap'
 import Router, { Navigation } from 'react-router'
-import TeamActions from '../../actions/teams'
-import ActivityActions from '../../actions/activities'
-import NewActivityForm from '../views/new-activity-form'
-import TeamStore from '../../stores/team-store'
+import ActivityActions from '../../../actions/activities'
+import TeamActions from '../../../actions/teams'
+import TeamStore from '../../../stores/team-store'
+import NewActivityForm from '../new-activity-form'
 
 export default React.createClass({
   displayName: 'NewActivityHandler',

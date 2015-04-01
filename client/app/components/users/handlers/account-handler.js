@@ -1,8 +1,8 @@
 import React from 'react'
-import UserStore from '../../stores/user-store'
-import ErrorStore from '../../stores/error-store'
-import { ActionTypes } from '../../constants'
-import UserActions from '../../actions/users'
+import UserStore from '../../../stores/user-store'
+import ErrorStore from '../../../stores/error-store'
+import { ActionTypes } from '../../../constants'
+import UserActions from '../../../actions/users'
 
 export default React.createClass({
   displayName: 'AccountPage',

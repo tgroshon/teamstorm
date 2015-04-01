@@ -1,8 +1,8 @@
 import React from 'react'
 import Router, {RouteHandler} from 'react-router'
-import ActivityStore from '../../stores/activity-store'
-import ActivityBox from '../views/activity-box'
-import ActivityActions from '../../actions/activities'
+import ActivityStore from '../../../stores/activity-store'
+import ActivityBox from '../activity-box'
+import ActivityActions from '../../../actions/activities'
 
 export default React.createClass({
   getInitialState() {

@@ -1,8 +1,8 @@
 import React from 'react'
 import Router, {RouteHandler, Link} from 'react-router'
-import TeamActions from '../../actions/teams'
-import TeamStore from '../../stores/team-store'
-import TeamBox from '../views/team-box'
+import TeamActions from '../../../actions/teams'
+import TeamStore from '../../../stores/team-store'
+import TeamBox from '../team-box'
 
 export default React.createClass({
   displayName: 'TeamHandler',
