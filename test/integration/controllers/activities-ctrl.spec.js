@@ -88,7 +88,7 @@ describe('Activities Controller', () => {
 
   describe('#create', () => {
 
-    var actData = {creator: 'fakeId', isActive: true, title: 'My New Team'}
+    var actData = {creatorId: 'fakeId', isActive: true, title: 'My New Team'}
     beforeEach(() => {
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
         Klass.should.eql(ActivityKlass)
