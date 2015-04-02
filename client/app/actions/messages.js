@@ -4,6 +4,10 @@ import HttpAPI from '../sources/http-api'
 import LocalStorage from '../sources/local-storage'
 
 function _streamListener(event) {
+  if (event.origin != 'https://teamstorm.herokuapp.com' && 
+      event.origin != 'http://teamstorm.docker') {
+    throw new Error('Bad origin on message: ' + event.origin)
+  }
   try {
     var message = JSON.parse(event.data)
     AppDispatcher.dispatch({
