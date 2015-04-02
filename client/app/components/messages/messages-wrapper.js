@@ -33,7 +33,7 @@ export default React.createClass({
           <h3 className="MessagesWrapper__Topic">{topic}</h3>
         </div>
         {displayData}
-        <MessageInputArea ref='messageInputArea' categories={categories} onCreate={this.handleCreate} />
+        <MessageInputArea ref='messageInputArea' {...this.props} categories={categories} onCreate={this.handleCreate} />
       </div>
     )
   }

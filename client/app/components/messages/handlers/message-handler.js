@@ -2,7 +2,9 @@ import React from 'react'
 import Router from 'react-router'
 import MessageStore from '../../../stores/message-store'
 import ActivityStore from '../../../stores/activity-store'
+import ErrorStore from '../../../stores/error-store'
 import MessageActions from '../../../actions/messages'
+import { ActionTypes } from '../../../constants'
 import MessagesWrapper from '../messages-wrapper'
 
 export default React.createClass({
@@ -11,22 +13,29 @@ export default React.createClass({
   getInitialState() {
     return {
       messages: MessageStore.getAll(this.getParams().activityId),
+      pending: MessageStore.pendingRequest(),
       activity: ActivityStore.get(this.getParams().activityId),
-      pending: MessageStore.pendingRequest()
+      error: ErrorStore.get(ActionTypes.ERR_HTTP_POST_MESSAGE),
     }
+  },
+
+  errorUpdate() {
+    this.storeUpdate()
   },
 
   storeUpdate() {
     this.setState({
       messages: MessageStore.getAll(this.getParams().activityId),
+      pending: MessageStore.pendingRequest(),
       activity: ActivityStore.get(this.getParams().activityId),
-      pending: MessageStore.pendingRequest()
+      error: ErrorStore.get(ActionTypes.ERR_HTTP_POST_MESSAGE),
     })
   },
 
   componentWillMount() {
     MessageStore.on('change', this.storeUpdate)
     ActivityStore.on('activity', this.storeUpdate)
+    ErrorStore.on(ActionTypes.ERR_HTTP_POST_MESSAGE, this.errorUpdate)
     MessageActions.fetchMessages(this.getParams().activityId)
     MessageActions.getMessageStream(this.getParams().activityId)
   },
@@ -46,6 +55,7 @@ export default React.createClass({
   componentWillUnmount() {
     MessageStore.removeListener('change', this.storeUpdate)
     ActivityStore.removeListener('activity', this.storeUpdate)
+    ErrorStore.removeListener(ActionTypes.ERR_HTTP_POST_MESSAGE, this.errorUpdate)
     MessageActions.stopMessageStream()
   },
 
@@ -69,8 +79,7 @@ export default React.createClass({
     return <MessagesWrapper
             ref='messagesWrapper'
             onCreate={this.handleCreate}
-            messages={this.state.messages}
-            activity={this.state.activity} />
+            {...this.state} />
   }
 })
 

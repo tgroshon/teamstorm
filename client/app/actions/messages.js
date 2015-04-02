@@ -52,10 +52,17 @@ export default {
             type: ActionTypes.ERR_HTTP_POST_MESSAGE,
             params: {
               error: err,
-              data: {payload, category}
+              data: message
             }
           })
         }
+        AppDispatcher.dispatch({
+          type: ActionTypes.STORE_MESSAGES,
+          params: {
+            activityId: activityId,
+            messages: [res.body]
+          }
+        })
       })
     }
   },

@@ -4,6 +4,14 @@ import {Input} from 'react-bootstrap'
 export default React.createClass({
   displayName: 'MessageInputArea',
 
+  getInitialState() {
+    var err = this.props.error
+    return {
+      // For initialization in case of error, not synchronization
+      payload: !!err ? err.get('data').payload : ''
+    }
+  },
+
   handleCreate(event) {
     event.preventDefault()
     this.props.onCreate(event)
@@ -17,8 +25,21 @@ export default React.createClass({
     }
   },
 
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      errorState: !!newProps.error,
+      payload: !!newProps.error ? newProps.error.get('data').payload : ''
+    })
+  },
+
   clearForm() {
     this.refs.messageInputTextarea.getDOMNode().value = ''
+  },
+
+  handleTextInput(e) {
+    this.setState({
+      payload: e.target.value
+    })
   },
 
   render() {
@@ -38,11 +59,15 @@ export default React.createClass({
       )
     }
 
+    let errorClass = this.state.errorState ? 'has-error' : ''
+
     return (
-      <div className="row MessageInputArea">
+      <div className={"row MessageInputArea form-group " + errorClass}>
         <textarea
           className="form-control MessageInputArea__textarea"
           ref="messageInputTextarea"
+          value={this.state.payload}
+          onChange={this.handleTextInput}
           rows="3"
           maxLength="140"
           placeholder="Enter your message..."
