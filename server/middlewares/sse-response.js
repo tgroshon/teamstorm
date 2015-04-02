@@ -1,5 +1,8 @@
 
 module.exports = function(req, res, next) {
+  // set timeout as high as possible
+  req.socket.setTimeout(Infinity)
+
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
