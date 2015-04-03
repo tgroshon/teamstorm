@@ -24,23 +24,14 @@
 
 .MessagesWrapper {
   position: absolute;
-  top: 60;
+  top: 58px;
   bottom: 0;
-  left: 300;
+  left: 285px;
   right: 10;
 }
 
 .MessagesWrapper__Topic {
   text-align: center;
-}
-
-.MessageList {
-  overflow-y: scroll;
-  position: absolute;
-  bottom: 138;
-  top: 50;
-  right: 10;
-  left: 0;
 }
 
 .MessageInputArea {
@@ -51,6 +42,8 @@
   right: 0;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 0;
+  margin-top: 0;
   padding: 10px;
   background-color: #0084B4;
   background: rgba(0, 132, 180, .1);
@@ -77,6 +70,19 @@
   display: block;
 }
 
+.MessageList {
+  position: absolute;
+  bottom: 138;
+  top: 50;
+  right: 10;
+  left: 0;
+}
+
+.MessageList__list {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .MessageList__2col_category {
   display: inline-block;
   position: relative;
@@ -84,6 +90,7 @@
   float: left;
   width: 50%;
   height: 100%;
+  overflow-y: scroll;
 }
 
 .MessageList__2col_category:nth-child(2) {
@@ -95,7 +102,10 @@
   border-bottom: 1px solid #cdcdcd;
 }
 .MessageList__2col_category--container {
-  display: inline-flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .MessageList__4x4_category {

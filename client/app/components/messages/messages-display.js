@@ -66,7 +66,7 @@ var ListDisplay = React.createClass({
     })
     return (
       <div className="row MessageList">
-        <ol className="list-group">
+        <ol className="MessageList__list list-group">
           {items}
         </ol>
       </div>
