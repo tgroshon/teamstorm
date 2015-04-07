@@ -72,7 +72,9 @@ export default React.createClass({
     return (
       <Navbar className="navbar-fixed-top">
         <Nav>
-          <div key={1} className="navbar-brand">TeamStorm</div>
+          <div key={1} className="navbar-brand">
+            <CustomItem to="app" className="Navbar__brand_link">Teamstorm</CustomItem>
+          </div>
           {this.getNavItems()}
         </Nav>
       </Navbar>

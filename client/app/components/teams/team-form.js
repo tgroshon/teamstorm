@@ -104,25 +104,31 @@ export default React.createClass({
       : []
 
     return (
-      <div className="col-md-6 form-group">
-        <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Team name..." defaultValue={title}/>
-        <TokenInput
-          className="form-control"
-          onChange={this.tokenHandleChange}
-          onInput={this.tokenHandleInput}
-          onSelect={this.tokenHandleSelect}
-          onRemove={this.tokenHandleRemove}
-          menuContent={memberOptions}
-          selected={selectedMembers}
-        />
-        <button className="btn btn-success" onClick={this.props.onCreate}>
-          <span className="glyphicon glyphicon-plus" aria-hidden="true" />
-          Save
-        </button>
-        <button className="btn btn-danger" onClick={this.props.onCancel}>
-          <span className="glyphicon glyphicon-minus" aria-hidden="true" />
-          Cancel
-        </button>
+      <div className="col-lg-6 form-group">
+        <div className="form-group">
+          <label>Team Name</label>
+          <input type="text" name="name" ref="nameInput" className="form-control" placeholder="Enter name..." defaultValue={title}/>
+        </div>
+        <div className="form-group">
+          <label>Members</label>
+          <TokenInput
+            className="form-control"
+            onChange={this.tokenHandleChange}
+            onInput={this.tokenHandleInput}
+            onSelect={this.tokenHandleSelect}
+            onRemove={this.tokenHandleRemove}
+            menuContent={memberOptions}
+            selected={selectedMembers}
+          />
+        </div>
+        <div className="form-group">
+          <button className="btn btn-success action-btn" onClick={this.props.onCreate}>
+            <span className="glyphicon glyphicon-plus" aria-hidden="true" /> Save
+          </button>
+          <button className="btn btn-danger action-btn" onClick={this.props.onCancel}>
+            <span className="glyphicon glyphicon-minus" aria-hidden="true" /> Cancel
+          </button>
+        </div>
       </div>
     )
   }

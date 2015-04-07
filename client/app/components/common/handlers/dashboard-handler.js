@@ -1,16 +1,10 @@
 import React from 'react'
-import { PageHeader } from 'react-bootstrap'
+import { PageHeader, Panel } from 'react-bootstrap'
+import HomePage from '../home-page'
 
 export default React.createClass({
   render() {
-    return (
-      <div>
-        <PageHeader>
-          Dashboard
-          <small> Coming Soon!</small>
-        </PageHeader>
-      </div>
-    )
+    return <HomePage />
   }
 })
 

@@ -73,8 +73,8 @@ export default React.createClass({
     })
 
     return (
-      <div className="input-group">
-        <Input type="text" ref="title" label="Title" />
+      <div className="col-lg-6 form-group">
+        <Input type="text" ref="title" label="Topic" />
         <Input type="select" ref="template" label='Template' onChange={this.handleChange} defaultValue="deliverable">
           <option value="deliverable">Deliverable</option>
           <option value="forum">Forum</option>
