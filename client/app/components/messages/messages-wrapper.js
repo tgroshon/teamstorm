@@ -6,7 +6,6 @@ import MessagesDisplay from './messages-display'
 
 export default React.createClass({
 
-
   handleCreate(event) {
     this.props.onCreate(event)
   },
@@ -23,14 +22,12 @@ export default React.createClass({
     var topic = this.props.activity.title
     var categories = this.props.activity.categories
 
-    var displayData = <MessagesDisplay {...this.props} categories={categories} />
-
     return (
       <div className="MessagesWrapper">
         <div className="row">
           <h3 className="MessagesWrapper__Topic">{topic}</h3>
         </div>
-        {displayData}
+        <MessagesDisplay {...this.props} categories={categories} />
         <MessageInputArea ref='messageInputArea' {...this.props} categories={categories} onCreate={this.handleCreate} />
       </div>
     )
