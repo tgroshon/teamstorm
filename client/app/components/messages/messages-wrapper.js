@@ -23,9 +23,7 @@ export default React.createClass({
     var topic = this.props.activity.title
     var categories = this.props.activity.categories
 
-    var displayData = this.props.messages.length === 0
-      ? <div className="messages-empty">Empty...</div>
-      : <MessagesDisplay {...this.props} categories={categories} />
+    var displayData = <MessagesDisplay {...this.props} categories={categories} />
 
     return (
       <div className="MessagesWrapper">
