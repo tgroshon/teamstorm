@@ -34,7 +34,9 @@ export default React.createClass({
 
   handleCreate() {
     var {title, type, teamId, categories} = this.refs.newActivityForm.getFormData()
-    ActivityActions.createActivity(title, type, teamId, categories)
+    if (title && type && teamId) {
+      ActivityActions.createActivity(title, type, teamId, categories)
+    }
   },
 
   handleCancel() {
