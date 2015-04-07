@@ -42,7 +42,8 @@ export default {
         AppDispatcher.dispatch({
           type: ActionTypes.STORE_TEAMS,
           params: {
-            teams: [res.body]
+            // Replace Id's with Objects
+            teams: [Object.assign({}, res.body, {members: memberObjects})]
           }
         })
       })
