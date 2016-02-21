@@ -8,20 +8,20 @@ var indexAttribute = 'teamId'
 var tableName = config.rdb.tables.activities
 
 exports.up = function (next) {
-  rdb.getConnection(function(err, connection) {
+  rdb.getConnection(function (err, connection) {
     if (err) return next(err)
-    r.db(config.rdb.name).table(tableName).indexCreate(indexAttribute).run(connection, function(err, result) {
+    r.db(config.rdb.name).table(tableName).indexCreate(indexAttribute).run(connection, function (err, result) {
       next(err)
     })
   })
-};
+}
 
 exports.down = function (next) {
-  rdb.getConnection(function(err, connection) {
+  rdb.getConnection(function (err, connection) {
     if (err) return next(err)
 
-    r.db(config.rdb.name).table(tableName).indexDrop(indexAttribute).run(connection, function(err, result) {
+    r.db(config.rdb.name).table(tableName).indexDrop(indexAttribute).run(connection, function (err, result) {
       next(err)
     })
   })
-};
+}

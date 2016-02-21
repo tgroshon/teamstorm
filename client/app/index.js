@@ -1,7 +1,6 @@
 import React from 'react'
-import Router, { Link, Route, DefaultRoute, RouteHandler, NotFoundRoute } from 'react-router'
 import UserActions from './actions/users'
-
+import Router from 'react-router'
 import MessageHandler from './components/messages/handlers/message-handler'
 import ActivityHandler from './components/activities/handlers/activity-handler'
 import ActivitiesHandler from './components/activities/handlers/activities-handler'
@@ -14,14 +13,13 @@ import EditTeamHandler from './components/teams/handlers/edit-team-handler'
 import LoginHandler from './components/users/handlers/login-handler'
 import OAuth2Handler from './components/users/handlers/oauth2-handler'
 import AccountHandler from './components/users/handlers/account-handler'
-import TopNav from './components/common/handlers/navigation-handler'
 
 var App = React.createClass({
-  componentWillMount() {
+  componentWillMount () {
     UserActions.restoreSession()
   },
 
-  render() {
+  render () {
     return (
       <div>
         <header className="top__header">
@@ -38,7 +36,7 @@ var App = React.createClass({
 })
 
 var DefaultAct = React.createClass({
-  render() {
+  render () {
     return (
       <div>
         <Link to="new-activity">
@@ -52,7 +50,7 @@ var DefaultAct = React.createClass({
 })
 
 var DefaultTeam = React.createClass({
-  render() {
+  render () {
     return (
       <div>
         <Link to="new-team">

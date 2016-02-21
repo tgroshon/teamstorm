@@ -27,11 +27,11 @@ export var ActionTypes = keyMirror({
   'ERR_HTTP_POST_TEAM': null,
   'ERR_HTTP_PUT_TEAM': null,
   'ERR_DECODE_TOKEN': null,
-  'CLEAR_ERR': null,
+  'CLEAR_ERR': null
 })
 
 export var ActivityTypes = keyMirror({
   '2col': null,
   '4x4': null,
-  'list': null,
+  'list': null
 })

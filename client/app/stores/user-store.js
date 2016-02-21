@@ -13,22 +13,21 @@ var StoreData = Immutable.Map({
 var UserStore = assign({}, EventEmitter.prototype, {
   name: 'UserStore',
 
-  authenticated() {
+  authenticated () {
     return StoreData.get('authenticated')
   },
 
-  getUser() {
+  getUser () {
     return StoreData.get('user')
   },
 
-  getSearchResults() {
+  getSearchResults () {
     return StoreData.get('searchResults').toJS()
   }
 })
 
 UserStore.dispatchToken = AppDispatcher.register((payload) => {
-
-  switch(payload.type) {
+  switch (payload.type) {
 
     case ActionTypes.STORE_SEARCH_RESULTS:
       StoreData = StoreData.merge({

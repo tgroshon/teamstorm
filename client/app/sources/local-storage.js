@@ -3,8 +3,8 @@ import logger from '../logger'
 export default {
   namespace: 'teamstorm:',
 
-  get(key) {
-    var item = localStorage.getItem(this.namespace + key)
+  get (key) {
+    var item = window.localStorage.getItem(this.namespace + key)
     try {
       return typeof item === 'string' ? item : JSON.parse(item)
     } catch (e) {
@@ -13,13 +13,13 @@ export default {
     }
   },
 
-  set(key, object) {
+  set (key, object) {
     var payload = typeof object === 'string' ? object : JSON.stringify(object)
-    return localStorage.setItem(this.namespace + key, payload)
+    return window.localStorage.setItem(this.namespace + key, payload)
   },
 
-  remove(key) {
-    return localStorage.removeItem(this.namespace + key)
+  remove (key) {
+    return window.localStorage.removeItem(this.namespace + key)
   }
 }
 

@@ -3,14 +3,13 @@ import { ActionTypes } from '../constants'
 import HttpAPI from '../sources/http-api'
 import LocalStorage from '../sources/local-storage'
 
-
 export default {
-  fetchActivities() {
+  fetchActivities () {
     var token = LocalStorage.get('token')
     if (token) {
       HttpAPI.fetchActivities(token, (err, res) => {
         if (err) {
-          //TODO logging
+          // TODO logging
           return
         }
         AppDispatcher.dispatch({
@@ -23,7 +22,7 @@ export default {
     }
   },
 
-  createActivity(title, type, teamId, categories) {
+  createActivity (title, type, teamId, categories) {
     var token = LocalStorage.get('token')
     if (token) {
       var activity = {title, type, teamId, categories}

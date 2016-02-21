@@ -7,7 +7,7 @@ import UserActions from '../../../actions/users'
 export default React.createClass({
   displayName: 'AccountPage',
 
-  getInitialState() {
+  getInitialState () {
     return {
       user: UserStore.getUser(),
       previousChanges: {},

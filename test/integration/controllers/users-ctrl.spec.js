@@ -1,5 +1,4 @@
 import request from 'supertest'
-import should from 'should'
 import sinon from 'sinon'
 import app from '../../../server/app.js'
 import rdbService from '../../../server/services/rdb-service'
@@ -7,9 +6,7 @@ import * as authService from '../../../server/services/auth-service'
 import UserModel from '../../../server/models/User'
 
 describe('Users Controller', () => {
-
   describe('#index', () => {
-
     var allUsers = [new UserModel({firstName: 'bob'})]
     var userData = {firstName: 'bob'}
     var token
@@ -21,6 +18,7 @@ describe('Users Controller', () => {
         cb(null, allUsers)
       })
     })
+
     afterEach(() => {
       rdbService.all.restore()
     })
@@ -45,7 +43,6 @@ describe('Users Controller', () => {
   })
 
   describe('#search', () => {
-
     var reqQuery = 'gmail'
     var userData = {firstName: 'bob'}
     var model = new UserModel(userData)
@@ -85,7 +82,6 @@ describe('Users Controller', () => {
   })
 
   describe('#create', () => {
-
     var userData = { firstName: 'bob', password: 'pwd1' }
     var hashedPassword = 'hashedPassword'
     var rdbReturnedData = {firstName: 'bob'}
@@ -104,6 +100,7 @@ describe('Users Controller', () => {
         cb(null, [rdbReturnedData])
       })
     })
+
     afterEach(() => {
       rdbService.insert.restore()
       authService.hash.restore()
@@ -132,7 +129,6 @@ describe('Users Controller', () => {
   })
 
   describe('#update', () => {
-
     var userId = '1'
     var newFirstName = 'Bob'
     var rdbReturnedData = {id: userId, firstName: newFirstName}
@@ -193,7 +189,6 @@ describe('Users Controller', () => {
   })
 
   describe('#token', () => {
-
     var pwdHash = 'hashedPassword'
     var loginEmail = 'bob@example.com'
     var loginPassword = 'pwd1'
@@ -239,4 +234,3 @@ describe('Users Controller', () => {
     })
   })
 })
-

@@ -1,11 +1,8 @@
-
 export default {
-
-  debug() {
+  debug () {
     console.log.apply(console, arguments)
   },
-
-  trace() {
+  trace () {
     console.log.apply(console, arguments)
   }
 }

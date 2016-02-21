@@ -11,11 +11,11 @@ var StoreData = Immutable.Map({
 var MessageStore = assign({}, EventEmitter.prototype, {
   name: 'MessageStore',
 
-  pendingRequest() {
+  pendingRequest () {
     return StoreData.get('pending')
   },
 
-  getAll(activityId) {
+  getAll (activityId) {
     var allMessages = StoreData.get(activityId)
     return allMessages ? allMessages.toArray() : []
   }
@@ -24,7 +24,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
 MessageStore.dispatchToken = AppDispatcher.register((payload) => {
   var params = payload.params
 
-  switch(payload.type) {
+  switch (payload.type) {
 
     case ActionTypes.STORE_MESSAGES:
       var latestMessages = Immutable.fromJS(params.messages).reduce((map, mess) => {
@@ -43,6 +43,7 @@ MessageStore.dispatchToken = AppDispatcher.register((payload) => {
     case ActionTypes.PENDING_MESSAGE_REQUEST:
       StoreData = StoreData.set('pending', true)
       MessageStore.emit('change')
+      break
 
     case ActionTypes.LOGOUT:
       StoreData = Immutable.Map({

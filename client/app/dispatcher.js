@@ -1,23 +1,21 @@
 import {Dispatcher} from 'flux'
-import logger from './logger'
 
 var dispatcher = new Dispatcher()
 var actionQueue = []
 var isProcessing = false
 
-function queueAction(payload) {
+function queueAction (payload) {
   actionQueue.push(payload)
   if (!isProcessing) {
     startProcessing()
   }
 }
 
-function startProcessing() {
+function startProcessing () {
   isProcessing = true
   while (actionQueue.length > 0) {
     if (dispatcher.isDispatching()) {
-      timeoutId = setTimeout(startProcessing, 100)
-      return
+      return setTimeout(startProcessing, 100)
     }
     var payload = actionQueue.shift()
     dispatcher.dispatch(payload)
@@ -25,18 +23,16 @@ function startProcessing() {
   isProcessing = false
 }
 
-var AppDispatcher = {
-  isProcessing() {
+export default {
+  isProcessing () {
     return isProcessing
   },
 
-  dispatch(payload) {
+  dispatch (payload) {
     queueAction(payload)
   },
 
-  register(callback) {
+  register (callback) {
     return dispatcher.register(callback)
   }
 }
-
-module.exports = AppDispatcher

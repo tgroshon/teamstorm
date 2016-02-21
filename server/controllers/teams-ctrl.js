@@ -1,57 +1,50 @@
-'use strict'
+import Team from '../models/Team'
 
-var Team = require('../models/Team')
+export default {
 
-module.exports = {
-
-  index: function(req, res) {
+  index (req, res) {
     Team.objects.getByMembership(req.user.id, function (err, teams) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
       res.json({
-        'teams': teams.map(function(team) {
-          return team.toJson()
-        })
+        'teams': teams.map(team => team.toJson())
       })
     })
   },
 
-  debug: function(req, res) {
+  debug (req, res) {
     Team.objects.all(function (err, teams) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
       res.json({
-        'teams': teams.map(function(act) {
-          return act.toJson()
-        })
+        'teams': teams.map(team => team.toJson())
       })
     })
   },
 
-  show: function(req, res) {
+  show (req, res) {
     Team.objects.get(req.params.teamId, function (err, team) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
-      
       res.json(team.toJson())
     })
   },
 
-  create: function(req, res) {
+  create (req, res) {
     var params = req.body
     params.creatorId = req.user.id
     var team = new Team(params)
-    team.save(function() {
+    team.save(() => {
       res.status(201).json(team.toJson())
     })
   },
 
-  update: function(req, res) {
+  update (req, res) {
     var params = req.body
     Team.objects.get(params.id, (err, team) => {
       if (err) {
@@ -81,4 +74,3 @@ module.exports = {
     })
   }
 }
-

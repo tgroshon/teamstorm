@@ -1,8 +1,7 @@
 import request from 'supertest'
-import should from 'should'
 import sinon from 'sinon'
 import app from '../../../server/app.js'
-import rdbService  from '../../../server/services/rdb-service'
+import rdbService from '../../../server/services/rdb-service'
 import * as authService from '../../../server/services/auth-service'
 import TeamKlass from '../../../server/models/Team'
 
@@ -19,6 +18,7 @@ describe('Teams Controller', () => {
 
   describe('#index', () => {
     var rdbReturnedData = new TeamKlass({name: 'My Team'})
+
     beforeEach(() => {
       sinon.stub(rdbService, 'getByMembership', (Klass, id, cb) => {
         Klass.should.eql(TeamKlass)
@@ -26,6 +26,7 @@ describe('Teams Controller', () => {
         cb(null, [rdbReturnedData])
       })
     })
+
     afterEach(() => {
       rdbService.getByMembership.restore()
     })
@@ -47,9 +48,9 @@ describe('Teams Controller', () => {
   })
 
   describe('#show', () => {
-
     var teamId = 'fakeTeamId'
     var rdbReturnedData = new TeamKlass({id: teamId, name: 'My Team'})
+
     beforeEach(() => {
       sinon.stub(rdbService, 'getTeam', (Klass, id, cb) => {
         Klass.should.eql(TeamKlass)
@@ -57,6 +58,7 @@ describe('Teams Controller', () => {
         cb(null, rdbReturnedData)
       })
     })
+
     afterEach(() => {
       rdbService.getTeam.restore()
     })
@@ -78,9 +80,9 @@ describe('Teams Controller', () => {
   })
 
   describe('#create', () => {
-
     var teamData = {name: 'My Team'}
     var teamWithUser
+
     beforeEach(() => {
       teamWithUser = {name: 'My Team', creatorId: userId}
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
@@ -89,6 +91,7 @@ describe('Teams Controller', () => {
         cb(null, [new TeamKlass(data)])
       })
     })
+
     afterEach(() => {
       rdbService.insert.restore()
     })
@@ -107,7 +110,6 @@ describe('Teams Controller', () => {
           sinon.assert.calledOnce(rdbService.insert)
           done()
         })
-
     })
   })
 })

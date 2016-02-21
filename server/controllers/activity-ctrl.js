@@ -1,12 +1,10 @@
-'use strict'
+import Message from '../models/Message'
+import Activity from '../models/Activity'
+import Team from '../models/Team'
 
-var Message = require('../models/Message')
-var Activity = require('../models/Activity')
-var Team = require('../models/Team')
+export default {
 
-module.exports = {
-
-  index: function(req, res) {
+  index (req, res) {
     Team.objects.getByMembership(req.user.id, function (err, teams) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
@@ -16,57 +14,53 @@ module.exports = {
         return res.json({ 'activities': [] })
       }
 
-      var teamIds = teams.map(function(team) { return team.id })
+      var teamIds = teams.map(team => team.id)
       Activity.objects.getByTeamIds(teamIds, function (actErr, activities) {
         if (actErr) {
           return res.status(500).json({ errors: [{ msg: actErr.message }] })
         }
 
         res.json({
-          'activities': activities.map(function(act) {
-            return act.toJson()
-          })
+          'activities': activities.map(act => act.toJson())
         })
       })
     })
   },
 
-  debug: function(req, res) {
+  debug (req, res) {
     Activity.objects.all(function (err, activities) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
       res.json({
-        'activities': activities.map(function(act) {
-          return act.toJson()
-        })
+        'activities': activities.map(act => act.toJson())
       })
     })
   },
 
-  show: function(req, res) {
+  show (req, res) {
     Activity.objects.get(req.params.activityId, function (err, activity) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
-      
       res.json(activity.toJson())
     })
   },
 
-  create: function(req, res) {
+  create (req, res) {
     var params = req.body
     delete params.id
     params.creatorId = req.user.id
     params.isActive = true
+
     var activity = new Activity(params)
-    activity.save(function() {
+    activity.save(() => {
       res.status(201).json(activity.toJson())
     })
   },
 
-  update: function(req, res) {
+  update (req, res) {
     var params = req.body
 
     Team.objects.getByMembership(req.user.id, function (err, teams) {
@@ -74,11 +68,9 @@ module.exports = {
         return res.status(500).json({ errors: [{ msg: err.message }] })
       }
 
-      var memberOfActivityTeam = (team) => {
-        return team.id === params.teamId
-      }
+      var memberOfActivityTeam = (team) => team.id === params.teamId
 
-      if (!teams.some(memberOfActivityTeam)){
+      if (!teams.some(memberOfActivityTeam)) {
         return res.status(401).json({ errors: [{ msg: 'Permission denied to this Activity' }] })
       }
 
@@ -97,7 +89,7 @@ module.exports = {
 
         if (activity) {
           activity.merge(params)
-          activity.save(function() {
+          activity.save(() => {
             res.status(201).json(activity.toJson())
           })
         } else {
@@ -107,7 +99,7 @@ module.exports = {
     })
   },
 
-  messageIndex: function(req, res) {
+  messageIndex (req, res) {
     Message.objects.getByActivity(req.params.activityId, function (err, messages) {
       if (err) {
         return res.status(500).json({ errors: [{ msg: err.message }] })
@@ -116,7 +108,7 @@ module.exports = {
     })
   },
 
-  createMessage: function(req, res) {
+  createMessage (req, res) {
     var params = {
       creator: req.user.id,
       payload: req.body.payload,
@@ -128,15 +120,15 @@ module.exports = {
     }
 
     var message = new Message(params)
-    message.save(function() {
+    message.save(() => {
       res.status(201).json(message.toJson())
     })
   },
 
-  streamMessages: function(req, res) {
-    Message.objects.streamAll(req.params.activityId, function(data) {
+  streamMessages (req, res) {
+    Message.objects.streamAll(req.params.activityId, (data) => {
       res.emit(JSON.stringify(data), 'message')
-    }, function(err) {
+    }, (err) => {
       if (err) {
         console.log('Ending response', err.msg)
       }

@@ -12,11 +12,11 @@ let StoreData = Immutable.Map({
 let TeamStore = assign({}, EventEmitter.prototype, {
   name: 'Team',
 
-  get(teamId) {
+  get (teamId) {
     return StoreData.get('teams').get(teamId)
   },
 
-  getTeams() {
+  getTeams () {
     return StoreData.get('teams').toArray()
   }
 })
@@ -24,7 +24,7 @@ let TeamStore = assign({}, EventEmitter.prototype, {
 TeamStore.dispatchToken = AppDispatcher.register(payload => {
   let params = payload.params
 
-  switch(payload.type) {
+  switch (payload.type) {
 
     case ActionTypes.STORE_TEAMS:
       let teams = Immutable.fromJS(params.teams)

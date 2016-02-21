@@ -9,22 +9,21 @@ var StoreData = Immutable.Map()
 var ErrorStore = assign({}, EventEmitter.prototype, {
   name: 'ErrorStore',
 
-  get(key) {
+  get (key) {
     return StoreData.get(key)
   },
 
-  hasErrors() {
+  hasErrors () {
     return StoreData.size > 0
   },
 
-  currentErrors() {
+  currentErrors () {
     return [...StoreData.entries()]
   }
 })
 
 ErrorStore.dispatchToken = AppDispatcher.register((payload) => {
-
-  switch(payload.type) {
+  switch (payload.type) {
 
     case ActionTypes.ERR_HTTP_USER_UPDATE:
       StoreData = StoreData.set(ActionTypes.ERR_HTTP_USER_UPDATE,
@@ -33,22 +32,22 @@ ErrorStore.dispatchToken = AppDispatcher.register((payload) => {
       break
 
     case ActionTypes.ERR_HTTP_POST_MESSAGE:
-      var storageValue = Immutable.Map({
+      let messageStoreValue = Immutable.Map({
         error: payload.params.error,
         data: payload.params.data
       })
       StoreData = StoreData.set(ActionTypes.ERR_HTTP_POST_MESSAGE,
-                                storageValue)
+                                messageStoreValue)
       ErrorStore.emit(ActionTypes.ERR_HTTP_POST_MESSAGE)
       break
 
     case ActionTypes.ERR_HTTP_POST_ACTIVITY:
-      var storageValue = Immutable.Map({
+      let activityStoreValue = Immutable.Map({
         error: payload.params.error,
         data: payload.params.data
       })
       StoreData = StoreData.set(ActionTypes.ERR_HTTP_POST_ACTIVITY,
-                                storageValue)
+                                activityStoreValue)
       ErrorStore.emit(ActionTypes.ERR_HTTP_POST_ACTIVITY)
       break
 

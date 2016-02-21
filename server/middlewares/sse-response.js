@@ -1,5 +1,4 @@
-
-module.exports = function(req, res, next) {
+export default function sseResponeMiddleware (req, res, next) {
   // set timeout as high as possible
   req.socket.setTimeout(Infinity)
 
@@ -9,7 +8,7 @@ module.exports = function(req, res, next) {
     'Connection': 'keep-alive'
   })
 
-  res.emit = function(payload, eventName) {
+  res.emit = (payload, eventName) => {
     res.write('\n')
     if (eventName) {
       res.write('event: ' + eventName + '\n')

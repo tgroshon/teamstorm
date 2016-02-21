@@ -9,7 +9,7 @@ var activities = Immutable.Map()
 var ActivityStore = assign({}, EventEmitter.prototype, {
   name: 'ActivityStore',
 
-  get(activityId) {
+  get (activityId) {
     if (activities.has(activityId)) {
       return activities.get(activityId)
     } else {
@@ -17,7 +17,7 @@ var ActivityStore = assign({}, EventEmitter.prototype, {
     }
   },
 
-  getAll() {
+  getAll () {
     return activities.toArray()
   }
 })
@@ -25,7 +25,7 @@ var ActivityStore = assign({}, EventEmitter.prototype, {
 ActivityStore.dispatchToken = AppDispatcher.register((payload) => {
   var params = payload.params
 
-  switch(payload.type) {
+  switch (payload.type) {
 
     case ActionTypes.STORE_ACTIVITIES:
       var newActivityMap = params.activities.reduce((map, act) => {

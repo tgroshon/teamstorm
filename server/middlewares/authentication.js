@@ -2,7 +2,7 @@ import passport from 'passport'
 import { decode } from '../services/auth-service'
 import User from '../models/User'
 
-export function passwordAuth(req, res, next) {
+export function passwordAuth (req, res, next) {
   User.authenticate(req.body.email, req.body.password, (err, user) => {
     if (err) return next(err)
 
@@ -15,7 +15,7 @@ export function passwordAuth(req, res, next) {
   })
 }
 
-export function tokenAuth(req, res, next) {
+export function tokenAuth (req, res, next) {
   var token = req.get('jwt')
   var result = decode(token)
   if (!result) {
@@ -26,7 +26,7 @@ export function tokenAuth(req, res, next) {
   }
 }
 
-export function OAuth2(provider) {
+export function OAuth2 (provider) {
   return (req, res, next) => {
     var middleware = passport.authenticate(provider, err => {
       next(err)
@@ -35,6 +35,6 @@ export function OAuth2(provider) {
   }
 }
 
-export function stub(req, res) {
+export function stub (req, res) {
   res.sendStatus(200)
 }

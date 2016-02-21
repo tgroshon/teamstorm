@@ -1,10 +1,6 @@
-'use strict'
-
-var _ = require('lodash')
-var config = require('config')
-var r = require('rethinkdb')
-var rdb = require('../services/rdb-service')
-var authService = require('../services/auth-service')
+import _ from 'lodash'
+import config from 'config'
+import rdb from '../services/rdb-service'
 
 var ATTRS = [
   'id',
@@ -17,49 +13,46 @@ var PRIVATE_ATTRS = [
 
 ]
 
-function Team(payload) {
+export default function Team (payload) {
   this.merge(payload)
 }
 
-Team.prototype.merge = function(data) {
+Team.prototype.merge = function (data) {
   _.extend(this, _.pick(data, ATTRS))
 }
 
-Team.prototype.save = function(done) {
-  Team.objects.insert(this, function(err, newTeamColl) {
+Team.prototype.save = function (done) {
+  Team.objects.insert(this, function (err, newTeamColl) {
     var newTeam = newTeamColl.pop()
     _.extend(this, newTeam)
     done(err)
   }.bind(this))
 }
 
-Team.prototype.toJson = function() {
+Team.prototype.toJson = function () {
   return _.pick(_.omit(this, PRIVATE_ATTRS), ATTRS)
 }
 
 Team.tableName = config.rdb.tables.teams
 
 Team.objects = {
-  insert: function(data, done) {
+  insert (data, done) {
     rdb.insert(Team, data, done)
-  }, 
+  },
 
-  all: function(done) {
+  all (done) {
     rdb.all(Team, done)
   },
 
-  get: function(id, done) {
+  get (id, done) {
     rdb.getTeam(Team, id, done)
   },
 
-  getByCreator: function(creatorId, done) {
+  getByCreator (creatorId, done) {
     rdb.getByIndex(Team, 'creatorId', creatorId, done)
   },
 
-  getByMembership: function(userId, done) {
+  getByMembership (userId, done) {
     rdb.getByMembership(Team, userId, done)
   }
 }
-
-module.exports = Team
-

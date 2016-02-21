@@ -1,26 +1,24 @@
-'use strict'
+import r from 'rethinkdb'
+import config from 'config'
+import _ from 'lodash'
 
-var r = require('rethinkdb')
-var config = require('config')
-var _ = require('lodash')
-
-function getConnection(done) {
+function getConnection (done) {
   r.connect({
     host: config.rdb.host,
     port: config.rdb.port,
-    authKey: config.rdb.authKey,
+    authKey: config.rdb.authKey
   }, function (err, connection) {
     if (err) return done(err)
-    connection['_id'] = Math.floor(Math.random()*10001)
+    connection['_id'] = Math.floor(Math.random() * 10001)
     done(err, connection)
   })
 }
 
-module.exports = {
+export default {
   getConnection: getConnection,
 
-  insert: function rdbServiceInsert(Klass, data, done) {
-    getConnection(function(cErr, conn) {
+  insert: function rdbServiceInsert (Klass, data, done) {
+    getConnection(function (cErr, conn) {
       if (cErr) return done(cErr)
 
       var clonedData = _.clone(data)
@@ -29,11 +27,11 @@ module.exports = {
       r.db(config.rdb.name)
         .table(Klass.tableName)
         .insert(clonedData, {conflict: 'update', returnChanges: true})
-        .run(conn, function(dbErr, results) {
+        .run(conn, function (dbErr, results) {
           conn.close()
           if (dbErr) return done(dbErr)
 
-          var changedValues = results.changes.map(function(change) {
+          var changedValues = results.changes.map(function (change) {
             return change['new_val']
           })
           done(dbErr, changedValues)
@@ -41,34 +39,34 @@ module.exports = {
     })
   },
 
-  all: function rdbServiceGetAll(Klass, done) {
-    getConnection(function(cErr, conn) {
+  all: function rdbServiceGetAll (Klass, done) {
+    getConnection(function (cErr, conn) {
       if (cErr) return done(cErr)
       r.db(config.rdb.name)
         .table(Klass.tableName)
-        .run(conn, function(qErr, cursor) {
-        if (qErr) {
-          conn.close()
-          return done(err)
-        }
-        cursor.toArray(function(err, results) {
-          conn.close()
-          if (err) return done(err)
-          done(err, results.map(function(result) {
-            return new Klass(result)
-          }))
+        .run(conn, function (qErr, cursor) {
+          if (qErr) {
+            conn.close()
+            return done(qErr)
+          }
+          cursor.toArray(function (err, results) {
+            conn.close()
+            if (err) return done(err)
+            done(err, results.map(function (result) {
+              return new Klass(result)
+            }))
+          })
         })
-      }) 
     })
   },
 
-  get: function rdbServiceGet(Klass, key, done) {
-    getConnection(function(cErr, conn) {
+  get: function rdbServiceGet (Klass, key, done) {
+    getConnection(function (cErr, conn) {
       if (cErr) return done(cErr)
       r.db(config.rdb.name)
         .table(Klass.tableName)
         .get(key)
-        .run(conn, function(err, data) {
+        .run(conn, function (err, data) {
           conn.close()
           if (err) return done(err)
 
@@ -77,8 +75,8 @@ module.exports = {
     })
   },
 
-  getTeam: function rdbServiceGetTeam(Klass, key, done) {
-    getConnection(function(cErr, conn) {
+  getTeam: function rdbServiceGetTeam (Klass, key, done) {
+    getConnection(function (cErr, conn) {
       if (cErr) return done(cErr)
       r.db(config.rdb.name)
         .table(Klass.tableName)
@@ -92,7 +90,7 @@ module.exports = {
               .coerceTo('array')
           }
         })
-        .run(conn, function(err, data) {
+        .run(conn, function (err, data) {
           conn.close()
           if (err) return done(err)
 
@@ -101,8 +99,8 @@ module.exports = {
     })
   },
 
-  getByIndex: function rdbServiceGetByIndex(Klass, index, value, done) {
-    getConnection(function(cErr, conn) {
+  getByIndex: function rdbServiceGetByIndex (Klass, index, value, done) {
+    getConnection(function (cErr, conn) {
       if (cErr) return done(cErr)
 
       value = Array.isArray(value) ? r.args(value) : value
@@ -112,15 +110,40 @@ module.exports = {
       var query = searchIndex ? rtable.getAll(value, searchIndex)
                               : rtable.getAll(value)
 
-      query.distinct().run(conn, function(err, cursor) {
-          if (err) {
+      query.distinct().run(conn, function (err, cursor) {
+        if (err) {
+          conn.close()
+          return done(err)
+        }
+        cursor.toArray(function (err, results) {
+          conn.close()
+          if (err) return done(err)
+          done(err, results.map(function (result) {
+            return new Klass(result)
+          }))
+        })
+      })
+    })
+  },
+
+  searchUser: function rdbServiceSearchUser (Klass, fields, query, done) {
+    getConnection(function (cErr, conn) {
+      if (cErr) return done(cErr)
+
+      r.db(config.rdb.name)
+        .table(Klass.tableName)
+        .filter(function (row) {
+          // case insensitive, fuzzy search
+          var pattern = '(?i)' + query.split('').join('\\w*')
+          return r.or.apply(this, fields.map(function (field) {
+            return row(field).match(pattern)
+          }))
+        }).run(conn, function (err, cursor) {
+          if (err) return done(err)
+
+          cursor.toArray(function (aErr, results) {
             conn.close()
-            return done(err)
-          }
-          cursor.toArray(function(err, results) {
-            conn.close()
-            if (err) return done(err)
-            done(err, results.map(function(result){
+            done(aErr, results.map(function (result) {
               return new Klass(result)
             }))
           })
@@ -128,41 +151,15 @@ module.exports = {
     })
   },
 
-  searchUser: function rdbServiceSearchUser(Klass, fields, query, done) {
-    getConnection(function(cErr, conn) {
-      if (cErr) return done(cErr)
-
-      r.db(config.rdb.name)
-        .table(Klass.tableName)
-        .filter(function(row) {
-          // case insensitive, fuzzy search
-          var pattern = '(?i)' + query.split('').join('\\w*')
-          return r.or.apply(this, fields.map(function(field) {
-            return row(field).match(pattern)
-          }))
-      }).run(conn, function(err, cursor) {
-        if (err) return done(err)
-
-        cursor.toArray(function(aErr, results){
-          conn.close()
-          done(aErr, results.map(function(result) {
-            return new Klass(result)
-          }))
-        })
-      })
-    })
-
-  },
-
-  getByMembership: function rdbServiceGetByMembership(Klass, userId, done) {
-    getConnection(function(conErr, conn) {
+  getByMembership: function rdbServiceGetByMembership (Klass, userId, done) {
+    getConnection(function (conErr, conn) {
       if (conErr) return done(conErr)
 
       // TODO: Optimize with a multi-index
       // http://rethinkdb.com/docs/secondary-indexes/javascript/
       r.db(config.rdb.name)
         .table(Klass.tableName)
-        .filter(r.row("members").contains(userId))
+        .filter(r.row('members').contains(userId))
         .union(
           r.db(config.rdb.name)
             .table(Klass.tableName)
@@ -178,40 +175,41 @@ module.exports = {
               .coerceTo('array')
           }
         })
-        .run(conn, function(err, cursor) {
+        .run(conn, function (err, cursor) {
           if (err) {
             conn.close()
             return done(err)
           }
 
-          cursor.toArray(function(arErr, results) {
+          cursor.toArray(function (arErr, results) {
             conn.close()
             if (!results) results = []
-            done(arErr, results.map(function(result) {
+            done(arErr, results.map(function (result) {
               return new Klass(result)
             }))
           })
-      })
+        })
     })
   },
 
-  streamMessages: function rdbServiceStreamMessags(Klass, activityId, listener,
-                                                   done) {
-    getConnection(function(err, conn) {
+  streamMessages: function rdbServiceStreamMessags (Klass, activityId, listener, done) {
+    getConnection((err, conn) => {
+      if (err) return done(err)
+
       r.db(config.rdb.name)
         .table(Klass.tableName)
         .changes()
         .filter(r.row('new_val')('activityId').eq(activityId))
-        .run(conn, function(err, feed) {
+        .run(conn, (err, feed) => {
           if (err) return done(err)
 
-          feed.on("error", function(error) {
+          feed.on('error', (error) => {
             feed.removeAllListeners()
             conn.close()
             done(error)
           })
 
-          feed.on("data", function(message) {
+          feed.on('data', (message) => {
             listener(message.new_val)
           })
         })

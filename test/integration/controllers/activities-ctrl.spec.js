@@ -1,5 +1,4 @@
 import request from 'supertest'
-import should from 'should'
 import sinon from 'sinon'
 import app from '../../../server/app'
 import rdbService from '../../../server/services/rdb-service'
@@ -21,15 +20,14 @@ describe('Activities Controller', () => {
   })
 
   describe('#index', () => {
-
     var rdbReturnData = new ActivityKlass({title: 'My Activity'})
 
     beforeEach(() => {
-      sinon.stub(rdbService, 'getByIndex', function(Klass, index, value, cb) {
+      sinon.stub(rdbService, 'getByIndex', function (Klass, index, value, cb) {
         value.should.be.an.Array // In this instance
         cb(null, [rdbReturnData])
       })
-      sinon.stub(rdbService, 'getByMembership', function(Klass, userId, cb) {
+      sinon.stub(rdbService, 'getByMembership', function (Klass, userId, cb) {
         cb(null, [fakeTeam])
       })
     })
@@ -56,11 +54,11 @@ describe('Activities Controller', () => {
   })
 
   describe('#show', () => {
-
     var actId = 'fakeActId'
     var rdbReturnData = new ActivityKlass({id: actId, title: 'My Activity'})
+
     beforeEach(() => {
-      sinon.stub(rdbService, 'get', function(Klass, id, cb) {
+      sinon.stub(rdbService, 'get', function (Klass, id, cb) {
         Klass.should.eql(ActivityKlass)
         id.should.eql(actId)
         cb(null, rdbReturnData)
@@ -82,13 +80,12 @@ describe('Activities Controller', () => {
           sinon.assert.calledOnce(rdbService.get)
           done()
         })
-
     })
   })
 
   describe('#create', () => {
-
     var actData = {creatorId: 'fakeId', isActive: true, title: 'My New Team'}
+
     beforeEach(() => {
       sinon.stub(rdbService, 'insert', (Klass, data, cb) => {
         Klass.should.eql(ActivityKlass)
@@ -117,7 +114,6 @@ describe('Activities Controller', () => {
   })
 
   describe('#update', () => {
-
     var actId = 'someId'
     var teamId = 'someTeamId'
     var newActivityData = {id: actId, teamId: teamId, title: 'New Act'}
@@ -166,9 +162,9 @@ describe('Activities Controller', () => {
     })
   })
   describe('#messageIndex', () => {
-
     var activityId = 'fakeActivityId'
     var rdbReturnedData = new MessageKlass({payload: 'Some message'})
+
     beforeEach(() => {
       sinon.stub(rdbService, 'getByIndex', (Klass, index, value, cb) => {
         Klass.should.eql(MessageKlass)
@@ -197,7 +193,6 @@ describe('Activities Controller', () => {
   })
 
   describe('#createMessage', () => {
-
     var activityId = 'fakeActivityId'
     var payload = 'A New Message'
     var messageData = {payload}
